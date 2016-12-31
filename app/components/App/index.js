@@ -1,20 +1,20 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-
+import Header from '../Header';
 class App extends React.Component {
     constructor(props) {
         super(props);
     }
     render() {
         return (
-        <div>
-            <h1>Filter table</h1>
+          <div className="flex-col flex">
+            <Header/>
             { this.props.children }
-            <footer>
+            <div>
                 <Link to="/">Filterable Table</Link>
                 <Link to="/about">About</Link>
-            </footer>
-        </div>
+            </div>
+          </div>
       );
     }
 }
