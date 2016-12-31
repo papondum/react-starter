@@ -2,11 +2,11 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from './components/App';
 import FilterableTable from './containers/FilterableTable';
-import About from './components/About';
+import Menu from './components/Menu';
 
 export default (
 	<Route path="/" component={App}>
-		<IndexRoute component={About} />
+		<IndexRoute component={Menu} />
 		<Route path="/about" component={FilterableTable} />
 	</Route>
 );
