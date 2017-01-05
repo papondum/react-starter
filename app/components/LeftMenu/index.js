@@ -24,12 +24,10 @@ class LeftMenu extends React.Component {
     }
 
     openTab(item) {
-        console.log(item);
         this.props.onOpenTab(item);
     }
 
     render() {
-        console.log(this.props);
         return (
           <div className="left-menu">
               <div className="flex-col flex menu">{this.menuGenerate()}</div>

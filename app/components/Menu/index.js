@@ -1,5 +1,6 @@
 import React from 'react';
 import LeftMenu from '../LeftMenu';
+import MainField from '../MainField';
 class Menu extends React.Component {
     constructor(props) {
         super(props);
@@ -21,7 +22,7 @@ class Menu extends React.Component {
         Jusst a dummy page to showcase react-router!
         <div className="row content">
             <LeftMenu menu={this.state.menu}/>
-            <div className="mainContent">MainField</div>
+            <MainField/>
         </div>
     </div>);}
 }
