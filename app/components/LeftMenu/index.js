@@ -1,4 +1,7 @@
 import React, { PropTypes }from 'react';
+import { connect } from 'react-redux';
+import { openTab } from '../../actions';
+
 import './style.scss';
 class LeftMenu extends React.Component {
     constructor(props) {
@@ -11,7 +14,7 @@ class LeftMenu extends React.Component {
     }
 
     _getSubItemMenuFromName(item) {
-        const subMenu = item.submenu.map((i)=><div className="menu-item" key={i.uniq}>{i.key}</div>);
+        const subMenu = item.submenu.map((i)=><div className="menu-item" key={i.uniq} onClick={()=>this.openTab(i.key)}>{i.key}</div>);
         this.setState({'submenu': subMenu});
     }
 
@@ -20,18 +23,40 @@ class LeftMenu extends React.Component {
         return menu;
     }
 
+    openTab(item) {
+        console.log(item);
+        this.props.onOpenTab(item);
+    }
+
     render() {
+        console.log(this.props);
         return (
           <div className="left-menu">
-            <div className="flex-col flex menu">{this.menuGenerate()}</div>
-            <div className="sub-menu">{this.state.submenu}</div>
+              <div className="flex-col flex menu">{this.menuGenerate()}</div>
+              <div className="sub-menu">{this.state.submenu}</div>
           </div>
       );
     }
 }
 
 LeftMenu.propTypes = {
-    menu: PropTypes.array
+    menu: PropTypes.array,
+    onOpenTab: PropTypes.func
 };
 
-export default LeftMenu;
+const mapStateToProps = (state) => {
+    return {
+        tab: state.tab
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onOpenTab: tab => dispatch(openTab(tab))
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LeftMenu);

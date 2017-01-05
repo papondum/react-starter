@@ -6,3 +6,10 @@ export function filterTable(filter) {
         filter
     };
 }
+
+export function openTab(tab) {
+    return {
+        type: types.OPEN_TAB,
+        tab
+    };
+}

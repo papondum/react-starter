@@ -1,5 +1,4 @@
 import React from 'react';
-import Test from '../Test';
 import LeftMenu from '../LeftMenu';
 class Menu extends React.Component {
     constructor(props) {
@@ -21,10 +20,9 @@ class Menu extends React.Component {
     <div className="box">
         Jusst a dummy page to showcase react-router!
         <div className="row content">
-          <LeftMenu menu={this.state.menu}/>
-          <div className="mainContent">MainField</div>
+            <LeftMenu menu={this.state.menu}/>
+            <div className="mainContent">MainField</div>
         </div>
-        <Test/>
     </div>);}
 }
 
