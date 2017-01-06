@@ -7,9 +7,10 @@ export function filterTable(filter) {
     };
 }
 
-export function openTab(tab) {
+export function openTab(item) {
+    console.log(item);
     return {
         type: types.OPEN_TAB,
-        tab
+        payload: {item}
     };
 }
