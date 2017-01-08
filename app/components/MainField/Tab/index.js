@@ -1,33 +1,28 @@
 import React, {PropTypes} from 'react';
-import { connect } from 'react-redux';
+import './style.scss';
 class Tab extends React.Component {
     constructor(props) {
         super(props);
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+    }
     generateTab() {
-        const ss = ['s', 'ss'];
-        const tab = ss.map(item=><div>{item}</div>);
-        // const tab = this.props.tabs.map(item=><div>{item}</div>);
-        return tab;
+        const tab = this.props.tab.tabs;
+        const tabs = tab.map(item=><div key={item} className="tab-style">{item}</div>);
+        return tabs;
     }
 
     render() {
         return(
-    <div>
+    <div className="flex">
         {this.generateTab()}
     </div>);}
 }
 
 Tab.propTypes = {
-    tabs: PropTypes.array
+    tab: PropTypes.object
 };
 
-const mapStateToProps = (state) => {
-    return {
-        tab: state.tab
-    };
-};
-export default connect(
-    mapStateToProps
-)(Tab);
+export default Tab;

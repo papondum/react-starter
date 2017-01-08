@@ -8,9 +8,8 @@ export function filterTable(filter) {
 }
 
 export function openTab(item) {
-    console.log(item);
     return {
         type: types.OPEN_TAB,
-        payload: {item}
+        payload: item
     };
 }

@@ -8,7 +8,6 @@ const initialState = {
 
 const actions = {
     [OPEN_TAB]: (state, payload) => {
-        console.log(payload);
         return Object.assign({}, state, {tabs: payload});
     }
 };

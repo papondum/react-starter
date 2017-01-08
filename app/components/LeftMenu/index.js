@@ -24,7 +24,16 @@ class LeftMenu extends React.Component {
     }
 
     openTab(item) {
-        this.props.onOpenTab(item);
+        const result = this.props.tab.tabs;
+        if(result.length > 0) {
+            const find = result.find((i)=> i === item);
+            if(find === undefined) {
+                result.push(item);
+            }
+        }else {
+            result.push(item);
+        }
+        this.props.onOpenTab(result);
     }
 
     render() {
@@ -39,7 +48,8 @@ class LeftMenu extends React.Component {
 
 LeftMenu.propTypes = {
     menu: PropTypes.array,
-    onOpenTab: PropTypes.func
+    onOpenTab: PropTypes.func,
+    tab: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
