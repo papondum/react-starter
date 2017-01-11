@@ -8,9 +8,19 @@ const initialState = {
 
 const actions = {
     [OPEN_TAB]: (state, payload) => {
-        console.log(typeof state, state);
-        console.log(typeof payload, payload);
-        return Object.assign({}, state, {tabs: state.tabs.concat(payload)});
+        let result = [];
+        const activeTab = payload;
+        if(state.tabs.length > 0) {
+            const find = state.tabs.find((i)=> i === payload[0]);
+            if(find === undefined) {
+                result = state.tabs.concat(payload);
+            } else{
+                result = state.tabs;
+            }
+        }else {
+            result = state.tabs.concat(payload);
+        }
+        return Object.assign({}, state, {activeTabs: activeTab[0], tabs: result});
     }
 };
 export default createReducer(initialState, actions);
