@@ -8,7 +8,9 @@ const initialState = {
 
 const actions = {
     [OPEN_TAB]: (state, payload) => {
-        return Object.assign({}, state, {tabs: payload});
+        console.log(typeof state, state);
+        console.log(typeof payload, payload);
+        return Object.assign({}, state, {tabs: state.tabs.concat(payload)});
     }
 };
 export default createReducer(initialState, actions);

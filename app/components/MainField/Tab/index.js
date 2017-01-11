@@ -5,13 +5,13 @@ class Tab extends React.Component {
         super(props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     console.log(nextProps);
+    // }
     generateTab() {
         const tab = this.props.tab.tabs;
-        const tabs = tab.map(item=><div key={item} className="tab-style">{item}</div>);
-        return tabs;
+        // const tabs = tab.map(item=><div key={item} className="tab-style">{item}</div>);
+        return tab;
     }
 
     render() {
