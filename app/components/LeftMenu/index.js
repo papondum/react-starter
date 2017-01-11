@@ -24,15 +24,6 @@ class LeftMenu extends React.Component {
     }
 
     openTab(item) {
-        // const result = this.props.tab.tabs;
-        // if(result.length > 0) {
-        //     const find = result.find((i)=> i === item);
-        //     if(find === undefined) {
-        //         result.push(item);
-        //     }
-        // }else {
-        //     result.push(item);
-        // }
         this.props.onOpenTab([item]);
     }
 

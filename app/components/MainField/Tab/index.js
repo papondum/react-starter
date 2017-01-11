@@ -5,13 +5,11 @@ class Tab extends React.Component {
         super(props);
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     console.log(nextProps);
-    // }
+
     generateTab() {
         const tab = this.props.tab.tabs;
-        // const tabs = tab.map(item=><div key={item} className="tab-style">{item}</div>);
-        return tab;
+        const tabs = tab.map(item=><div key={item} onClick={()=>this.props.openContent(item)} className="tab-style">{item}</div>);
+        return tabs;
     }
 
     render() {
@@ -22,7 +20,8 @@ class Tab extends React.Component {
 }
 
 Tab.propTypes = {
-    tab: PropTypes.object
+    tab: PropTypes.object,
+    openContent: PropTypes.func.isRequired
 };
 
 export default Tab;
