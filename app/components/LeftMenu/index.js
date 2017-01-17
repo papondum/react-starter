@@ -14,7 +14,7 @@ class LeftMenu extends React.Component {
     }
 
     _getSubItemMenuFromName(item) {
-        const subMenu = item.submenu.map((i)=><div className="menu-item" key={i.uniq} onClick={()=>this.openTab(i.key)}>{i.key}</div>);
+        const subMenu = item.submenu.map((i)=><div className="menu-item" key={i.name} onClick={()=>this.openTab(i.name)}>{i.name}</div>);
         this.setState({'submenu': subMenu});
     }
 
