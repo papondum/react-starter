@@ -4,10 +4,8 @@ export function createReducer(initialState, reducerMap) {
         return reducer ? reducer(state, action.payload) : state;
     };
 }
-export function  getJson(url){
-
+export function  getJsonFromUtil(url){
       // var url = 'http://localhost:4040/users'
-
       fetch(url)
       .then((response)=> {
         if (response.status >= 400) {

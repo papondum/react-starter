@@ -20,7 +20,7 @@ class MainField extends React.Component {
         return(
     <div className="mainContent">
         <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
-        <Content content = {this.state.mainField}/>
+        <Content contentHeader = {this.state.mainField}/>
             </div>);}
 }
 
