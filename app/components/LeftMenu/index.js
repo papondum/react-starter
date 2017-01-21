@@ -37,12 +37,6 @@ class LeftMenu extends React.Component {
     }
 }
 
-LeftMenu.propTypes = {
-    menu: PropTypes.array,
-    onOpenTab: PropTypes.func,
-    tab: PropTypes.object
-};
-
 const mapStateToProps = (state) => {
     return {
         tab: state.tab

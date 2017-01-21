@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import './style.scss';
-class Tab extends React.Component {
+class TabList extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -19,9 +19,4 @@ class Tab extends React.Component {
     </div>);}
 }
 
-Tab.propTypes = {
-    tab: PropTypes.object,
-    openContent: PropTypes.func.isRequired
-};
-
-export default Tab;
+export default TabList;

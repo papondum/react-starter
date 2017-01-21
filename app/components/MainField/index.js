@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import Tab from './Tab';
+import TabList from './TabList';
 import { connect } from 'react-redux';
 import Content from './Content';
 class MainField extends React.Component {
@@ -19,14 +19,10 @@ class MainField extends React.Component {
     render() {
         return(
     <div className="mainContent">
-        <Tab tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
+        <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
         <Content content = {this.state.mainField}/>
             </div>);}
 }
-
-MainField.propTypes = {
-    tab: PropTypes.object
-};
 
 const mapStateToProps = (state) => {
     return {
