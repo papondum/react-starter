@@ -64,7 +64,7 @@ class Content extends React.Component {
 
     render() {
         return(
-    <div className="flex">
+    <div className='content-style'>
         {this.props.contentHeader}
         <ContentForm type = {this.props.contentHeader} content = {this.state.content}/>
     </div>);}

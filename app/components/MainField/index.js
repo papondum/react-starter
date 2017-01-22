@@ -3,6 +3,7 @@ import TabList from './TabList';
 import { connect } from 'react-redux';
 import { openTab } from '../../actions';
 import Content from './Content';
+import ActionMenu from '../ActionMenu'
 import './style.scss'
 class MainField extends React.Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class MainField extends React.Component {
         return(
     <div className="mainContent">
         <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
+        <ActionMenu/>
         <Content contentHeader = {this.state.mainField}/>
             </div>);}
 }
