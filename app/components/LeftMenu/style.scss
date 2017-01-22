@@ -11,5 +11,19 @@
   cursor: pointer;
   min-height: 40px;
   min-width: 60px;
-  padding: 10px;
+  padding: 10px 5px;
+  text-align: center;
+  font-family:"Lato";
+  img{
+    height: 40px;
+    width:40px;
+  }
+  p{
+    margin:0;
+  }
+}
+
+.active-menu{
+  background-color: #ffffff;
+  color:blue;
 }

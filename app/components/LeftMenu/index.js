@@ -1,16 +1,22 @@
 import React, { PropTypes }from 'react';
 import { connect } from 'react-redux';
 import { openTab } from '../../actions';
-
+import SaleIcon from '../../resource/Icon/menu_sales.png'
+import PurchaseIcon from '../../resource/Icon/menu_purchase.png'
+import InventoryIcon from '../../resource/Icon/menu_inventory.png'
+import MasterIcon from '../../resource/Icon/menu_masterfile.png'
+import ReportIcon from '../../resource/Icon/menu_report.png'
+import DashIcon from '../../resource/Icon/menu_dashboard.png'
 import './style.scss';
 class LeftMenu extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {'submenu': []};
+        this.state = {'submenu': [],',menuActive':''};
     }
 
     openSubmenu(item) {
         this._getSubItemMenuFromName(item);
+        this.setState({'menuActive':item.name})
     }
 
     _getSubItemMenuFromName(item) {
@@ -18,8 +24,37 @@ class LeftMenu extends React.Component {
         this.setState({'submenu': subMenu});
     }
 
+    _getIconFromName(name){
+      switch (name) {
+        case 'Sales':
+          return (<img src={SaleIcon}/>)
+          break;
+        case 'Purchase':
+          return (<img src={PurchaseIcon}/>)
+          break;
+        case 'Inventory':
+          return (<img src={InventoryIcon}/>)
+          break;
+        case 'Master file':
+          return (<img src={MasterIcon}/>)
+          break;
+        case 'Report':
+          return (<img src={ReportIcon}/>)
+          break;
+        case 'Dashboard':
+          return (<img src={DashIcon}/>)
+          break;
+        default:
+          console.log('default');
+      }
+    }
+
     menuGenerate() {
-        const menu = (this.props.menu).map((i)=><div className="menu-item" onClick={()=>this.openSubmenu(i)} key={i.name}>{i.name}</div>);
+        const menu = (this.props.menu).map((i)=>
+        <div className={this.state.menuActive==i.name? 'menu-item active-menu':"menu-item"} onClick={()=>this.openSubmenu(i)} key={i.name}>
+          {this._getIconFromName(i.name)}
+          <p>{i.name}</p>
+        </div>);
         return menu;
     }
 

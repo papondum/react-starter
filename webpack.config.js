@@ -50,6 +50,13 @@ module.exports = {
                 loader: 'babel'
             },
             {
+              test: /\.(jpg|png)$/,
+              loader: 'file-loader',
+              options: {
+                name: '[path][name].[hash].[ext]',
+              },
+            },            
+            {
                 test: /\.json?$/,
                 loader: 'json'
             },
