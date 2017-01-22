@@ -43,10 +43,10 @@ class Content extends React.Component {
           this.getJson('http://localhost:4040/products')
           break;
         case 'Brand':
-          this.getJson('http://localhost:4040/users')
+          this.getJson('http://localhost:4040/brands')
           break;
         case 'Film Type':
-          this.getJson('http://localhost:4040/users')
+          this.getJson('http://localhost:4040/film')
           break;
 
         default:
