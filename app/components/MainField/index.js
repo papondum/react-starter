@@ -1,7 +1,9 @@
 import React, {PropTypes} from 'react';
 import TabList from './TabList';
 import { connect } from 'react-redux';
+import { openTab } from '../../actions';
 import Content from './Content';
+import './style.scss'
 class MainField extends React.Component {
     constructor(props) {
         super(props);
@@ -11,6 +13,7 @@ class MainField extends React.Component {
     }
 
     _getMainFieldFromTab(item) {
+        this.props.onOpenTab([item])
         this.setState({
             mainField: item
         });
@@ -29,7 +32,11 @@ const mapStateToProps = (state) => {
         tab: state.tab
     };
 };
-
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onOpenTab: tab => dispatch(openTab(tab))
+    };
+};
 export default connect(
-    mapStateToProps
+    mapStateToProps,mapDispatchToProps
 )(MainField);

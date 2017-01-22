@@ -23,10 +23,8 @@ class Content extends React.Component {
     }
 
     _getContent(category){
-      console.log(category);
       switch (category) {
         case 'User account':
-          console.log('sss');
           this.getJson('http://localhost:4040/users')
           break;
         case 'User role':
@@ -52,17 +50,17 @@ class Content extends React.Component {
           break;
 
         default:
-          console.log('default');
+          this.setState({'content':''})
           break;
       }
     }
-
-
-    componentWillUpdate() {
+    componentDidMount(){
+      this._getContent(this.props.tab.activeTabs)
+    }
+    componentWillReceiveProps() {
       this._getContent(this.props.tab.activeTabs)
       // this.setState({'content': this.getJson('http://localhost:4040/users')})
     }
-
 
     render() {
         return(

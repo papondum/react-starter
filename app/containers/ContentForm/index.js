@@ -3,42 +3,6 @@ import React from 'react';
 class ContentForm extends React.Component {
     constructor(props) {
         super(props);
-        // this.state=({
-        //   'header':[]
-        // })
-    }
-
-    _getHeaderFormat(head){
-      // switch (head) {
-      //   case 'User account':
-      //     this.setState({'header':
-      //     ['No', 'Firstname', 'Lastname', 'Username', 'Password', 'Email', 'Role']})
-      //     break;
-      //   case 'User role':
-      //
-      //     break;
-      //   case 'Customer':
-      //
-      //     break;
-      //   case 'Supplier':
-      //
-      //     break;
-      //   case 'Price list':
-      //
-      //     break;
-      //   case 'Product':
-      //
-      //     break;
-      //   case 'Brand':
-      //
-      //     break;
-      //     case 'Film Type':
-      //
-      //       break;
-      //
-      //   default:
-          console.log('default');
-      //}
     }
 
     _headerGen(content){
