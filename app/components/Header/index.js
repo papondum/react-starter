@@ -1,13 +1,15 @@
 import React from 'react';
 import './style.scss';
-class Header extends React.Component {
+import LogoIcon from '../../resource/Icon/codex_logo.png'
+class Header extends React.Component{
     constructor(props) {
         super(props);
     }
     render() {
         return (
           <div className="header">
-            Header
+            <img className = 'codex-icon' src={LogoIcon}/>
+            Headser
           </div>
       );
     }

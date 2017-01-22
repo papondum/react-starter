@@ -22,11 +22,12 @@ class MainField extends React.Component {
 
     render() {
         return(
-    <div className="mainContent">
-        <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
-        <ActionMenu/>
-        <Content contentHeader = {this.state.mainField}/>
-            </div>);}
+          <div className="mainContent">
+              <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
+              <ActionMenu/>
+              <Content contentHeader = {this.state.mainField}/>
+          </div>)
+    }
 }
 
 const mapStateToProps = (state) => {

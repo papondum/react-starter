@@ -14,7 +14,7 @@ class TabList extends React.Component {
 
     render() {
         return(
-    <div className="flex">
+    <div className="flex tablist-style">
         {this.generateTab()}
     </div>);}
 }

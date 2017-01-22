@@ -22,7 +22,21 @@
     margin:0;
   }
 }
-
+.submenu-item{
+  cursor: pointer;
+  min-height: 40px;
+  min-width: 60px;
+  padding: 10px 5px;
+  font-family:"Lato";
+  border-right: 1px solid #f0f0f0;
+  img{
+    height: 40px;
+    width:40px;
+  }
+  p{
+    margin:0;
+  }
+}
 .active-menu{
   background-color: #ffffff;
   color:blue;

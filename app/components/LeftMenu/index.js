@@ -7,6 +7,7 @@ import InventoryIcon from '../../resource/Icon/menu_inventory.png'
 import MasterIcon from '../../resource/Icon/menu_masterfile.png'
 import ReportIcon from '../../resource/Icon/menu_report.png'
 import DashIcon from '../../resource/Icon/menu_dashboard.png'
+import submenuIcon from '../../resource/Icon/submenu.png'
 import './style.scss';
 class LeftMenu extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class LeftMenu extends React.Component {
     }
 
     _getSubItemMenuFromName(item) {
-        const subMenu = item.submenu.map((i)=><div className="menu-item" key={i.name} onClick={()=>this.openTab(i.name)}>{i.name}</div>);
+        const subMenu = item.submenu.map((i)=><div className="submenu-item" key={i.name} onClick={()=>this.openTab(i.name)}><img src={submenuIcon}/><span>{i.name}</span></div>);
         this.setState({'submenu': subMenu});
     }
 
@@ -65,7 +66,7 @@ class LeftMenu extends React.Component {
     render() {
         return (
           <div className="left-menu">
-              <div className="flex-col flex menu">{this.menuGenerate()}</div>
+              <div className="flex-col flex menu flex-1">{this.menuGenerate()}</div>
               <div className="sub-menu">{this.state.submenu}</div>
           </div>
       );
