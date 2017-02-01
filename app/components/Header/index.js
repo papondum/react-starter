@@ -7,9 +7,13 @@ class Header extends React.Component{
     }
     render() {
         return (
-          <div className="header">
+          <div className="header flex">
             <img className = 'codex-icon' src={LogoIcon}/>
             Headser
+            <div className='flex-1'>&nbsp;</div>
+            <div>Accout name</div>
+              <div>Seting</div>
+            <div>Logout</div>
           </div>
       );
     }
