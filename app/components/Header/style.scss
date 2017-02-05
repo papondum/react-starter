@@ -1,9 +1,25 @@
 .header{
   background-color: #016be5;
-  height: 60px;
+  height: 70px;
+  color:#fff;
+  p{
+    color:#fff
+  }
 }
 .codex-icon{
-  padding: 8px;
-  height: 36px;
-  width: 36px;
+  padding: 12px;
+  height: 40px;
+  width: 40px;
+}
+.header-text{
+  height: 80%;
+  margin: auto 30px;
+  padding: 12px;
+  font-family: 'Lato';
+  p{
+    margin: 0
+  }
+  .sub-text{
+    font-size: 14px;
+  }
 }

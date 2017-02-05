@@ -1,6 +1,6 @@
 import React, { PropTypes }from 'react';
 import { connect } from 'react-redux';
-import { openTab } from '../../actions';
+import { openTab ,setHeader ,setSubHeader} from '../../actions/tab';
 import SaleIcon from '../../resource/Icon/menu_sales.png'
 import PurchaseIcon from '../../resource/Icon/menu_purchase.png'
 import InventoryIcon from '../../resource/Icon/menu_inventory.png'
@@ -16,6 +16,7 @@ class LeftMenu extends React.Component {
     }
 
     openSubmenu(item) {
+        this.props.setHeader(item.name)
         this._getSubItemMenuFromName(item);
         this.setState({'menuActive':item.name})
     }
@@ -60,6 +61,7 @@ class LeftMenu extends React.Component {
     }
 
     openTab(item) {
+        this.props.setSubHeader(item)
         this.props.onOpenTab([item]);
     }
 
@@ -81,7 +83,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onOpenTab: tab => dispatch(openTab(tab))
+        onOpenTab: tab => dispatch(openTab(tab)),
+        setHeader: tab => dispatch(setHeader(tab)),
+        setSubHeader: tab => dispatch(setSubHeader(tab))
     };
 };
 

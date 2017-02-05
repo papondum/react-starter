@@ -1,0 +1,45 @@
+.input-group{
+  font-family: "Lato";
+  max-width: 500px;
+  max-height: 500px;
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  h2{
+    text-align: center;
+  }
+  input{
+    padding:10px;
+    margin:10px 0;
+  }
+  button{
+    height:50px;
+    background-color: #075cbd;
+    color:#fff;
+    border-radius: 5px;
+    margin:20px 0;
+    border-style: none;
+  }
+}
+footer {
+    font-family: "Lato";
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    margin-bottom: 20px;
+    p{
+      width:50%;
+      margin:0 auto;
+      text-align: center;
+      opacity: 0.87;
+    }
+}
+.icon{
+  height: 30px;
+  width:30px;
+}
