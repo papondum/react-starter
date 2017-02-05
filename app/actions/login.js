@@ -1,8 +1,10 @@
+import {post } from '../../utils'
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
 
 export function requestLogin(creds) {
+  console.log(creds);
   return {
     type: LOGIN_REQUEST,
     isFetching: true,
@@ -11,12 +13,12 @@ export function requestLogin(creds) {
   }
 }
 
-export function receiveLogin(user) {
+export function receiveLogin(token) {
   return {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    id_token: user.id_token
+    id_token: token
   }
 }
 
@@ -30,57 +32,25 @@ export function loginError(message) {
 }
 
 export function loginUser(creds) {
-  let config = {
-    method: 'POST',
-    headers: {  'Accept': 'application/json',
-                'Content-Type': 'application/json' },
-    body: JSON.stringify({"username":creds.username ,"password":creds.password})
-  }
-  const url = '/user/login'
-  const {hostname, protocol} = window.location
-  const serverUrl = `${protocol}//${hostname}:4040${url}`
-    fetch(serverUrl, config)
-    .then(response =>
-      response.json().then(user => ({ user, response }))
-          ).then(({ user, response }) =>  {
-      if (!response.ok) {
-        // If there was a problem, we want to
-        // dispatch the error condition
-        dispatch(loginError(user.message))
-        return Promise.reject(user)
+  return dispatch => {
+    dispatch(requestLogin(creds))
+    return post('/user/login',{
+      "username":creds.username ,"password":creds.password
+    } )
+    .then(response=>{
+      if(!response.ok){
+        localStorage.setItem('id_token', response.id_token)
+        dispatch(receiveLogin(response.id_token))
       }
       else {
-        console.log('OK');
-        // If login was successful, set the token in local storage
-        localStorage.setItem('id_token', user.id_token)
-        // Dispatch the success action
-        console.log(user);
-        // dispatch(receiveLogin(user))
-      }
-    }).catch(err => console.log("Error: ", err))
 
-  // return dispatch => {
-  //   // We dispatch requestLogin to kickoff the call to the API
-  //   dispatch(requestLogin(creds))
-  //
-  //   return fetch('http://localhost:4040/user/login', config)
-  //     .then(response =>
-  //       response.json().then(user => ({ user, response }))
-  //           ).then(({ user, response }) =>  {
-  //       if (!response.ok) {
-  //         // If there was a problem, we want to
-  //         // dispatch the error condition
-  //         dispatch(loginError(user.message))
-  //         return Promise.reject(user)
-  //       }
-  //       else {
-  //         // If login was successful, set the token in local storage
-  //         localStorage.setItem('id_token', user.id_token)
-  //         // Dispatch the success action
-  //         dispatch(receiveLogin(user))
-  //       }
-  //     }).catch(err => console.log("Error: ", err))
-  // }
+        dispatch(loginError(response))
+      }
+      })
+      .catch(err => {
+        dispatch(loginError(err))
+        console.log(err)})
+  }
 }
 
 

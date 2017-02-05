@@ -9,7 +9,7 @@ class MainField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mainField: null
+            mainField: ''
         };
     }
 

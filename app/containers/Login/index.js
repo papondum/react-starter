@@ -12,19 +12,13 @@ class Login extends Component {
   }
 
   render() {
-    const { errorMessage } = this.props
-    console.log(this.props);
     return (
       <div>
-        <input type='text' ref='username' className="form-control" placeholder='Username'/>
-        <input type='password' ref='password' className="form-control" placeholder='Password'/>
+        <input type='text' ref='username' className="form-control" placeholder='Username' required/>
+        <input type='password' ref='password' className="form-control" placeholder='Password' required/>
         <button onClick={(event) => this.handleClick(event)} className="btn btn-primary">
           Login
         </button>
-
-        {errorMessage &&
-          <p>{errorMessage}</p>
-        }
       </div>
     )
   }

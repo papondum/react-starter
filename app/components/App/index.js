@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import Header from '../Header';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import Login from '../../containers/Login'
 import {loginUser} from '../../actions/login'
 class App extends React.Component {
@@ -9,13 +10,10 @@ class App extends React.Component {
         super(props);
     }
     render() {
-      const { errorMessage ,dispatch} = this.props
-      if(!this.props.auth.isAutenticated){
-
+      if(!this.props.auth.isAuthenticated){
         return (
           <Login
-                errorMessage={errorMessage}
-                onLoginClick={ (creds) => loginUser(creds) }
+                onLoginClick={ (creds) => this.props.loginUser(creds) }
               />
         )
       }
@@ -40,8 +38,15 @@ const mapStateToProps = (state) => {
     return {
         auth: state.login.auth
     };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loginUser: creds => dispatch(loginUser(creds))
+    };
 };
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(App);

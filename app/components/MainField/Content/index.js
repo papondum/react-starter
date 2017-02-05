@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {getJsonFromUtil} from '../../../utils'
 import { connect } from 'react-redux';
 import ContentForm from '../../../containers/ContentForm'
+import {get } from '../../../../utils'
 class Content extends React.Component {
     constructor(props) {
         super(props);
@@ -10,43 +11,38 @@ class Content extends React.Component {
     }
 
     getJson(url){
-          fetch(url)
+          get(url)
           .then((response)=> {
             if (response.status >= 400) {
               throw new Error("Bad response from server");
             }
-            return response.json();
+            this.setState({'content': response})
           })
-          .then((data)=> {
-            this.setState({'content': data})            // get content from link
-          })
+          .catch(err=>console.log(err))
     }
 
     _getContent(category){
       switch (category) {
         case 'User account':
-          this.getJson('http://localhost:4040/users')
+          this.getJson('/api/user/all')
           break;
         case 'User role':
-          this.getJson('http://localhost:4040/roles')
+          this.getJson('/api/role/all')
           break;
         case 'Customer':
-          this.getJson('http://localhost:4040/customer')
+          this.getJson('/api/customer/all')
           break;
         case 'Supplier':
-          this.getJson('http://localhost:4040/users')
-          break;
-        case 'Price list':
-          this.getJson('http://localhost:4040/users')
+          this.getJson('/api/organization/all')
           break;
         case 'Product':
-          this.getJson('http://localhost:4040/products')
+          this.getJson('/api/product/all')
           break;
         case 'Brand':
-          this.getJson('http://localhost:4040/brands')
+          this.getJson('/api/brand/all')
           break;
         case 'Film Type':
-          this.getJson('http://localhost:4040/film')
+          this.getJson('/api/film/all')
           break;
 
         default:
@@ -54,12 +50,10 @@ class Content extends React.Component {
           break;
       }
     }
-    componentDidMount(){
-      this._getContent(this.props.tab.activeTabs)
-    }
+
     componentWillReceiveProps() {
       this._getContent(this.props.tab.activeTabs)
-      // this.setState({'content': this.getJson('http://localhost:4040/users')})
+      // this.setState({'content': this.getJson('/users')})
     }
 
     render() {

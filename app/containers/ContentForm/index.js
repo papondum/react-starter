@@ -36,11 +36,11 @@ class ContentForm extends React.Component {
         <table>
         <thead>
           <tr>
-            {this._headerGen(this.props.content)}
+             {this._headerGen(this.props.content)}
           </tr>
         </thead>
         <tbody>
-          {this._contentGen(this.props.content)}
+            {this._contentGen(this.props.content)}
         </tbody>
       </table></div>)
     }

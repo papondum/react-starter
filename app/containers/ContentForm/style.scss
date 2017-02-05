@@ -1,7 +1,7 @@
 .content-style{
   width: 100%;
   overflow: scroll;
-  height: 100%;
+  height: calc(100% - 130px);
 }
 table {
     border-collapse: collapse;
