@@ -22,9 +22,76 @@ class LeftMenu extends React.Component {
     }
 
     _getSubItemMenuFromName(item) {
-        const subMenu = item.submenu.map((i)=><div className="submenu-item" key={i.name} onClick={()=>this.openTab(i.name)}><img src={submenuIcon}/><span>{i.name}</span></div>);
-        this.setState({'submenu': subMenu});
+        const subMenu = item.submenu.map((i) => {
+          return (<div className="submenu-item" key={i.name} onClick={()=>this.openTab(i.name)} value={i.type}>
+                      <img src={submenuIcon}/>
+                      <span>{i.name}</span>
+                  </div>)});
+        let result = this._genMasterFileGroup(subMenu)
+        this.setState({'submenu': result});
     }
+
+    _genMasterFileGroup(item){
+      let clusteringFromSet = {user:[],business:[],price:[],product:[]}
+      for (var i = 0; i < item.length; i++) {
+        switch (item[i].props.value) {
+          case 'User':
+            clusteringFromSet.user.push(item[i])
+            break;
+          case 'Business Partner':
+            clusteringFromSet.business.push(item[i])
+            break;
+          case 'Pricing':
+            clusteringFromSet.price.push(item[i])
+            break;
+          case 'Product':
+            clusteringFromSet.product.push(item[i])
+            break;
+          default:
+
+        }
+      }
+      return (
+        <div>
+          <div>
+            <div className="sub-head-text">User</div>
+            {clusteringFromSet.user}
+          </div>
+          <div>
+            <div className="sub-head-text">Business Partner</div>
+            {clusteringFromSet.business}
+          </div>
+          <div>
+            <div className="sub-head-text">Pricing</div>
+            {clusteringFromSet.price}
+          </div>
+          <div>
+            <div className="sub-head-text">Product</div>
+            {clusteringFromSet.product}
+          </div>
+        </div>)
+    }
+
+
+    _genGroup(item){
+      switch (item.type) {
+        case 'User':
+          //push to user set
+          break;
+        case 'Business Partner':
+          //push to user set
+          break;
+        case 'Pricer':
+          //push to user set
+          break;
+        case 'Product':
+          //push to user set
+          break;
+        default:
+
+      }
+    }
+
 
     _getIconFromName(name){
       switch (name) {

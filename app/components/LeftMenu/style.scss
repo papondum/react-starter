@@ -2,8 +2,13 @@
   background-color: #ffffff;
   width:100%;
   border-left: 1px solid #e0e0e0;
-  padding-left: 10px;
   min-width: 200px;
+  .sub-head-text{
+    color:blue;
+    font-family: "Lato";
+    border-bottom: 1px solid #e0e0e0;
+    padding: 5px 10px;
+  }
 }
 .menu{
   width:100%;
@@ -27,7 +32,7 @@
   cursor: pointer;
   min-height: 40px;
   min-width: 60px;
-  padding: 10px 5px;
+  padding: 10px 15px;
   font-family:"Lato";
   border-right: 1px solid #f0f0f0;
   img{

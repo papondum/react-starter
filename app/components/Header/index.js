@@ -15,7 +15,6 @@ class Header extends React.Component{
     }
 
     componentWillReceiveProps(nextProps){
-      console.log(this.props);
       if(nextProps.head!=undefined){
         this.setState({
           mainHeader:nextProps.head
