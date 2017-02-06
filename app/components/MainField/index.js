@@ -24,7 +24,7 @@ class MainField extends React.Component {
         return(
           <div className="mainContent">
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
-              <ActionMenu/>
+              <ActionMenu activePage={this.props.tab.activeTabs}/>
               <Content contentHeader = {this.state.mainField}/>
           </div>)
     }
