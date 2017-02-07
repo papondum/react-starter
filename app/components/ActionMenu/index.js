@@ -12,8 +12,8 @@ import emailIcon from '../../resource/Icon/button_create.png'
 
 import printIcon from '../../resource/Icon/button_print.png'
 import exportIcon from '../../resource/Icon/button_export.png'
-import * as UserAccountActions from '../../actions/useraccount'
 import refreshIcon from '../../resource/Icon/button_create.png'
+import UserAccount from '../ActionPage/UserAccount'
 class ActionMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -37,12 +37,11 @@ class ActionMenu extends React.Component {
     _setActionCategory(){
       switch (this.props.activePage) {
         case 'User account':
-        console.log('invoked');
           this.setState({
-            createAction:()=>this.props.showCreateUser(),
-            editAction:()=>this.props.showEditUser(),
+            createAction:()=>this.props.actionFn((<UserAccount/>)),
+            editAction:()=>this.props.actionFn(),
             copyAction:'',
-            deleteAction:()=>this.props.showDeleteUser(),
+            deleteAction:()=>this.props.actionFn(),
             attachAction:'',
             emailAction:'',
             printAction:'',
@@ -98,10 +97,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, UserAccountActions), dispatch)
-}
-
 export default connect(
-    mapStateToProps,mapDispatchToProps
+    mapStateToProps
 )(ActionMenu);

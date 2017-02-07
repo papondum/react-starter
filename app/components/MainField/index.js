@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import { openTab } from '../../actions';
 import Content from './Content';
 import ActionMenu from '../ActionMenu'
+import {get } from '../../../utils'
 import './style.scss'
 class MainField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mainField: ''
+            mainField: '',
+            mainContent:''
         };
     }
 
@@ -20,12 +22,63 @@ class MainField extends React.Component {
         });
     }
 
+    getJson(url){
+          get(url)
+          .then((response)=> {
+            if (response.status >= 400) {
+              throw new Error("Bad response from server");
+            }
+            this.setState({'mainContent': response})
+          })
+          .catch(err=>console.log(err))
+    }
+
+    _getContent(category){
+      switch (category) {
+        case 'User account':
+          this.getJson('/api/user/all')
+          break;
+        case 'User role':
+          this.getJson('/api/role/all')
+          break;
+        case 'Customer':
+          this.getJson('/api/customer/all')
+          break;
+        case 'Supplier':
+          this.getJson('/api/organization/all')
+          break;
+        case 'Product':
+          this.getJson('/api/product/all')
+          break;
+        case 'Brand':
+          this.getJson('/api/brand/all')
+          break;
+        case 'Film Type':
+          this.getJson('/api/film/all')
+          break;
+
+        default:
+          this.setState({'mainContent':''})
+          break;
+      }
+    }
+
+    componentWillReceiveProps(nextProps) {
+      this._getContent(this.props.tab.activeTabs)
+    }
+
+    setContent(content){
+      this.setState({
+        mainContent:content
+      })
+    }
+
     render() {
         return(
           <div className="mainContent">
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
-              <ActionMenu activePage={this.props.tab.activeTabs}/>
-              <Content contentHeader = {this.state.mainField}/>
+              <ActionMenu activePage={this.props.tab.activeTabs} actionFn={(item)=>this.setContent(item)}/>
+              <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent}/>
           </div>)
     }
 }
