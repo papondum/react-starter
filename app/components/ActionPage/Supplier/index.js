@@ -1,16 +1,16 @@
 import React, {PropTypes} from 'react';
 import './style.scss';
-class UserAccount extends React.Component {
+class Supplier extends React.Component {
     constructor(props) {
         super(props);
     }
 
     _genHeader(type){
       if(type=='create'){
-        return 'Create - User account'
+        return 'Create - Supplier'
       }
       else if(type=='edit'){
-        return 'Edit - User account'
+        return 'Edit - Supplier'
       }
     }
 
@@ -30,31 +30,35 @@ class UserAccount extends React.Component {
 
             <div className='flex'>
               <div className='input-box left'>
-                <label>Firstname</label>
+                <label>Code</label>
                 <input className='flex' type="text"/>
               </div>
               <div className='input-box'>
-                <label>Lastname</label>
+                <label>Tel</label>
+                <input className='flex' type="text"/>
+              </div>
+              <div className='input-box'>
+                <label>Contact Name</label>
                 <input className='flex' type="text"/>
               </div>
             </div>
             <div className='flex'>
               <div className='input-box left'>
-                <label>Username</label>
+                <label>Supplier Name</label>
                 <input className='flex' type="text"/>
               </div>
               <div className='input-box'>
-                <label>Password</label>
+                <label>Fax</label>
                 <input className='flex' type="text"/>
               </div>
             </div>
             <div className='flex'>
               <div className='input-box left'>
+                <label>Address</label>
+                <input className='flex' type="text"/>
+              </div>
+              <div className='input-box'>
                 <label>Email</label>
-                <input className='flex' type="text"/>
-              </div>
-              <div className='input-box'>
-                <label>Role</label>
                 <input className='flex' type="text"/>
               </div>
             </div>
@@ -62,4 +66,4 @@ class UserAccount extends React.Component {
     }
 }
 
-export default UserAccount;
+export default Supplier;

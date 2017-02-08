@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import './style.scss';
-class UserAccount extends React.Component {
+class UserRole extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -62,4 +62,4 @@ class UserAccount extends React.Component {
     }
 }
 
-export default UserAccount;
+export default UserRole;

@@ -1,0 +1,17 @@
+.flex{display: flex;}
+.input-box{
+  margin:20px;
+
+}
+.page-style{
+  font-family: "Lato";
+  .left{
+    margin-right: 5 0px;
+  }
+  .page-head{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    color:#616161;
+  }
+}

@@ -64,7 +64,7 @@ class MainField extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      this._getContent(this.props.tab.activeTabs)
+      this._getContent(nextProps.tab.activeTabs)
     }
 
     setContent(content){
@@ -77,7 +77,7 @@ class MainField extends React.Component {
         return(
           <div className="mainContent">
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
-              <ActionMenu activePage={this.props.tab.activeTabs} actionFn={(item)=>this.setContent(item)}/>
+              {this.state.mainContent.length==undefined? '':<ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} actionFn={(item)=>this.setContent(item)}/>}
               <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent}/>
           </div>)
     }

@@ -28,6 +28,7 @@ class ContentForm extends React.Component {
       for(var o in obj){
         result.push((<td>{obj[o]}</td>))
       }
+      result.unshift((<td><input type='checkbox' value={obj}/></td>))
       return result
     }
 

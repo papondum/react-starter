@@ -14,6 +14,8 @@ import printIcon from '../../resource/Icon/button_print.png'
 import exportIcon from '../../resource/Icon/button_export.png'
 import refreshIcon from '../../resource/Icon/button_create.png'
 import UserAccount from '../ActionPage/UserAccount'
+import Customer from '../ActionPage/Customer'
+import Supplier from '../ActionPage/Supplier'
 class ActionMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -30,16 +32,18 @@ class ActionMenu extends React.Component {
             refreshAction:'',
         };
     }
-
-    componentWillReceiveProps(){
+    componentDidMount(){
+      this._setActionCategory()
+    }
+    componentWillReceiveProps(nextProps){
       this._setActionCategory()
     }
     _setActionCategory(){
       switch (this.props.activePage) {
         case 'User account':
           this.setState({
-            createAction:()=>this.props.actionFn((<UserAccount/>)),
-            editAction:()=>this.props.actionFn(),
+            createAction:()=>this.props.actionFn((<UserAccount type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.actionFn((<UserAccount type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
             copyAction:'',
             deleteAction:()=>this.props.actionFn(),
             attachAction:'',
@@ -53,10 +57,30 @@ class ActionMenu extends React.Component {
 
           break;
         case 'Customer':
-
+          this.setState({
+            createAction:()=>this.props.actionFn((<Customer type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.actionFn((<Customer type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            copyAction:'',
+            deleteAction:()=>this.props.actionFn(),
+            attachAction:'',
+            emailAction:'',
+            printAction:'',
+            exportAction:'',
+            refreshAction:'',
+          })
           break;
         case 'Supplier':
-
+          this.setState({
+            createAction:()=>this.props.actionFn((<Supplier type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.actionFn((<Supplier type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            copyAction:'',
+            deleteAction:()=>this.props.actionFn(),
+            attachAction:'',
+            emailAction:'',
+            printAction:'',
+            exportAction:'',
+            refreshAction:'',
+          })
           break;
         case 'Price list':
 
@@ -79,7 +103,7 @@ class ActionMenu extends React.Component {
         return(
           <div className='action-group-btn'>
           <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
-          <button onClick={() =>this.state.createAction() }><img src={editIcon}/> <p>Edit</p></button>
+          <button onClick={() =>this.state.editAction() }><img src={editIcon}/> <p>Edit</p></button>
           <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
           <button onClick={() =>this.state.createAction() }><img src={deleteIcon}/> <p>Delete</p></button>
           <button onClick={() =>this.state.createAction() }><img src={attachIcon}/> <p>Attach</p></button>
