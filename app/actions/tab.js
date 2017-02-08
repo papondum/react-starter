@@ -1,4 +1,5 @@
 export const OPEN_TAB = 'OPEN_TAB';
+export const CLOSE_TAB = 'CLOSE_TAB';
 export const SET_HEAD = 'SET_HEAD';
 export const SET_SUB_HEAD = 'SET_SUB_HEAD';
 export function openTab(item) {
@@ -21,4 +22,11 @@ export function setSubHeader(item) {
         type: SET_SUB_HEAD,
         payload: item
     };
+}
+
+export function closeTab(item) {
+    return{
+      type:CLOSE_TAB,
+      payload: item
+    }
 }

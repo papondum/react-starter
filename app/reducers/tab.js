@@ -1,5 +1,5 @@
 import {createReducer} from '../utils';
-import {OPEN_TAB, SET_HEAD, SET_SUB_HEAD} from '../actions/tab';
+import {OPEN_TAB, SET_HEAD, SET_SUB_HEAD, CLOSE_TAB} from '../actions/tab';
 
 const initialState = {
     activeTabs: {},
@@ -24,11 +24,19 @@ const actions = {
         }
         return Object.assign({}, state, {activeTabs: activeTab[0], tabs: result});
     },
-    [SET_HEAD]:(state, payload)=>{
+    [SET_HEAD]:(state, payload) => {
       return Object.assign({},state,{mainHeadText:payload})
     },
-    [SET_SUB_HEAD]:(state, payload)=>{
+    [SET_SUB_HEAD]:(state, payload) => {
       return Object.assign({},state,{subHeadText:payload})
+    },
+    [CLOSE_TAB] :(state,payload) => {
+      let result = state.tabs
+      var index = result.indexOf(payload);
+      if (index > -1) {
+          result.splice(index, 1);
+      }
+      return Object.assign({},state,{tabs:result})
     }
 };
 export default createReducer(initialState, actions);

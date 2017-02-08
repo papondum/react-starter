@@ -45,7 +45,7 @@ class UserAccount extends React.Component {
               </div>
               <div className='input-box'>
                 <label>Password</label>
-                <input className='flex' type="text"/>
+                <input className='flex' type="password"/>
               </div>
             </div>
             <div className='flex'>

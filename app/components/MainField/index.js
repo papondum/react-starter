@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import TabList from './TabList';
 import { connect } from 'react-redux';
-import { openTab } from '../../actions';
+import { openTab ,closeTab} from '../../actions/tab';
 import Content from './Content';
 import ActionMenu from '../ActionMenu'
 import {get } from '../../../utils'
@@ -76,7 +76,7 @@ class MainField extends React.Component {
     render() {
         return(
           <div className="mainContent">
-              <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)}/>
+              <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)} closeTab= {(tab) => this.props.closeTab(tab)}/>
               {this.state.mainContent.length==undefined? '':<ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} actionFn={(item)=>this.setContent(item)}/>}
               <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent}/>
           </div>)
@@ -90,7 +90,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        onOpenTab: tab => dispatch(openTab(tab))
+        onOpenTab: tab => dispatch(openTab(tab)),
+        closeTab: tab => dispatch(closeTab(tab))
     };
 };
 export default connect(
