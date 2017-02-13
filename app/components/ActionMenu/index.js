@@ -15,6 +15,7 @@ import exportIcon from '../../resource/Icon/button_export.png'
 import refreshIcon from '../../resource/Icon/button_create.png'
 import UserAccount from '../ActionPage/UserAccount'
 import Customer from '../ActionPage/Customer'
+import Userrole from '../ActionPage/UserRole'
 import Supplier from '../ActionPage/Supplier'
 class ActionMenu extends React.Component {
     constructor(props) {
@@ -54,7 +55,17 @@ class ActionMenu extends React.Component {
           })
           break;
         case 'User role':
-
+          this.setState({
+            createAction:()=>this.props.actionFn((<Userrole type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.actionFn((<Userrole type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            copyAction:'',
+            deleteAction:()=>this.props.actionFn(),
+            attachAction:'',
+            emailAction:'',
+            printAction:'',
+            exportAction:'',
+            refreshAction:'',
+          })
           break;
         case 'Customer':
           this.setState({

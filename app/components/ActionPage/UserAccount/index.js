@@ -29,32 +29,32 @@ class UserAccount extends React.Component {
 
 
             <div className='flex'>
-              <div className='input-box left'>
-                <label>Firstname</label>
+              <div className='input-box left flex'>
+                <label>Firstname:</label>
                 <input className='flex' type="text"/>
               </div>
-              <div className='input-box'>
-                <label>Lastname</label>
+              <div className='input-box flex'>
+                <label>Lastname:</label>
                 <input className='flex' type="text"/>
               </div>
             </div>
             <div className='flex'>
-              <div className='input-box left'>
-                <label>Username</label>
+              <div className='input-box left flex'>
+                <label>Username:</label>
                 <input className='flex' type="text"/>
               </div>
-              <div className='input-box'>
-                <label>Password</label>
+              <div className='input-box flex'>
+                <label>Password:</label>
                 <input className='flex' type="password"/>
               </div>
             </div>
             <div className='flex'>
-              <div className='input-box left'>
-                <label>Email</label>
+              <div className='input-box left flex'>
+                <label>Email:</label>
                 <input className='flex' type="text"/>
               </div>
-              <div className='input-box'>
-                <label>Role</label>
+              <div className='input-box flex'>
+                <label>Role:</label>
                 <input className='flex' type="text"/>
               </div>
             </div>

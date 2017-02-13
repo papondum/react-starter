@@ -1,12 +1,14 @@
 .flex{display: flex;}
 .input-box{
   margin:20px;
-
+  label{
+    width:80px;
+  }
 }
 .page-style{
   font-family: "Lato";
   .left{
-    margin-right: 5 0px;
+    margin-right: 5px;
   }
   .page-head{
     display: flex;

@@ -6,11 +6,14 @@ class ContentForm extends React.Component {
     }
 
     _headerGen(content){
+      let genHead=[]
       if(content.length>0){
         var head = Object.keys(content[0])
-        var genHead = head.map(item=>{
-          return (<th key= {item}>{item}</th>)
-        })}
+        genHead = head.map(item=>{
+          return (<td key= {item}>{item}</td>)
+        })
+        genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
+      }
         return genHead
     }
 
@@ -18,7 +21,7 @@ class ContentForm extends React.Component {
       var result = []
       for(var i=0 ;i<content.length;i++){
         let eachRow = this._getEachVal(content[i])
-        result.push((<tr>{eachRow}</tr>))
+        result.push((<tr key = {i}>{eachRow}</tr>))
       }
       return result
     }
@@ -26,9 +29,9 @@ class ContentForm extends React.Component {
     _getEachVal(obj){
       var result=[]
       for(var o in obj){
-        result.push((<td>{obj[o]}</td>))
+        result.push((<td key={o}>{obj[o]}</td>))
       }
-      result.unshift((<td><input type='checkbox' value={obj}/></td>))
+      result.unshift((<td key='checkbox'><input type='checkbox' value={obj}/></td>))
       return result
     }
 
