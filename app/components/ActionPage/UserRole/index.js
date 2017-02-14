@@ -47,7 +47,16 @@ class UserRole extends React.Component {
 
     _genBodyRole(){
       let item = this.state.stateRole
-      let result  = item.map(i => <tr>{i.name}</tr>)
+      let result  = item.map(i =>
+        <div key = {i.name} className='row-item'>
+          {i.name}
+          <div className='child-item'>
+            {i.subitem.map(j=>
+              <div key={j.name} className = 'sub-item'>
+                <span><span>{j.name}</span><input type='checkbox' value={j.view}/><input type='checkbox' value={j.view}/><input type='checkbox' value={j.view}/><input type='checkbox' value={j.view}/><input type='checkbox' value={j.view}/></span>
+              </div>)}
+          </div>
+        </div>)
       return result
     }
 
@@ -86,10 +95,10 @@ class UserRole extends React.Component {
                   <td>Edit</td>
                 </tr>
               </thead>
-              <tbody>
+              </table>
+              <div>
                 {this._genBodyRole()}
-              </tbody>
-            </table>
+              </div>
           </div>
         )
     }
