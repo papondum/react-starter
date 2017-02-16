@@ -6,17 +6,16 @@ import createIcon from '../../resource/Icon/button_create.png'
 import editIcon from '../../resource/Icon/button_edit.png'
 import deleteIcon from '../../resource/Icon/button_delete.png'
 import copyIcon from '../../resource/Icon/button_copy.png'
-
 import attachIcon from '../../resource/Icon/button_create.png'
-import emailIcon from '../../resource/Icon/button_create.png'
-
 import printIcon from '../../resource/Icon/button_print.png'
+import emailIcon from '../../resource/Icon/button_email.png'
 import exportIcon from '../../resource/Icon/button_export.png'
 import refreshIcon from '../../resource/Icon/button_create.png'
 import UserAccount from '../ActionPage/UserAccount'
 import Customer from '../ActionPage/Customer'
 import Userrole from '../ActionPage/UserRole'
 import Supplier from '../ActionPage/Supplier'
+import PriceList from '../ActionPage/PriceList'
 class ActionMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -94,7 +93,17 @@ class ActionMenu extends React.Component {
           })
           break;
         case 'Price list':
-
+          this.setState({
+            createAction:()=>this.props.actionFn((<PriceList type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.actionFn((<PriceList type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            copyAction:'',
+            deleteAction:()=>this.props.actionFn(),
+            attachAction:'',
+            emailAction:'',
+            printAction:'',
+            exportAction:'',
+            refreshAction:'',
+          })
           break;
         case 'Product':
 

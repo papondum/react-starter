@@ -13,8 +13,8 @@ class App extends React.Component {
     render() {
       if(!this.props.auth.isAuthenticated){
         return (
-          // <Login onLoginClick={ (creds) => this.props.loginUser(creds) }/>
-          <Role/>
+          <Login onLoginClick={ (creds) => this.props.loginUser(creds) }/>
+        //  <Role/>
         )
       }
       else{

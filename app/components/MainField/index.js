@@ -47,6 +47,9 @@ class MainField extends React.Component {
         case 'Supplier':
           this.getJson('/api/organization/all')
           break;
+        case 'Price list':
+          this.getJson('/api/user/all')
+          break;
         case 'Product':
           this.getJson('/api/product/all')
           break;

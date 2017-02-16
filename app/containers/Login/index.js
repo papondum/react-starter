@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './style.scss'
+import logoSrc from '../../resource/Icon/logo_codex_transparent.png'
 class Login extends Component {
   constructor(props){
     super(props)
@@ -15,6 +16,7 @@ class Login extends Component {
     return (
       <div>
           <div className='input-group'>
+              <img src={logoSrc} />
               <h2>Log in to Codex ERP</h2>
               <p>Please enter your credentials to access system.</p>
               <input type='text' ref='username' className="form-control" placeholder='Username' required/>

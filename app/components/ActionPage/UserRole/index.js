@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react';
 import './style.scss';
+import cancelIcon from '../../../resource/Icon/button_cancel.png'
+import saveIcon from '../../../resource/Icon/button_save.png'
 class UserRole extends React.Component {
     constructor(props) {
         super(props);
@@ -75,8 +77,8 @@ class UserRole extends React.Component {
               <div className='page-head'>
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
-                      <button onClick={()=>this.props.getContent('User account')}>Cancel</button>
-                      <button>Save</button>
+                    <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/>Cancel</button>
+                    <button><img src={saveIcon}/>Save</button>
                   </div>
               </div>
               <hr/>

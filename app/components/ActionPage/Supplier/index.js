@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react';
 import './style.scss';
+import cancelIcon from '../../../resource/Icon/button_cancel.png'
+import saveIcon from '../../../resource/Icon/button_save.png'
 class Supplier extends React.Component {
     constructor(props) {
         super(props);
@@ -20,8 +22,8 @@ class Supplier extends React.Component {
             <div className='page-head'>
               <h2>{this._genHeader(this.props.type)}</h2>
               <div className='action-group-btn'>
-                <button onClick={()=>this.props.getContent('User account')}>Cancel</button>
-                <button>Save</button>
+                <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/><p>Cancel</p></button>
+                <button><img src={saveIcon}/><p>Save</p></button>
               </div>
             </div>
             <hr/>
