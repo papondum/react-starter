@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import Login from '../../containers/Login'
 import {loginUser} from '../../actions/login'
+import Role from '../ActionPage/UserRole'
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -12,9 +13,8 @@ class App extends React.Component {
     render() {
       if(!this.props.auth.isAuthenticated){
         return (
-          <Login
-                onLoginClick={ (creds) => this.props.loginUser(creds) }
-              />
+          // <Login onLoginClick={ (creds) => this.props.loginUser(creds) }/>
+          <Role/>
         )
       }
       else{
