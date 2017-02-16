@@ -49,12 +49,12 @@ class UserRole extends React.Component {
       let item = this.state.stateRole
       let result  = item.map(i =>
         <div key = {i.name} className='row-item'>
-            <span className = 'sub-head'>{i.name}</span>
+            <div className = 'sub-head'>{i.name}</div>
             <div className='child-item'>
                 {i.subitem.map(j=>
                     <div key={j.name} className = 'sub-item'>
                         <div className='flex'>
-                            <div style={{'flex':5}}>{j.name}</div>
+                            <div style={{'flex':10}}>{j.name}</div>
                             <div className='flex' style={{'flex':5}}>
                                 <input className='flex-1' type='checkbox' value={j.view}/>
                                 <input className='flex-1' type='checkbox' value={j.email}/>
@@ -94,7 +94,7 @@ class UserRole extends React.Component {
               <hr/>
 
               <div className='flex role-head'>
-                  <div style={{'flex':5}}>
+                  <div style={{'flex':10}}>
                       <span>Document</span>
                   </div>
                   <div style={{'flex':5}} className='flex'>
