@@ -84,11 +84,11 @@ class UserRole extends React.Component {
               <hr/>
               <div className='flex'>
                   <div className='input-box left flex'>
-                      <label>User role:</label>
+                      <label><i>User role :</i></label>
                       <input className='flex' type="text"/>
                   </div>
                   <div className='input-box flex'>
-                      <label>Description:</label>
+                      <label><i>Description :</i></label>
                       <input className='flex' type="text"/>
                   </div>
               </div>
