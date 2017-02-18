@@ -4,10 +4,10 @@
   border-left: 1px solid #e0e0e0;
   min-width: 200px;
   .sub-head-text{
-    color:blue;
-    font-family: "Lato";
+    color:#006be5;
     border-bottom: 1px solid #e0e0e0;
     padding: 5px 10px;
+    font-size: 11px;
   }
 }
 .menu{
@@ -19,13 +19,14 @@
   min-width: 60px;
   padding: 10px 5px;
   text-align: center;
-  font-family:"Lato";
   img{
     height: 40px;
     width:40px;
   }
   p{
     margin:0;
+    color: #454545;
+    font-size: 9.3px;
   }
 }
 .submenu-item{
@@ -33,17 +34,25 @@
   min-height: 40px;
   min-width: 60px;
   padding: 10px 15px;
-  font-family:"Lato";
   border-right: 1px solid #f0f0f0;
+  display: flex;
   img{
     height: 40px;
     width:40px;
   }
   p{
+    font-size: 12px;
+    color:#454545;
+    font-family: 'Myriad Pro';
     margin:0;
+    margin-top:13px;
   }
 }
 .active-menu{
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
   background-color: #ffffff;
-  color:blue;
+  p{
+      color:#006be5;
+  }
 }

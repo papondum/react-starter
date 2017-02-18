@@ -80,9 +80,11 @@ class MainField extends React.Component {
     render() {
         return(
           <div className="mainContent">
+
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)} closeTab= {(tab) => this.props.closeTab(tab)}/>
               {this.state.mainContent.length==undefined? '':<ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} actionFn={(item)=>this.setContent(item)}/>}
               <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent}/>
+              <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
           </div>)
     }
 }

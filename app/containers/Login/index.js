@@ -15,15 +15,18 @@ class Login extends Component {
   render() {
     return (
       <div>
-          <div className='input-group'>
+          <div className = 'container'>
               <img src={logoSrc} />
-              <h2>Log in to Codex ERP</h2>
-              <p>Please enter your credentials to access system.</p>
-              <input type='text' ref='username' className="form-control" placeholder='Username' required/>
-              <input type='password' ref='password' className="form-control" placeholder='Password' required/>
-              <button onClick={(event) => this.handleClick(event)} className="btn btn-primary">
-                  Log in
-              </button>
+              <h1>Log in to Codex ERP</h1>
+
+              <div className='input-group'>
+                  <p>Please enter your credentials to access system.</p>
+                  <input type='text' ref='username' className="form-control" placeholder='Username' required/>
+                  <input type='password' ref='password' className="form-control" placeholder='Password' required/>
+                  <button onClick={(event) => this.handleClick(event)} className="btn btn-primary">
+                      Log in
+                  </button>
+              </div>
           </div>
           <footer>
               <p>

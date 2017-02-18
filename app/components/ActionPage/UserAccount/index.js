@@ -27,7 +27,7 @@ class UserAccount extends React.Component {
                   </div>
               </div>
               <hr/>
-
+              
               <div className='flex'>
                   <div className='input-box left flex'>
                       <label>Firstname:</label>

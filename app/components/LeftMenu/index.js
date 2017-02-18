@@ -24,9 +24,9 @@ class LeftMenu extends React.Component {
     _getSubItemMenuFromName(item) {
         const subMenu = item.submenu.map((i) => {
           return (<div className="submenu-item" key={i.name} onClick={()=>this.openTab(i.name)} value={i.type}>
-                      <img src={submenuIcon}/>
-                      <span>{i.name}</span>
-                  </div>)});
+              <img src={submenuIcon}/>
+              <div><p>{i.name}</p></div>
+          </div>)});
         let result = this._genMasterFileGroup(subMenu)
         this.setState({'submenu': result});
     }

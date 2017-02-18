@@ -157,15 +157,18 @@ class ActionMenu extends React.Component {
 
     render() {
         return(
-          <div className='action-group-btn'>
-              <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
-              <button onClick={() =>this.state.editAction() }><img src={editIcon}/> <p>Edit</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={deleteIcon}/> <p>Delete</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
+          <div className='flex action-bar' >
+              <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
+              <div className='action-group-btn'>
+                  <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
+                  <button onClick={() =>this.state.editAction() }><img src={editIcon}/> <p>Edit</p></button>
+                  <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
+                  <button onClick={() =>this.state.createAction() }><img src={deleteIcon}/> <p>Delete</p></button>
+                  <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
+                  <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
+                  <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
+                  <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
+              </div>
           </div>)
         }
 }

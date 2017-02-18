@@ -1,33 +1,31 @@
 .input-group{
-  font-family: "Lato";
-  max-width: 500px;
-  max-height: 500px;
-  position: absolute;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   margin: auto;
   display: flex;
   flex-direction: column;
-  h2{
-    text-align: center;
-  }
   input{
     padding:10px;
     margin:10px 0;
+    color: #b0b4b7;
+    border-radius: 3px;
+    border:1px solid #b0b4b7;
+  }
+  input:-webkit-autofill{
+    color: #b0b4b7;
+    background-color: #fff;
   }
   button{
     height:50px;
-    background-color: #075cbd;
+    background-color: #0265d5;
     color:#fff;
     border-radius: 5px;
     margin:20px 0;
     border-style: none;
   }
+  p{
+    margin:25px 0;
+  }
 }
 footer {
-    font-family: "Lato";
     position: fixed;
     bottom: 0;
     width:100%;
@@ -42,4 +40,19 @@ footer {
 .icon{
   height: 30px;
   width:30px;
+}
+.container{
+  margin-top:10vh;
+  margin:auto;
+  max-width: 600px;
+  img{
+    height: 110px;
+    width: 500px;
+    margin-top: 15vh;
+  }
+  h1{
+    text-align: center;
+    margin: 45px 0;
+    font-weight: 200;
+  }
 }

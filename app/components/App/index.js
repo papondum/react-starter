@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import Login from '../../containers/Login'
 import {loginUser} from '../../actions/login'
 import Role from '../ActionPage/UserRole'
+import './style.scss'
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -20,8 +21,8 @@ class App extends React.Component {
       else{
         return (
           <div className="flex-col flex">
-            <Header/>
-            { this.props.children }
+              <Header/>
+              { this.props.children }
             <div>
                 <Link to="/">Filterable Table</Link>
                 <Link to="/about">About</Link>
