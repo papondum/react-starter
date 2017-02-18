@@ -7,10 +7,13 @@ ul{
 }
 
 .role-head{
-  padding: 10px;
+  border-top: 1px solid #757575;
   border-bottom: 2px solid #757575;
   opacity: 0.87;
   font-weight: 600;
+  >div>span{
+    padding: 10px;
+  }
 }
 .sub-head{
   padding: 10px;

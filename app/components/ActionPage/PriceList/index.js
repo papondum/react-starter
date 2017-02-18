@@ -71,8 +71,8 @@ class PriceList extends React.Component {
                           </div>
                       </div>
                   </div>)}
-                  </div>
-              </div>)
+          </div>
+      </div>)
     return result
   }
 
@@ -82,7 +82,6 @@ class PriceList extends React.Component {
             <div className='page-head'>
                 <h2>{this._genHeader(this.props.type)}</h2>
                 <div className='action-group-btn'>
-                    <button><img src={attachIcon}/> <p>Attach</p></button>
                     <button><img src={emailIcon}/> <p>Email</p></button>
                     <button><img src={printIcon}/> <p>Print</p></button>
                     <button><img src={exportIcon}/> <p>Export</p></button>
@@ -100,16 +99,19 @@ class PriceList extends React.Component {
 
             <hr/>
 
+            <div className='flex price-line'>
+                <h2>Price List Line(s) </h2>
+                <button>Input Price</button>
+            </div>
+
             <div className='flex role-head'>
-                <div style={{'flex':10}}>
-                    <span>Document</span>
-                </div>
                 <div style={{'flex':5}} className='flex'>
-                    <span className='flex-1' style={{'textAlign':'center'}}>View</span>
-                    <span className='flex-1' style={{'textAlign':'center'}}>Email</span>
-                    <span className='flex-1' style={{'textAlign':'center'}}>Print</span>
-                    <span className='flex-1' style={{'textAlign':'center'}}>Export</span>
-                    <span className='flex-1' style={{'textAlign':'center'}}>Edit</span>
+                    <span ><input type='checkbox'/>No.</span>
+                    <span className='flex-1'>Film Type</span>
+                    <span className='flex-1'>Brand</span>
+                    <span className='flex-1'>Thickness</span>
+                    <span className='flex-1'>Average Cost</span>
+                    <span className='flex-1'>Unit Price(THB/Kg)</span>
                 </div>
             </div>
             <div>

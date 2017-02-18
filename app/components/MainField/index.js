@@ -59,7 +59,8 @@ class MainField extends React.Component {
         case 'Film Type':
           this.getJson('/api/film/all')
           break;
-
+        case 'Grade':
+          this.getJson('/api/film/all')
         default:
           this.setState({'mainContent':''})
           break;

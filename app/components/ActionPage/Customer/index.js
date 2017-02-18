@@ -19,52 +19,52 @@ class Customer extends React.Component {
     render() {
         return(
           <div className='page-style'>
-            <div className='page-head'>
-              <h2>{this._genHeader(this.props.type)}</h2>
-              <div className='action-group-btn'>
-                <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/><p>Cancel</p></button>
-                <button><img src={saveIcon}/><p>Save</p></button>
+              <div className='page-head'>
+                  <h2>{this._genHeader(this.props.type)}</h2>
+                  <div className='action-group-btn'>
+                      <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button><img src={saveIcon}/><p>Save</p></button>
+                  </div>
               </div>
-            </div>
-            <hr/>
+              <hr/>
 
 
 
-            <div className='flex'>
-              <div className='input-box left'>
-                <label>Code</label>
-                <input className='flex' type="text"/>
+              <div className='flex'>
+                  <div className='input-box flex left'>
+                      <label>Code :</label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label>Tel :</label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label>Invoice To :</label>
+                      <input className='flex' type="text"/>
+                  </div>
               </div>
-              <div className='input-box'>
-                <label>Tel</label>
-                <input className='flex' type="text"/>
+              <div className='flex'>
+                  <div className='input-box flex left'>
+                      <label>Customer Name :</label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label>Fax :</label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label>Ship To :</label>
+                      <input className='flex' type="text"/>
+                  </div>
               </div>
-              <div className='input-box'>
-                <label>Invoice To</label>
-                <input className='flex' type="text"/>
-              </div>
-            </div>
-            <div className='flex'>
-              <div className='input-box left'>
-                <label>Customer Name</label>
-                <input className='flex' type="text"/>
-              </div>
-              <div className='input-box'>
-                <label>Fax</label>
-                <input className='flex' type="text"/>
-              </div>
-              <div className='input-box'>
-                <label>Ship To</label>
-                <input className='flex' type="text"/>
-              </div>
-            </div>
-            <div className='flex'>
-              <div className='input-box left'>
-                <label>Contact Name</label>
-                <input className='flex' type="text"/>
-              </div>
-              <div className='input-box'>
-                <label>Email</label>
+              <div className='flex'>
+                  <div className='input-box flex left'>
+                      <label>Contact Name :</label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label>Email :</label>
                 <input className='flex' type="text"/>
               </div>
             </div>

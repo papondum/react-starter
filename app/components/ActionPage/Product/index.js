@@ -2,17 +2,17 @@ import React, {PropTypes} from 'react';
 import './style.scss';
 import cancelIcon from '../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../resource/Icon/button_save.png'
-class UserAccount extends React.Component {
+class Product extends React.Component {
     constructor(props) {
         super(props);
     }
 
     _genHeader(type){
       if(type=='create'){
-        return 'Create - User account'
+        return 'Create - Product'
       }
       else if(type=='edit'){
-        return 'Edit - User account'
+        return 'Edit - Product'
       }
     }
 
@@ -28,41 +28,52 @@ class UserAccount extends React.Component {
               </div>
               <hr/>
 
+
+
               <div className='flex'>
-                  <div className='input-box left flex'>
-                      <label>Firstname:</label>
+                  <div className='input-box flex left'>
+                      <label><i>Film Type :</i></label>
                       <input className='flex' type="text"/>
                   </div>
                   <div className='input-box flex'>
-                      <label>Lastname:</label>
+                      <label><i>Width :</i></label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label><i>Density :</i></label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label><i>Decimal Digit :</i></label>
                       <input className='flex' type="text"/>
                   </div>
               </div>
               <div className='flex'>
-                  <div className='input-box left flex'>
-                      <label>Username:</label>
+                  <div className='input-box flex left'>
+                      <label><i>Brand :</i></label>
                       <input className='flex' type="text"/>
                   </div>
                   <div className='input-box flex'>
-                      <label>Password:</label>
-                      <input className='flex' type="password"/>
+                      <label><i>Thickness :</i></label>
+                      <input className='flex' type="text"/>
+                  </div>
+                  <div className='input-box flex'>
+                      <label><i>Rounding Methode :</i></label>
+                      <input className='flex' type="text"/>
                   </div>
               </div>
               <div className='flex'>
-                  <div className='input-box left flex'>
-                      <label>Email:</label>
+                  <div className='input-box flex left'>
+                      <label><i>Grade :</i></label>
                       <input className='flex' type="text"/>
                   </div>
                   <div className='input-box flex'>
-                      <label>Role:</label>
-                      <select style={{'width': '173px'}}>
-                          <option value="Administrator">Administrator</option>
-                          <option value="User">User</option>
-                      </select>
-              </div>
+                      <label><i>Length :</i></label>
+                      <input className='flex' type="text"/>
+                  </div>
             </div>
           </div>)
     }
 }
 
-export default UserAccount;
+export default Product;

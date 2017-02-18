@@ -18,6 +18,7 @@ class Menu extends React.Component {
               {'name': 'Product', 'type': 'Product'},
               {'name': 'Brand', 'type': 'Product'},
               {'name': 'Film Type', 'type': 'Product'},
+              {'name': 'Grade', 'type': 'Product'},
             ]},
             {'name': 'Report', 'icon': 'w', 'submenu': [{'key': 1, 'uniq': 27}, {'key': 2, 'uniq': 28}, {'key': 1, 'uniq': 29}]},
             {'name': 'Dashboard', 'icon': 'g', 'submenu': [{'key': 3, 'uniq': 33}, {'key': 4, 'uniq': 30}]},

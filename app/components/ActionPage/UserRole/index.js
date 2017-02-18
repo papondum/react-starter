@@ -77,8 +77,8 @@ class UserRole extends React.Component {
               <div className='page-head'>
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
-                    <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/>Cancel</button>
-                    <button><img src={saveIcon}/>Save</button>
+                      <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/>Cancel</button>
+                      <button><img src={saveIcon}/>Save</button>
                   </div>
               </div>
               <hr/>
@@ -93,7 +93,6 @@ class UserRole extends React.Component {
                   </div>
               </div>
 
-              <hr/>
 
               <div className='flex role-head'>
                   <div style={{'flex':10}}>
