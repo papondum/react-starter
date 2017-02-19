@@ -1,0 +1,19 @@
+.modal-message {
+  header {
+  }
+  .icon {
+    font-size: 72px;
+    text-align: center;
+  }
+  .message {
+    color: #000;
+    padding: 24px 0;
+    .actions {
+      margin-top: 36px;
+      button {
+        width: 120px;
+        margin-right: 16px;
+      }
+    }
+  }
+}

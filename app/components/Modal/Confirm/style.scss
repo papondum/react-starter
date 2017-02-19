@@ -1,0 +1,40 @@
+.modal-confirm {
+  z-index: 11 !important;
+  header {
+    h4 {
+      margin: 0px;
+    }
+  }
+  .icon {
+    font-size: 72px;
+    text-align: center;
+  }
+  .message {
+    color: #757575;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    font-size: 14px;
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+.modal-txt{
+  color:#76828e;
+}
+
+.material-btn{
+  border-style: none;
+  height: 36px;
+  margin-left:8px;
+  font-weight:300;
+  font-size: 14px;
+  padding: 10px;
+}
+.inactive-color{
+  opacity: 0.37;
+  &.login{
+    margin-right: 10px;
+  }
+}

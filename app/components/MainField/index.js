@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { openTab ,closeTab} from '../../actions/tab';
 import Content from './Content';
 import ActionMenu from '../ActionMenu'
+import Modal from '../Modal/Confirm'
+import ModalCustom from '../Modal/Custom'
 import {get } from '../../../utils'
 import './style.scss'
 class MainField extends React.Component {
@@ -11,10 +13,27 @@ class MainField extends React.Component {
         super(props);
         this.state = {
             mainField: '',
-            mainContent:''
+            mainContent:'',
+            showModal:{
+              show:false
+            }
         };
     }
 
+    showModal(){
+      this.setState({
+        showModal:{
+          show:true,
+          close:()=>
+          this.setState({
+            showModal:{
+              show:false
+            }
+          }),
+          submitTxt:'SUBMIT'
+        }
+      })
+    }
     _getMainFieldFromTab(item) {
         this.props.onOpenTab([item])
         this.setState({
@@ -77,14 +96,24 @@ class MainField extends React.Component {
       })
     }
 
+    showActionMenu(){
+      if(this.state.mainContent.length==undefined){
+        return ''
+      }
+      else{
+        return <ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} setContent={(item)=>this.setContent(item)} showModal={()=>this.showModal()}/>
+      }
+    }
+
     render() {
         return(
           <div className="mainContent">
 
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)} closeTab= {(tab) => this.props.closeTab(tab)}/>
-              {this.state.mainContent.length==undefined? '':<ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} actionFn={(item)=>this.setContent(item)}/>}
-              <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent}/>
+              {this.showActionMenu()}
+              <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent} />
               <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
+              <Modal show = {this.state.showModal.show} options = {this.state.showModal.show}/>
           </div>)
     }
 }

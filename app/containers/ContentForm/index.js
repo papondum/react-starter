@@ -35,18 +35,22 @@ class ContentForm extends React.Component {
       return result
     }
 
+
+
     render() {
+      //flow >> click delete  >> get checked value >>  send to delete
+      // how delete fn get checked value from this?
       return (<div>
-        <table>
-        <thead>
-          <tr>
-             {this._headerGen(this.props.content)}
-          </tr>
-        </thead>
-        <tbody>
-            {this._contentGen(this.props.content)}
-        </tbody>
-      </table></div>)
+          <table>
+              <thead>
+                  <tr>
+                      {this._headerGen(this.props.content)}
+                  </tr>
+              </thead>
+              <tbody>
+                  {this._contentGen(this.props.content)}
+              </tbody>
+          </table></div>)
     }
 }
 

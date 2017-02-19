@@ -1,0 +1,104 @@
+.modal-custom {
+  header {
+    color: white !important;
+    h4 {
+      margin: 0px;
+    }
+  }
+  .icon {
+    font-size: 72px;
+    text-align: center;
+  }
+  .message {
+    color: #000;
+    .actions {
+      margin-top: 36px;
+      display: flex;
+      justify-content: flex-end;
+      button {
+        width: 120px;
+        margin-right: 16px;
+      }
+    }
+  }
+  .ok-btn {
+    margin-left: 12px;
+  }
+}
+
+
+.modal-header{
+  display:flex;
+}
+
+.close-btn{
+  margin-left:auto;
+  margin-bottom: auto;
+  margin-top: auto;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover{
+    background-color: red;
+    color:white;
+  }
+}
+.close-btn svg{
+    font-size: 20px;
+}
+
+.modal-text{
+  color:black;
+}
+
+.modal-header-txt-small{
+  font-weight: bold;
+  color:black;
+}
+
+.modal-text-small{
+  color:black;
+}
+
+.modal-content{
+    margin: auto;
+    background-color: #fff;
+    position: relative;
+    outline: 0;
+    display: table;
+    min-width: 350px;
+}
+.h3-fixmargin{
+  margin-top:0px;
+  margin-bottom: 0px;
+}
+.modal-content-body{
+  padding: 24px;
+}
+.modal-content-bot{
+  padding:8px;
+  float:right;
+}
+.modal-contentC{
+    margin: auto;
+    background-color: #fff;
+    position: relative;
+    outline: 0;
+    display: table;
+    min-width: 350px;
+    padding:24px;
+    border-radius: 3px;
+}
+.z-index3{
+  z-index:3;
+}
+
+.bottom-modal {
+  display: none;
+  position: absolute;
+  right: 50%;
+  bottom: 0;
+  margin-right: 400px;
+  z-index: 1;
+  border: solid 1px;
+}
