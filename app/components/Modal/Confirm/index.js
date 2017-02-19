@@ -31,8 +31,9 @@ class ModalConfirm extends Component {
     else{
       return (
         <div className="modal-content-bot actions button">
-            <button className="material-btn" onClick={(event) => this.ok(event)}>{this.props.submitTxt? this.props.submitTxt:'DELETE'}</button>
-            <button className="material-btn" onClick={(event) => this.hideModal(event)}>CANCEL</button>
+            <button className="material-btn cancel-style" onClick={(event) => this.hideModal(event)}>CANCEL</button>
+            <button className="material-btn delete-style" onClick={(event) => this.ok(event)}>{this.props.submitTxt? this.props.submitTxt:'DELETE'}</button>
+
         </div>
       )
     }
@@ -42,13 +43,11 @@ class ModalConfirm extends Component {
     var display = this.props.options.show? {display: 'block'}: {display: 'none'}
     return (
       <div className="w3-modal modal-confirm" style={display} onClick={this.props.options.backdrop ? "" : (event) => this.hideModal(event)}>
-
-          <div className="modal-content  w3-animate-zoom" onClick={(event) => event.stopPropagation()} style={{'maxWidth':'400px'}}>
+          <div className="modal-content  w3-animate-zoom" onClick={(event) => event.stopPropagation()} style={{'maxWidth':'500px'}}>
               <div className='flex modal-header-txt'>
                   <h3 className='h3-fixmargin'>{typeof this.props.options.header=='object'? '':this.props.options.header}</h3>
               </div>
               <div className='modal-content-body'>
-
                   <div className="w3-medium primary-text modal-txt">{this.props.options.message}</div>
               </div>
               {this.getConfirmButton()}

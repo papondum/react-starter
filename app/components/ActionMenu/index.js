@@ -46,7 +46,7 @@ class ActionMenu extends React.Component {
       this.setState({
         showModal:{
           show:true,
-          header:'Delete',
+          header:'Delete item(s)',
           message:'Are you sure you want to delete selected item(s)?',
           close:()=>{
             this.setState({

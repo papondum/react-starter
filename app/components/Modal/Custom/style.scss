@@ -29,6 +29,12 @@
 
 .modal-header{
   display:flex;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  h3{
+    font-size: 20px;
+    color:#757575;
+  }
 }
 
 .close-btn{
@@ -67,6 +73,10 @@
     outline: 0;
     display: table;
     min-width: 350px;
+    h3{
+      font-size: 20px;
+      color:#757575;
+    }
 }
 .h3-fixmargin{
   margin-top:0px;
@@ -74,6 +84,8 @@
 }
 .modal-content-body{
   padding: 24px;
+  min-height: 75px;
+  min-width: 490px;
 }
 .modal-content-bot{
   padding:8px;
@@ -101,4 +113,14 @@
   margin-right: 400px;
   z-index: 1;
   border: solid 1px;
+}
+
+.cancel-style{
+  background-color: #dddddd;
+  font-size: 14px;
+  color:#757575;
+}
+.delete-style{
+  color:#fff;
+  background-color: #d62c2c;
 }
