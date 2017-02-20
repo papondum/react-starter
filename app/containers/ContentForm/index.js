@@ -1,8 +1,14 @@
 import React from 'react';
 import './style.scss';
+import { bindActionCreators } from 'redux'
+import {connect} from 'react-redux'
+import * as DeleteActions from '../../actions/deleteCall'
 class ContentForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+          checkedItem:[]
+        }
     }
 
     _headerGen(content){
@@ -31,11 +37,36 @@ class ContentForm extends React.Component {
       for(var o in obj){
         result.push((<td key={o}>{obj[o]}</td>))
       }
-      result.unshift((<td key='checkbox'><input type='checkbox' value={obj}/></td>))
+      result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
       return result
     }
 
+    ifChecked(id){
+      console.log(this.state.checkedItem);
+      if(this.refs[id].checked){
+        if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
+          this.setState({
+            checkedItem:this.state.checkedItem.concat([this.refs[id].value])
+          })
+        }
+      }
+      else{
+          var array = this.state.checkedItem;
+          var index = array.indexOf(this.refs[id].value)
+          array.splice(index, 1);
+          this.setState({checkedItem: array });
+        }
 
+    }
+
+
+
+    componentWillReceiveProps(nextProps){
+      if(nextProps.deleteCall.userAcc=='active'){
+        //call api delete
+        this.props.deleteItem({user_id:this.state.checkedItem})
+      }
+    }
 
     render() {
       //flow >> click delete  >> get checked value >>  send to delete
@@ -54,4 +85,14 @@ class ContentForm extends React.Component {
     }
 }
 
-export default ContentForm;
+function mapStateToProps(state) {
+  return {
+    deleteCall: state.deleteCall
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},DeleteActions), dispatch)
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(ContentForm)

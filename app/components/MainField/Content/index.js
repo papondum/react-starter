@@ -12,7 +12,7 @@ class Content extends React.Component {
     render() {
         return(
     <div className='content-style'>
-      {this.props.mainContent.length!=undefined? (<ContentForm type = {this.props.contentHeader} content = {this.props.mainContent}/>):this.props.mainContent}
+        {this.props.mainContent.length!=undefined? (<ContentForm type = {this.props.contentHeader} content = {this.props.mainContent} />):this.props.mainContent}
     </div>);}
 }
 const mapStateToProps = (state) => {

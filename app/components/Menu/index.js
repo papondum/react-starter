@@ -29,7 +29,6 @@ class Menu extends React.Component {
     render() {
         return(
     <div className="box">
-        Jusst a dummy page to showcase react-router!
         <div className="row content">
             <LeftMenu menu={this.state.menu}/>
             <MainField/>

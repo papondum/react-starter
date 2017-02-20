@@ -10,7 +10,7 @@ import printIcon from '../../resource/Icon/button_print.png'
 import emailIcon from '../../resource/Icon/button_email.png'
 import exportIcon from '../../resource/Icon/button_export.png'
 import refreshIcon from '../../resource/Icon/button_create.png'
-
+import * as DeleteAction from '../../actions/deleteCall'
 import Modal from '../Modal/Custom'
 import ModalC from '../Modal/Confirm'
 
@@ -55,6 +55,9 @@ class ActionMenu extends React.Component {
               }
             })
           },
+          confirm:()=>{
+            this.props.deleteTrig(this.props.activePage)
+          },
           submitTxt:'SUMMIT'
         }
       })
@@ -64,6 +67,13 @@ class ActionMenu extends React.Component {
     }
     componentWillReceiveProps(nextProps){
       this._setActionCategory()
+      if(nextProps.userAcc=='idle'){
+        this.setState({
+          showModal:{
+            show:false
+          }
+        })
+      }
     }
     _setActionCategory(){
       switch (this.props.activePage) {
@@ -208,10 +218,15 @@ class ActionMenu extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        tab: state.tab
+        tab: state.tab,
+        deleteCall: state.deleteCall
     };
 };
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
+}
+
 export default connect(
-    mapStateToProps
+    mapStateToProps,mapDispatchToProps
 )(ActionMenu);
