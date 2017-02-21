@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import './style.scss';
 import cancelIcon from '../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../resource/Icon/button_save.png'
+import { post ,get } from '../../../../utils'
 class Grade extends React.Component {
     constructor(props) {
         super(props);
