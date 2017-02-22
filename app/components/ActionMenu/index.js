@@ -63,7 +63,7 @@ class ActionMenu extends React.Component {
         }
       })
     }
-    
+
     componentDidMount(){
       this._setActionCategory()
     }
@@ -164,7 +164,7 @@ class ActionMenu extends React.Component {
             refreshAction:'',
           })
           break;
-        case 'Film type':
+        case 'Film Type':
           this.setState({
             createAction:()=>this.props.setContent((<FilmType type='create' getContent={(item)=>this.props.getContent(item)}/>)),
             editAction:()=>this.props.setContent((<FilmType type='edit' getContent={(item)=>this.props.getContent(item)}/>)),

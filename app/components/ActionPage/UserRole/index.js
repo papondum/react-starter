@@ -82,8 +82,7 @@ class UserRole extends React.Component {
             throw new Error("Bad response from server");
           }
           //Notify fn value added
-          // Not sure what to do
-          // this.props.getContent('User account')
+          this.props.getContent('User role')
         })
         .catch(err=>console.log(err))
       }
@@ -98,7 +97,7 @@ class UserRole extends React.Component {
               <div className='page-head'>
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
-                      <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/>Cancel</button>
+                      <button onClick={()=>this.props.getContent('User role')}><img src={cancelIcon}/>Cancel</button>
                       <button onClick = {() => this.createRole()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>

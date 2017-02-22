@@ -41,9 +41,8 @@ class Supplier extends React.Component {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
           }
-          //Notify fn value added
-          // How to go back to supplier
-          // this.props.getContent('User account')
+          // Notify added
+          this.props.getContent('Supplier')
         })
         .catch(err=>console.log(err))
       }
@@ -58,7 +57,7 @@ class Supplier extends React.Component {
               <div className='page-head'>
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
-                      <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick={()=>this.props.getContent('Supplier')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.createSupplier()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>

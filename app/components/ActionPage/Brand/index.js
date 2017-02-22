@@ -27,8 +27,7 @@ class Brand extends React.Component {
             throw new Error("Bad response from server");
           }
           //Notify fn value added
-          // Not sure what to do
-          // this.props.getContent('User account')
+          this.props.getContent('Brand')
         })
         .catch(err=>console.log(err))
       }
@@ -43,7 +42,7 @@ class Brand extends React.Component {
               <div className='page-head'>
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
-                      <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick={()=>this.props.getContent('Brand')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.createBrand()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
