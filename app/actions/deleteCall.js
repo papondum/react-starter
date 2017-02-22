@@ -1,19 +1,19 @@
 import {post } from '../../utils'
 export const DELETE_USERACC_TRIGGER = 'DELETE_USERACC_TRIGGER'
 export const DELETE_USERACC_IDLE = 'DELETE_USERACC_IDLE'
-export function deleteAcc(){
+export function deleteAcc(){        // go to reducer deleteCall
   return {
     type:DELETE_USERACC_TRIGGER
   }
 }
 
-export function deleteAccToIdle(){
+export function deleteAccToIdle(){    
   return {
     type:DELETE_USERACC_IDLE
   }
 }
 
-export function deleteTrig(item){
+export function deleteTrig(item){           //Trigger state   do noti
   switch (item) {
     case 'User account':
       return dispatch =>{
@@ -24,7 +24,9 @@ export function deleteTrig(item){
 
 }
 
-export function deleteItem(item){
+export function deleteItem(item,type){      //Action state   do delete
+  //need switch case for select api by type
+
   return dispatch=> {
     post('/user/delete',item)
     .then((response)=> {

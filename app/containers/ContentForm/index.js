@@ -42,7 +42,6 @@ class ContentForm extends React.Component {
     }
 
     ifChecked(id){
-      console.log(this.state.checkedItem);
       if(this.refs[id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
           this.setState({
@@ -62,10 +61,17 @@ class ContentForm extends React.Component {
 
 
     componentWillReceiveProps(nextProps){
-      if(nextProps.deleteCall.userAcc=='active'){
+      //trigger when state userAcc call delete
+
+      if(nextProps.deleteCall.userAcc=='active'){     //need to set up for each page that delete is active or not?(seperate)  >>> go to actions->deleteCall and reducer->deleteCall
         //call api delete
-        this.props.deleteItem({user_id:this.state.checkedItem})
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'User account')
       }
+
+      //nextProps.deleteCall.userRole
+      //nextProps.deleteCall.customer
+
     }
 
     render() {

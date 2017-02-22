@@ -42,7 +42,7 @@ class ActionMenu extends React.Component {
         };
     }
 
-    showModal(){
+    showDeleteModal(){
       this.setState({
         showModal:{
           show:true,
@@ -56,15 +56,18 @@ class ActionMenu extends React.Component {
             })
           },
           confirm:()=>{
-            this.props.deleteTrig(this.props.activePage)
+            this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
+            this.props.getContent(this.props.activePage)
           },
           submitTxt:'SUMMIT'
         }
       })
     }
+    
     componentDidMount(){
       this._setActionCategory()
     }
+
     componentWillReceiveProps(nextProps){
       this._setActionCategory()
       if(nextProps.userAcc=='idle'){
@@ -80,9 +83,9 @@ class ActionMenu extends React.Component {
         case 'User account':
           this.setState({
             createAction:()=>this.props.setContent((<UserAccount type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<UserAccount type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<UserAccount type='edit' getContent={(item)=>this.props.getContent(item)} objFromFetch={this.props}/>)),
             copyAction:'',
-            deleteAction:()=>this.showModal(),
+            deleteAction:()=>this.showDeleteModal(),
             emailAction:'',
             printAction:'',
             exportAction:'',
@@ -204,13 +207,6 @@ class ActionMenu extends React.Component {
                   <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
                   <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
               </div>
-              {/* <Modal show = {this.state.showModal.show} options = {this.state.showModal}>
-                  <div>
-                  Are you sure you want to delete selected item(s).?
-                  <button>Cancel</button>
-                  <button>Delete</button>
-                  </div>
-              </Modal> */}
               <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
           </div>)
               }
