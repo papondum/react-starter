@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import './style.scss';
 import cancelIcon from '../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../resource/Icon/button_save.png'
+import { post ,get } from '../../../../utils'
 class Grade extends React.Component {
     constructor(props) {
         super(props);
@@ -16,6 +17,26 @@ class Grade extends React.Component {
       }
     }
 
+    createGrade(){
+      let grade_code = this.refs.grade_code.value
+      let grade_name = this.refs.grade_name.value
+      if(grade_code&&grade_name){
+        post('/api/grade/create',{"grade_code":grade_code, "grade_name":grade_name})
+        .then((response)=> {
+          if (response.status >= 400) {
+            throw new Error("Bad response from server");
+          }
+          //Notify fn value added
+          // Not sure what to do
+          // this.props.getContent('User account')
+        })
+        .catch(err=>console.log(err))
+      }
+      else{
+        console.log('Invalid Input');
+      }
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -23,7 +44,7 @@ class Grade extends React.Component {
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
                       <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/><p>Cancel</p></button>
-                      <button><img src={saveIcon}/><p>Save</p></button>
+                      <button onClick = {() => this.createGrade()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
               <hr/>
@@ -33,14 +54,11 @@ class Grade extends React.Component {
               <div className='flex'>
                   <div className='input-box flex left'>
                       <label><i>Grade Code :</i></label>
-                      <select style={{'width': '173px'}}>
-                          <option value="Administrator">HDC</option>
-                          <option value="User">User</option>
-                      </select>
+                      <input className='flex' type="text" ref='grade_code'/>
                   </div>
                   <div className='input-box flex'>
                       <label><i>Grade Name :</i></label>
-                      <input className='flex' type="text"/>
+                      <input className='flex' type="text" ref='grade_name'/>
                   </div>
 
               </div>

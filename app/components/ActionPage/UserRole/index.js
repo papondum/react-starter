@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import './style.scss';
 import cancelIcon from '../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../resource/Icon/button_save.png'
+import { post ,get } from '../../../../utils'
 class UserRole extends React.Component {
     constructor(props) {
         super(props);
@@ -71,6 +72,26 @@ class UserRole extends React.Component {
       return result
     }
 
+    createRole(){
+      let name = this.refs.name.value
+      let description = this.refs.description.value
+      if(name&&description){
+        post('/api/role/create',{"name":name, "description":description})
+        .then((response)=> {
+          if (response.status >= 400) {
+            throw new Error("Bad response from server");
+          }
+          //Notify fn value added
+          // Not sure what to do
+          // this.props.getContent('User account')
+        })
+        .catch(err=>console.log(err))
+      }
+      else{
+        console.log('Invalid Input');
+      }
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -78,18 +99,18 @@ class UserRole extends React.Component {
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
                       <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/>Cancel</button>
-                      <button><img src={saveIcon}/>Save</button>
+                      <button onClick = {() => this.createRole()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
               <hr/>
               <div className='flex'>
                   <div className='input-box left flex'>
                       <label><i>User role :</i></label>
-                      <input className='flex' type="text"/>
+                      <input className='flex' type="text" ref = 'name'/>
                   </div>
                   <div className='input-box flex'>
                       <label><i>Description :</i></label>
-                      <input className='flex' type="text"/>
+                      <input className='flex' type="text" ref = 'description'/>
                   </div>
               </div>
 
