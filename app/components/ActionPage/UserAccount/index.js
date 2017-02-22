@@ -28,6 +28,7 @@ class UserAccount extends React.Component {
       let password = this.refs.password.value
       let email = this.refs.email.value
       let role = this.refs.role.value
+      console.log(role)
       if(firstname&&lastname&&password&&email&&role){
         post('/user/create',{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
         .then((response)=> {
@@ -45,18 +46,20 @@ class UserAccount extends React.Component {
     }
 
     getRoleList(){
-      let url = '/api/role/all'
+      let url = '/api/role/raw'
       get(url)
       .then((response)=> {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
+        console.log(response)
         this.setState({roleList:response})
       })
       .catch(err=>console.log(err))
     }
 
     roleListToElem(){
+      console.log(this.state.roleList)
       let result = this.state.roleList.map(i=><option key = {i.id} value = {i.id}>{i.name}</option>)
       return result
     }
