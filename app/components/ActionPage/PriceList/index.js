@@ -7,6 +7,7 @@ import attachIcon from '../../../resource/Icon/button_create.png'
 import emailIcon from '../../../resource/Icon/button_email.png'
 import printIcon from '../../../resource/Icon/button_print.png'
 import exportIcon from '../../../resource/Icon/button_export.png'
+import { post ,get } from '../../../../utils'
 class PriceList extends React.Component {
   constructor(props) {
       super(props);
@@ -76,6 +77,25 @@ class PriceList extends React.Component {
     return result
   }
 
+  createPriceList(){
+    let name = this.refs.name.value
+    let status = "In Process"
+    if(name&&status){
+      post('/api/price_list/create',{"name":name, "status":status})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        //Notify fn value added
+        this.props.getContent('Price list')
+      })
+      .catch(err=>console.log(err))
+    }
+    else{
+      console.log('Invalid Input');
+    }
+  }
+
   render() {
       return(
         <div className='page-style'>
@@ -85,15 +105,15 @@ class PriceList extends React.Component {
                     <button><img src={emailIcon}/> <p>Email</p></button>
                     <button><img src={printIcon}/> <p>Print</p></button>
                     <button><img src={exportIcon}/> <p>Export</p></button>
-                    <button onClick={()=>this.props.getContent('User account')}><img src={cancelIcon}/><p>Cancel</p></button>
-                    <button><img src={saveIcon}/><p>Save</p></button>
+                    <button onClick={()=>this.props.getContent('Price list')}><img src={cancelIcon}/><p>Cancel</p></button>
+                    <button onClick = {() => this.createPriceList()} ><img src={saveIcon}/><p>Save</p></button>
                 </div>
             </div>
             <hr/>
             <div className='flex'>
                 <div className='input-box left flex'>
                     <label>Name:*</label>
-                    <input className='flex' type="text"/>
+                    <input className='flex' type="text" ref='name'/>
                 </div>
             </div>
 
