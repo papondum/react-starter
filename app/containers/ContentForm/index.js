@@ -63,18 +63,49 @@ class ContentForm extends React.Component {
     componentWillReceiveProps(nextProps){
       //trigger when state userAcc call delete
 
-      if(nextProps.deleteCall.userAcc=='active'){     //need to set up for each page that delete is active or not?(seperate)  >>> go to actions->deleteCall and reducer->deleteCall
-        //call api delete
+      // if(nextProps.deleteCall.userAcc=='active'){
+      //   let obj = {user_id:this.state.checkedItem}
+      //   this.props.deleteItem(obj,'User account')
+      // }
+      if(nextProps.deleteCall.userRole=='active'){
         let obj = {user_id:this.state.checkedItem}
-        this.props.deleteItem(obj,'User account')
+        this.props.deleteItem(obj,'User role')
+      }
+      if(nextProps.deleteCall.customer=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Customer')
+      }
+      if(nextProps.deleteCall.supplier=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Supplier')
+      }
+      if(nextProps.deleteCall.price=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Price')
+      }
+      if(nextProps.deleteCall.product=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Product')
+      }
+      if(nextProps.deleteCall.brand=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Brand')
+      }
+      if(nextProps.deleteCall.film=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Film Type')
+      }
+      if(nextProps.deleteCall.grade=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Grade')
       }
 
-      //nextProps.deleteCall.userRole
-      //nextProps.deleteCall.customer
+
 
     }
 
     render() {
+      console.log(this.props.deleteCall.userRole);
       //flow >> click delete  >> get checked value >>  send to delete
       // how delete fn get checked value from this?
       return (<div>
