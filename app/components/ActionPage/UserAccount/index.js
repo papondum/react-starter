@@ -59,7 +59,6 @@ class UserAccount extends React.Component {
     }
 
     roleListToElem(){
-      console.log(this.state.roleList)
       let result = this.state.roleList.map(i=><option key = {i.id} value = {i.id}>{i.name}</option>)
       return result
     }
