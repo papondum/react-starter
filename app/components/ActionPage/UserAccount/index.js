@@ -28,7 +28,6 @@ class UserAccount extends React.Component {
       let password = this.refs.password.value
       let email = this.refs.email.value
       let role = this.refs.role.value
-      console.log(role)
       if(firstname&&lastname&&password&&email&&role){
         post('/user/create',{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
         .then((response)=> {
@@ -52,7 +51,6 @@ class UserAccount extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        console.log(response)
         this.setState({roleList:response})
       })
       .catch(err=>console.log(err))

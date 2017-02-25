@@ -42,6 +42,7 @@ class ContentForm extends React.Component {
     }
 
     ifChecked(id){
+      console.log(id);
       if(this.refs[id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
           this.setState({
@@ -63,10 +64,10 @@ class ContentForm extends React.Component {
     componentWillReceiveProps(nextProps){
       //trigger when state userAcc call delete
 
-      // if(nextProps.deleteCall.userAcc=='active'){
-      //   let obj = {user_id:this.state.checkedItem}
-      //   this.props.deleteItem(obj,'User account')
-      // }
+      if(nextProps.deleteCall.userAcc=='active'){
+        let obj = {user_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'User account')
+      }
       if(nextProps.deleteCall.userRole=='active'){
         let obj = {user_id:this.state.checkedItem}
         this.props.deleteItem(obj,'User role')
@@ -105,7 +106,6 @@ class ContentForm extends React.Component {
     }
 
     render() {
-      console.log(this.props.deleteCall.userRole);
       //flow >> click delete  >> get checked value >>  send to delete
       // how delete fn get checked value from this?
       return (<div>

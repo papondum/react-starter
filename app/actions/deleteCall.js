@@ -137,18 +137,17 @@ export function apiSelector(url,item){
   }
 }
 
-export function deleteItem(item,type){      //Action state   do delete
-  //need switch case for select api by type
-  console.log('triggerd',item ,type);
+export function deleteItem(item,type){
   switch (type) {
     case 'User account':
     let url = '/user/delete'
-      return apiSelector(url,item)
+      return dispatch=>dispatch(apiSelector(url,item))
       break;
+
     case 'User role':
       return dispatch=> {
-        let url = '/api/role/delete'
-        post(url,item)
+        let url1 = '/api/role/delete'
+        post(url1,item)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -160,36 +159,40 @@ export function deleteItem(item,type){      //Action state   do delete
         .catch(err=>console.log(err))
       }
       break;
+
     case 'Customer':
-      return dispatch => {
-
-      }
+      let url2 = '/customer/delete'
+      return dispatch=>dispatch(apiSelector(url2,item))
       break;
+
     case 'Supplier':
-      return dispatch => {
-
-      }
+      let url3 = '/supplier/delete'
+      return dispatch=>dispatch(apiSelector(url3,item))
       break;
+
     case 'Price list':
-      return dispatch => {
+      let url4 = '/price_list/delete'
+      return dispatch=>dispatch(apiSelector(url4,item))
+      break;
 
-      }
-      break;
     case 'Product':
-      return dispatch => {
-      }
+      let url5 = '/product/delete'
+      return dispatch=>dispatch(apiSelector(url5,item))
       break;
+
     case 'Brand':
-      return dispatch => {
-      }
+      let url6 = '/brand/delete'
+      return dispatch=>dispatch(apiSelector(url6,item))
       break;
+
     case 'Film Type':
-      return dispatch => {
-      }
+      let url7 = '/film/delete'
+      return dispatch=>dispatch(apiSelector(url7,item))
       break;
+
     case 'Grade':
-      return dispatch => {
-      }
+      let url8 = '/grade/delete'
+      return dispatch=>dispatch(apiSelector(url8,item))
     default:
       console.log(item);
       break;
