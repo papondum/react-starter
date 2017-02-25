@@ -45,7 +45,7 @@ class UserAccount extends React.Component {
     }
 
     getRoleList(){
-      let url = '/api/role/all'
+      let url = '/api/role/raw'
       get(url)
       .then((response)=> {
         if (response.status >= 400) {
