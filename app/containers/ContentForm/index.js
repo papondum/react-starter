@@ -16,7 +16,11 @@ class ContentForm extends React.Component {
       if(content.length>0){
         var head = Object.keys(content[0])
         genHead = head.map(item=>{
-          return (<td key= {item}>{item}</td>)
+          if (item == 'id') {
+            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+          } else {
+            return (<td key= {item}>{item}</td>)
+          }
         })
         genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
       }
@@ -35,14 +39,17 @@ class ContentForm extends React.Component {
     _getEachVal(obj){
       var result=[]
       for(var o in obj){
-        result.push((<td key={o}>{obj[o]}</td>))
+        if (o == 'id') {
+          result.push((<td key={o} style={{display: 'none'}}>{obj[o]}</td>))
+        } else {
+          result.push((<td key={o}>{obj[o]}</td>))
+        }
       }
       result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
       return result
     }
 
     ifChecked(id){
-      console.log(id);
       if(this.refs[id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
           this.setState({
