@@ -76,35 +76,35 @@ class ContentForm extends React.Component {
         this.props.deleteItem(obj,'User account')
       }
       if(nextProps.deleteCall.userRole=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {role_id:this.state.checkedItem}
         this.props.deleteItem(obj,'User role')
       }
       if(nextProps.deleteCall.customer=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {customer_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Customer')
       }
       if(nextProps.deleteCall.supplier=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {supplier:this.state.checkedItem}
         this.props.deleteItem(obj,'Supplier')
       }
       if(nextProps.deleteCall.price=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {pricelist_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Price')
       }
       if(nextProps.deleteCall.product=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {product_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Product')
       }
       if(nextProps.deleteCall.brand=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {brand_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Brand')
       }
       if(nextProps.deleteCall.film=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {film_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Film Type')
       }
       if(nextProps.deleteCall.grade=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {grade_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Grade')
       }
 

@@ -161,37 +161,37 @@ export function deleteItem(item,type){
       break;
 
     case 'Customer':
-      let url2 = '/customer/delete'
+      let url2 = '/api/customer/delete'
       return dispatch=>dispatch(apiSelector(url2,item))
       break;
 
     case 'Supplier':
-      let url3 = '/supplier/delete'
+      let url3 = '/api/supplier/delete'
       return dispatch=>dispatch(apiSelector(url3,item))
       break;
 
     case 'Price list':
-      let url4 = '/price_list/delete'
+      let url4 = '/api/price_list/delete'
       return dispatch=>dispatch(apiSelector(url4,item))
       break;
 
     case 'Product':
-      let url5 = '/product/delete'
+      let url5 = '/api/product/delete'
       return dispatch=>dispatch(apiSelector(url5,item))
       break;
 
     case 'Brand':
-      let url6 = '/brand/delete'
+      let url6 = '/api/brand/delete'
       return dispatch=>dispatch(apiSelector(url6,item))
       break;
 
     case 'Film Type':
-      let url7 = '/film/delete'
+      let url7 = '/api/film/delete'
       return dispatch=>dispatch(apiSelector(url7,item))
       break;
 
     case 'Grade':
-      let url8 = '/grade/delete'
+      let url8 = '/api/grade/delete'
       return dispatch=>dispatch(apiSelector(url8,item))
     default:
       console.log(item);
