@@ -42,7 +42,6 @@ class ContentForm extends React.Component {
     }
 
     ifChecked(id){
-      console.log(id);
       if(this.refs[id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
           this.setState({

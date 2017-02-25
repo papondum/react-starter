@@ -68,6 +68,7 @@ class UserAccount extends React.Component {
 
 
     render() {
+      console.log(this.props.objFromFetch);
         return(
           <div className='page-style'>
               <div className='page-head'>

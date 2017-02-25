@@ -74,34 +74,34 @@ class ModalInput extends Component {
     }
     return (
       <div className="w3-modal modal-input" style={display} onClick={(event) => this.hideModal(event)}>
-        <div className="modal-content w3-animate-zoom" onClick={(event) => event.stopPropagation()} style={{'maxWidth':'320px'}}>
-          <div className='modal-content-body'>
-            <header className="modal-header-txt"><h4>{this.props.options.header}</h4></header>
-            <div className="input-form">
-              <form onSubmit={this.handleSubmit}>
-                <div className='group input-box'>
-                  <input ref='input' type="text" onChange={validateName} value={this.state.name} required/>
-                  <span className="highlight"></span>
-                  <span className="bar"></span>
-                  <label>Name</label>
-                  {this.state.validateError && <span className="w3-label w3-small w3-text-red">{this.props.validateText}</span>}
-                </div>
-              </form>
-            </div>
+          <div className="modal-content w3-animate-zoom" onClick={(event) => event.stopPropagation()} style={{'maxWidth':'320px'}}>
+              <div className='modal-content-body'>
+                  <header className="modal-header-txt"><h4>{this.props.options.header}</h4></header>
+                  <div className="input-form">
+                      <form onSubmit={this.handleSubmit}>
+                          <p>{this.props.options.message||''}</p>
+                          <div className='group input-box'>
+                              <input ref='input' type="text" onChange={validateName} value={this.state.name} required/>
+                              <span className="highlight"></span>
+                              <span className="bar"></span>
+                              {this.state.validateError && <span className="w3-label w3-small w3-text-red">{this.props.validateText}</span>}
+                          </div>
+                      </form>
+                  </div>
+              </div>
+              <div className='modal-content-bot'>
+                  <div className="actions">
+                      <button
+                          className="modal-btn-txt"
+                          type="submit"
+                          disabled={this.state.validateError || !this.state.name.trim()}
+                          onClick={() => this.props.options.confirm(this.state.name)}>
+                          {this.props.options.action === 'rename' ? 'RENAME' : 'ADD'}
+                      </button>
+                      <button className="modal-btn-txt" type="button" onClick={(event) => this.hideModal(event)}>CANCEL</button>
+                  </div>
+              </div>
           </div>
-          <div className='modal-content-bot'>
-            <div className="actions">
-              <button
-                className="modal-btn-txt"
-                type="submit"
-                disabled={this.state.validateError || !this.state.name.trim()}
-                onClick={() => this.props.options.confirm(this.state.name)}>
-                {this.props.options.action === 'rename' ? 'RENAME' : 'ADD'}
-              </button>
-              <button className="modal-btn-txt" type="button" onClick={(event) => this.hideModal(event)}>CANCEL</button>
-            </div>
-          </div>
-        </div>
       </div>
     )
   }

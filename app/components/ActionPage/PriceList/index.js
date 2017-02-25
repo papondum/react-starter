@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import './style.scss';
 import cancelIcon from '../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../resource/Icon/button_save.png'
-
+import InputModal from '../../Modal/Input'
 import attachIcon from '../../../resource/Icon/button_create.png'
 import emailIcon from '../../../resource/Icon/button_email.png'
 import printIcon from '../../../resource/Icon/button_print.png'
@@ -41,7 +41,12 @@ class PriceList extends React.Component {
             value:{view:false, email:false, print:false, export:false, edit:false}}, {
             name:'Customer',
             value:{view:false, email:false, print:false, export:false, edit:false}}]}
-        ]
+        ],
+        mainContent:'',
+        inputModal:{
+          show:false
+        },
+        checkedItem:[]
       }
   }
   _genHeader(type){
@@ -51,6 +56,50 @@ class PriceList extends React.Component {
     else if(type=='edit'){
       return 'Edit - Price List'
     }
+  }
+
+  _headerGen(content){
+    let genHead=[]
+    if(content.length>0){
+      var head = Object.keys(content[0])
+      genHead = head.map(item=>{
+        return (<td key= {item}>{item}</td>)
+      })
+      genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
+    }
+      return genHead
+  }
+
+  _contentGen(content){
+    var result = []
+    for(var i=0 ;i<content.length;i++){
+      let eachRow = this._getEachVal(content[i])
+      result.push((<tr key = {i}>{eachRow}</tr>))
+    }
+    return result
+  }
+
+  _getEachVal(obj){
+    var result=[]
+    for(var o in obj){
+      result.push((<td key={o}>{obj[o]}</td>))
+    }
+    result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
+    return result
+  }
+  componentDidMount(){
+    this.getProduct()
+  }
+
+  getProduct(){
+    get('/api/product/all')
+    .then((response)=> {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      this.setState({'mainContent': response})
+    })
+    .catch(err=>console.log(err))
   }
 
   _genBodyRole(){
@@ -80,8 +129,9 @@ class PriceList extends React.Component {
   createPriceList(){
     let name = this.refs.name.value
     let status = "In Process"
+    let obj = {name,status,list_item: this.state.checkedItem}  //objArray
     if(name&&status){
-      post('/api/price_list/create',{"name":name, "status":status})
+      post('/api/price_list/create',obj)
       .then((response)=> {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
@@ -94,6 +144,39 @@ class PriceList extends React.Component {
     else{
       console.log('Invalid Input');
     }
+  }
+
+  openInputModal(){
+    this.setState({
+      inputModal: {
+        show: true,
+        header: 'Input Unit Price',
+        message: 'Input Unit Price for selected item(s).',
+        close: ()=>{
+          this.setState({inputModal:{show:false}})
+        },
+        confirm: ()=>{
+          this.createPriceList()    //get checked item
+        }
+      }
+    })
+  }
+
+  ifChecked(id){
+    if(this.refs[id].checked){
+      if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
+        this.setState({
+          checkedItem:this.state.checkedItem.concat([{id:this.refs[id].value, price:this.refs.input}])
+        })
+      }
+    }
+    else{
+        var array = this.state.checkedItem;
+        var index = array.indexOf(this.refs[id].value)
+        array.splice(index, 1);
+        this.setState({checkedItem: array });
+      }
+
   }
 
   render() {
@@ -121,24 +204,25 @@ class PriceList extends React.Component {
 
             <div className='flex price-line'>
                 <h2>Price List Line(s) </h2>
-                <button>Input Price</button>
-            </div>
-
-            <div className='flex role-head'>
-                <div style={{'flex':5}} className='flex'>
-                    <span ><input type='checkbox'/>No.</span>
-                    <span className='flex-1'>Film Type</span>
-                    <span className='flex-1'>Brand</span>
-                    <span className='flex-1'>Thickness</span>
-                    <span className='flex-1'>Average Cost</span>
-                    <span className='flex-1'>Unit Price(THB/Kg)</span>
-                </div>
+                <button onClick={()=>this.openInputModal()}>Input Price</button>
             </div>
             <div>
-                {this._genBodyRole()}
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                {this._headerGen(this.state.mainContent)}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this._contentGen(this.state.mainContent)}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <InputModal show = {this.state.inputModal.show} options = {this.state.inputModal}/>
         </div>
-      )
+            )
   }
 }
 

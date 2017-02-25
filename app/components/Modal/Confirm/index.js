@@ -43,7 +43,7 @@ class ModalConfirm extends Component {
     var display = this.props.options.show? {display: 'block'}: {display: 'none'}
     return (
       <div className="w3-modal modal-confirm" style={display} onClick={this.props.options.backdrop ? "" : (event) => this.hideModal(event)}>
-          <div className="modal-content  w3-animate-zoom" onClick={(event) => event.stopPropagation()} style={{'maxWidth':'500px'}}>
+          <div className="modal-content  w3-animate-zoom" onClick={(event) => event.stopPropagation()} style={{'maxWidth':'500px',padding: '16px'}}>
               <div className='flex modal-header-txt'>
                   <h3 className='h3-fixmargin'>{typeof this.props.options.header=='object'? '':this.props.options.header}</h3>
               </div>

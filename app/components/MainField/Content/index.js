@@ -11,7 +11,8 @@ class Content extends React.Component {
 
     render() {
         return(
-    <div className='content-style'>
+    // <div className='content-style'>
+    <div style={{overflow: 'scroll', height: 'calc(100% - 98px)'}}>
         {this.props.mainContent.length!=undefined? (<ContentForm type = {this.props.contentHeader} content = {this.props.mainContent} />):this.props.mainContent}
     </div>);}
 }
