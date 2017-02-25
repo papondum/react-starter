@@ -16,7 +16,11 @@ class ContentForm extends React.Component {
       if(content.length>0){
         var head = Object.keys(content[0])
         genHead = head.map(item=>{
-          return (<td key= {item}>{item}</td>)
+          if (item == 'id') {
+            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+          } else {
+            return (<td key= {item}>{item}</td>)
+          }
         })
         genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
       }
@@ -35,7 +39,11 @@ class ContentForm extends React.Component {
     _getEachVal(obj){
       var result=[]
       for(var o in obj){
-        result.push((<td key={o}>{obj[o]}</td>))
+        if (o == 'id') {
+          result.push((<td key={o} style={{display: 'none'}}>{obj[o]}</td>))
+        } else {
+          result.push((<td key={o}>{obj[o]}</td>))
+        }
       }
       result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
       return result
@@ -61,42 +69,41 @@ class ContentForm extends React.Component {
 
 
     componentWillReceiveProps(nextProps){
-      //trigger when state userAcc call delete
 
       if(nextProps.deleteCall.userAcc=='active'){
         let obj = {user_id:this.state.checkedItem}
         this.props.deleteItem(obj,'User account')
       }
       if(nextProps.deleteCall.userRole=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {role_id:this.state.checkedItem}
         this.props.deleteItem(obj,'User role')
       }
       if(nextProps.deleteCall.customer=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {customer_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Customer')
       }
       if(nextProps.deleteCall.supplier=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {supplier:this.state.checkedItem}
         this.props.deleteItem(obj,'Supplier')
       }
       if(nextProps.deleteCall.price=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {pricelist_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Price')
       }
       if(nextProps.deleteCall.product=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {product_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Product')
       }
       if(nextProps.deleteCall.brand=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {brand_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Brand')
       }
       if(nextProps.deleteCall.film=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {film_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Film Type')
       }
       if(nextProps.deleteCall.grade=='active'){
-        let obj = {user_id:this.state.checkedItem}
+        let obj = {grade_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Grade')
       }
 
