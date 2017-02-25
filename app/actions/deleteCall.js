@@ -47,6 +47,7 @@ export function deleteGrade(){
 }
 
 export function deleteAccToIdle(){
+  console.log('lag');
   return {type:DELETE_USERACC_IDLE}
 }
 export function deleteRoleToIdle(){
@@ -131,7 +132,7 @@ export function apiSelector(url,item){
       }
       //Notify fn value deleted
       console.log(response);
-      dispatch(deleteAccToIdle())
+
     })
     .catch(err=>console.log(err))
   }
@@ -141,7 +142,10 @@ export function deleteItem(item,type){
   switch (type) {
     case 'User account':
     let url = '/user/delete'
-      return dispatch=>dispatch(apiSelector(url,item))
+      return dispatch=>{
+        dispatch(apiSelector(url,item))
+        dispatch(deleteAccToIdle())
+      }
       break;
 
     case 'User role':
@@ -154,7 +158,7 @@ export function deleteItem(item,type){
           }
           //Notify fn value deleted
           console.log(response);
-          dispatch(deleteAccToIdle())
+          dispatch(deleteRoleToIdle())
         })
         .catch(err=>console.log(err))
       }
@@ -162,37 +166,58 @@ export function deleteItem(item,type){
 
     case 'Customer':
       let url2 = '/api/customer/delete'
-      return dispatch=>dispatch(apiSelector(url2,item))
+      return dispatch=>{
+        dispatch(apiSelector(url2,item))
+        dispatch(deleteCustomerToIdle())
+      }
       break;
 
     case 'Supplier':
       let url3 = '/api/supplier/delete'
-      return dispatch=>dispatch(apiSelector(url3,item))
+      return dispatch=>{
+        dispatch(apiSelector(url3,item))
+        dispatch(deleteSupplierToIdle())
+      }
       break;
 
     case 'Price list':
       let url4 = '/api/price_list/delete'
-      return dispatch=>dispatch(apiSelector(url4,item))
+      return dispatch=>{
+        dispatch(apiSelector(url4,item))
+        dispatch(deletePriceToIdle())
+      }
       break;
 
     case 'Product':
       let url5 = '/api/product/delete'
-      return dispatch=>dispatch(apiSelector(url5,item))
+      return dispatch=>{
+        dispatch(apiSelector(url5,item))
+        dispatch(deleteProductToIdle())
+      }
       break;
 
     case 'Brand':
       let url6 = '/api/brand/delete'
-      return dispatch=>dispatch(apiSelector(url6,item))
+      return dispatch=>{
+        dispatch(apiSelector(url6,item))
+        dispatch(deleteBrandToIdle())
+      }
       break;
 
     case 'Film Type':
       let url7 = '/api/film/delete'
-      return dispatch=>dispatch(apiSelector(url7,item))
+      return dispatch=>{
+        dispatch(apiSelector(url7,item))
+        dispatch(deleteFilmToIdle())
+      }
       break;
 
     case 'Grade':
       let url8 = '/api/grade/delete'
-      return dispatch=>dispatch(apiSelector(url8,item))
+      return dispatch=>{
+        dispatch(apiSelector(url8,item))
+        dispatch(deleteGradeToIdle())
+      }
     default:
       console.log(item);
       break;
