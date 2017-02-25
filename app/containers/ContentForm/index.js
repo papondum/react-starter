@@ -69,7 +69,6 @@ class ContentForm extends React.Component {
 
 
     componentWillReceiveProps(nextProps){
-      //trigger when state userAcc call delete
 
       if(nextProps.deleteCall.userAcc=='active'){
         let obj = {user_id:this.state.checkedItem}
