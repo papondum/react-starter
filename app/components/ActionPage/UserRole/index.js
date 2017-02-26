@@ -55,10 +55,10 @@ class UserRole extends React.Component {
     }
     _genHeader(type){
       if(type=='create'){
-        return 'Create - User account'
+        return 'Create - User role'
       }
       else if(type=='edit'){
-        return 'Edit - User account'
+        return 'Edit - User role'
       }
     }
 
@@ -93,14 +93,16 @@ class UserRole extends React.Component {
       let result  = {
         "name":name,
         "description":description,
-        "sale_quo":{view:this.refs.sale_quo_view.checked,email:this.refs.sale_quo_email.checked,print:this.refs.sale_quo_print.checked,export:this.refs.sale_quo_export.checked,edit:this.refs.sale_quo_edit.checked},
-        "sale_rol":{view:this.refs.sale_ord_view.checked,email:this.refs.sale_ord_email.checked,print:this.refs.sale_ord_print.checked,export:this.refs.sale_ord_export.checked,edit:this.refs.sale_ord_edit.checked},
-        "purchase_ord":{view:this.refs.purchase_ord_view.checked,email:this.refs.purchase_ord_email.checked,print:this.refs.purchase_ord_print.checked,export:this.refs.purchase_ord_export.checked,edit:this.refs.purchase_ord_edit.checked},
-        "good_rec":{view:this.refs.good_rec_view.checked,email:this.refs.good_rec_email.checked,print:this.refs.good_rec_print.checked,export:this.refs.good_rec_export.checked,edit:this.refs.good_rec_edit.checked},
-        "deliver_ord":{view:this.refs.deliver_ord_view.checked,email:this.refs.deliver_ord_email.checked,print:this.refs.deliver_ord_print.checked,export:this.refs.deliver_ord_export.checked,edit:this.refs.deliver_ord_edit.checked},
-        "user_acc":{view:this.refs.user_acc_view.checked,email:this.refs.user_acc_email.checked,print:this.refs.user_acc_print.checked,export:this.refs.user_acc_export.checked,edit:this.refs.user_acc_edit.checked},
-        "user_rol":{view:this.refs.user_rol_view.checked,email:this.refs.user_rol_email.checked,print:this.refs.user_rol_print.checked,export:this.refs.user_rol_export.checked,edit:this.refs.user_rol_edit.checked},
-        "customer":{view:this.refs.customer_view.checked,email:this.refs.customer_email.checked,print:this.refs.customer_print.checked,export:this.refs.customer_export.checked,edit:this.refs.customer_edit.checked},
+        "role_detail": {
+          "sale_quo":{view:this.refs.sale_quo_view.checked,email:this.refs.sale_quo_email.checked,print:this.refs.sale_quo_print.checked,export:this.refs.sale_quo_export.checked,edit:this.refs.sale_quo_edit.checked},
+          "sale_rol":{view:this.refs.sale_ord_view.checked,email:this.refs.sale_ord_email.checked,print:this.refs.sale_ord_print.checked,export:this.refs.sale_ord_export.checked,edit:this.refs.sale_ord_edit.checked},
+          "purchase_ord":{view:this.refs.purchase_ord_view.checked,email:this.refs.purchase_ord_email.checked,print:this.refs.purchase_ord_print.checked,export:this.refs.purchase_ord_export.checked,edit:this.refs.purchase_ord_edit.checked},
+          "good_rec":{view:this.refs.good_rec_view.checked,email:this.refs.good_rec_email.checked,print:this.refs.good_rec_print.checked,export:this.refs.good_rec_export.checked,edit:this.refs.good_rec_edit.checked},
+          "deliver_ord":{view:this.refs.deliver_ord_view.checked,email:this.refs.deliver_ord_email.checked,print:this.refs.deliver_ord_print.checked,export:this.refs.deliver_ord_export.checked,edit:this.refs.deliver_ord_edit.checked},
+          "user_acc":{view:this.refs.user_acc_view.checked,email:this.refs.user_acc_email.checked,print:this.refs.user_acc_print.checked,export:this.refs.user_acc_export.checked,edit:this.refs.user_acc_edit.checked},
+          "user_rol":{view:this.refs.user_rol_view.checked,email:this.refs.user_rol_email.checked,print:this.refs.user_rol_print.checked,export:this.refs.user_rol_export.checked,edit:this.refs.user_rol_edit.checked},
+          "customer":{view:this.refs.customer_view.checked,email:this.refs.customer_email.checked,print:this.refs.customer_print.checked,export:this.refs.customer_export.checked,edit:this.refs.customer_edit.checked}
+        }
     }
       if(name&&description){
         post('/api/role/create',result)
@@ -124,7 +126,7 @@ class UserRole extends React.Component {
               <div className='page-head'>
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
-                      <button onClick={()=>this.props.getContent('User role')}><img src={cancelIcon}/>Cancel</button>
+                      <button onClick = {() => this.props.getContent('User role')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.createRole()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
