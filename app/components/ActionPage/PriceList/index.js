@@ -92,7 +92,7 @@ class PriceList extends React.Component {
   }
 
   getProduct(){
-    get('/api/product/all')
+    get('/api/price_list/create')
     .then((response)=> {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
