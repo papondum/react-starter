@@ -56,12 +56,22 @@ class ContentForm extends React.Component {
             checkedItem:this.state.checkedItem.concat([this.refs[id].value])
           })
         }
+
+        if(this.state.checkedItem.length==0){
+          //send existing state checked id state
+          this.props.checkedSingleItem(this.refs[id].value)
+        }
+
       }
-      else{
+      else{   //if checked item that not want it will return wrong val
           var array = this.state.checkedItem;
           var index = array.indexOf(this.refs[id].value)
           array.splice(index, 1);
           this.setState({checkedItem: array });
+
+          if(this.state.checkedItem.length==1){
+            this.props.checkedSingleItem(this.refs[id].value)
+          }
         }
 
     }

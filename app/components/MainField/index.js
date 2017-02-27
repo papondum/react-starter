@@ -96,6 +96,10 @@ class MainField extends React.Component {
       })
     }
 
+    checkedSingleItem(item){
+      console.log(item);
+    }
+
     showActionMenu(){
       if(this.state.mainContent.length==undefined){
         return ''
@@ -107,10 +111,15 @@ class MainField extends React.Component {
 
     render() {
         return(
+
           <div className="mainContent">
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)} closeTab= {(tab) => this.props.closeTab(tab)}/>
+
+
               {this.showActionMenu()}
-              <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent} />
+
+              {/* content will recieve some prop that from ticked */}
+              <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent} checkedSingleItem = {(item)=>this.checkedSingleItem(item)}/>
               <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
               <Modal show = {this.state.showModal.show} options = {this.state.showModal.show}/>
           </div>)

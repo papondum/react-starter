@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import './style.scss';
 import cancelIcon from '../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../resource/Icon/button_save.png'
-import InputModal from '../../Modal/Input'
+import ModalCustom from '../../Modal/Custom'
 import attachIcon from '../../../resource/Icon/button_create.png'
 import emailIcon from '../../../resource/Icon/button_email.png'
 import printIcon from '../../../resource/Icon/button_print.png'
@@ -87,12 +87,14 @@ class PriceList extends React.Component {
     result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
     return result
   }
+
   componentDidMount(){
     this.getProduct()
   }
 
   getProduct(){
-    get('/api/price_list/create')
+    // get('/api/price_list/create')
+    get('/api/product/all')
     .then((response)=> {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
@@ -156,7 +158,13 @@ class PriceList extends React.Component {
           this.setState({inputModal:{show:false}})
         },
         confirm: ()=>{
-          this.createPriceList()    //get checked item
+          // add value to table that have checked
+          for (var i = 0; i < this.state.checkedItem.length; i++) {
+            this.state.checkedItem[i].price = this.refs.inputprice.value
+          }
+          console.log(this.refs.inputprice.value);
+          console.log(this.state.checkedItem);
+          //this.createPriceList()
         }
       }
     })
@@ -165,8 +173,9 @@ class PriceList extends React.Component {
   ifChecked(id){
     if(this.refs[id].checked){
       if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
+
         this.setState({
-          checkedItem:this.state.checkedItem.concat([{id:this.refs[id].value, price:this.refs.input}])
+          checkedItem:this.state.checkedItem.concat([{id:this.refs[id].value, price:this.refs.inputprice.value}])
         })
       }
     }
@@ -220,7 +229,14 @@ class PriceList extends React.Component {
                     </table>
                 </div>
             </div>
-            <InputModal show = {this.state.inputModal.show} options = {this.state.inputModal}/>
+            <ModalCustom show = {this.state.inputModal.show} options = {this.state.inputModal}>
+                <div>
+                    {this.state.inputModal.message}
+                    <input type = 'number' ref = 'inputprice'/>
+                    <button onClick = {()=>this.state.inputModal.confirm()}>Add</button>
+                    <button onClick = {()=>this.state.inputModal.close()}>Cancel</button>
+                </div>
+            </ModalCustom>
         </div>
             )
   }

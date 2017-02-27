@@ -13,7 +13,7 @@ class Content extends React.Component {
         return(
     // <div className='content-style'>
     <div style={{overflow: 'scroll', height: 'calc(100% - 98px)'}}>
-        {this.props.mainContent.length!=undefined? (<ContentForm type = {this.props.contentHeader} content = {this.props.mainContent} />):this.props.mainContent}
+        {this.props.mainContent.length!=undefined? (<ContentForm type = {this.props.contentHeader} content = {this.props.mainContent} checkedSingleItem = {(item)=>this.props.checkedSingleItem(item)}/>):this.props.mainContent}
     </div>);}
 }
 const mapStateToProps = (state) => {
