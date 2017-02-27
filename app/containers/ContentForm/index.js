@@ -59,6 +59,7 @@ class ContentForm extends React.Component {
 
         if(this.state.checkedItem.length==0){
           //send existing state checked id state
+
           this.props.checkedSingleItem(this.refs[id].value)
         }
 
@@ -70,7 +71,7 @@ class ContentForm extends React.Component {
           this.setState({checkedItem: array });
 
           if(this.state.checkedItem.length==1){
-            this.props.checkedSingleItem(this.refs[id].value)
+            this.props.checkedSingleItem(this.state.checkedItem[0])
           }
         }
 

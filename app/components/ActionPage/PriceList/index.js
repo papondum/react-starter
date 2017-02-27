@@ -66,6 +66,7 @@ class PriceList extends React.Component {
         return (<td key= {item}>{item}</td>)
       })
       genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
+      genHead.push((<td key='price'>price_item</td>))
     }
       return genHead
   }
@@ -79,12 +80,13 @@ class PriceList extends React.Component {
     return result
   }
 
-  _getEachVal(obj){
+  _getEachVal(obj){         //gen price that from modal checkedItem val {id:'', price:''}
     var result=[]
     for(var o in obj){
       result.push((<td key={o}>{obj[o]}</td>))
     }
     result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
+    // result.unshift((<td key='priceval'>{this.state.checkedItem.find((i)=> i.id==obj.id)}</td>))
     return result
   }
 
@@ -162,8 +164,17 @@ class PriceList extends React.Component {
           for (var i = 0; i < this.state.checkedItem.length; i++) {
             this.state.checkedItem[i].price = this.refs.inputprice.value
           }
-          console.log(this.refs.inputprice.value);
-          console.log(this.state.checkedItem);
+          for (var i = 0; i < this.state.mainContent.length; i++) {
+            for (var j = 0; j < this.state.checkedItem.length; j++) {
+              if(this.state.checkedItem[j].id==this.state.mainContent[i].id){
+                // console.log(this.state.mainContent[i],this.state.checkedItem[j]);
+                // this.setState({
+                //   this.state.mainContent[i].price:this.state.checkedItem[j].price
+                // })
+                this.state.mainContent[i].price == this.state.checkedItem[j].price
+              }
+            }
+          }
           //this.createPriceList()
         }
       }
@@ -189,6 +200,7 @@ class PriceList extends React.Component {
   }
 
   render() {
+    console.log(this.state.mainContent);
       return(
         <div className='page-style'>
             <div className='page-head'>
