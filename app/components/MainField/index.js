@@ -16,7 +16,8 @@ class MainField extends React.Component {
             mainContent:'',
             showModal:{
               show:false
-            }
+            },
+            editItem:''
         };
     }
 
@@ -97,7 +98,9 @@ class MainField extends React.Component {
     }
 
     checkedSingleItem(item){
-      console.log(item);
+      this.setState({
+        editItem:item
+      })
     }
 
     showActionMenu(){
@@ -105,7 +108,7 @@ class MainField extends React.Component {
         return ''
       }
       else{
-        return <ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} setContent={(item)=>this.setContent(item)} showModal={()=>this.showModal()}/>
+        return <ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} setContent={(item)=>this.setContent(item)} showModal={()=>this.showModal()} editItem = {this.state.editItem}/>
       }
     }
 

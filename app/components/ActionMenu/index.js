@@ -83,7 +83,7 @@ class ActionMenu extends React.Component {
         case 'User account':
           this.setState({
             createAction:()=>this.props.setContent((<UserAccount type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<UserAccount type='edit' getContent={(item)=>this.props.getContent(item)} objFromFetch={this.props}/>)),
+            editAction:()=>this.props.setContent((<UserAccount type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',

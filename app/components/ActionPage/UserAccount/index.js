@@ -21,6 +21,8 @@ class UserAccount extends React.Component {
       }
     }
 
+    //get this.props.editItem fetch api by item id doneee!!!
+
     updateUser(){
       let firstname = this.refs.firstname.value
       let lastname = this.refs.lastname.value
@@ -68,7 +70,6 @@ class UserAccount extends React.Component {
 
 
     render() {
-      console.log(this.props.objFromFetch);
         return(
           <div className='page-style'>
               <div className='page-head'>
