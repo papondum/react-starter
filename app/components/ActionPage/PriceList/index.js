@@ -46,7 +46,8 @@ class PriceList extends React.Component {
         inputModal:{
           show:false
         },
-        checkedItem:[]
+        checkedItem:[],
+        pricetagItem:[]
       }
   }
   _genHeader(type){
@@ -86,7 +87,7 @@ class PriceList extends React.Component {
       result.push((<td key={o}>{obj[o]}</td>))
     }
     result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
-    // result.unshift((<td key='priceval'>{this.state.checkedItem.find((i)=> i.id==obj.id)}</td>))
+    result.push((<td key='pricelist' ref= {obj.id+'_price'}></td>))
     return result
   }
 
@@ -95,8 +96,7 @@ class PriceList extends React.Component {
   }
 
   getProduct(){
-    // get('/api/price_list/create')
-    get('/api/product/all')
+     get('/api/price_list/create')
     .then((response)=> {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
@@ -133,7 +133,7 @@ class PriceList extends React.Component {
   createPriceList(){
     let name = this.refs.name.value
     let status = "In Process"
-    let obj = {name,status,list_item: this.state.checkedItem}  //objArray
+    let obj = {name,status,list_item: this.state.pricetagItem}  //objArray
     if(name&&status){
       post('/api/price_list/create',obj)
       .then((response)=> {
@@ -151,6 +151,7 @@ class PriceList extends React.Component {
   }
 
   openInputModal(){
+    console.log(this.state.checkedItem);
     this.setState({
       inputModal: {
         show: true,
@@ -160,20 +161,14 @@ class PriceList extends React.Component {
           this.setState({inputModal:{show:false}})
         },
         confirm: ()=>{
-          // add value to table that have checked
-          for (var i = 0; i < this.state.checkedItem.length; i++) {
-            this.state.checkedItem[i].price = this.refs.inputprice.value
+          console.log(this.state.checkedItem);
+          let state = this.state.checkedItem
+          for (var i = 0; i < state.length; i++) {
+            state[i].price = this.refs['inputprice'].value
           }
-          for (var i = 0; i < this.state.mainContent.length; i++) {
-            for (var j = 0; j < this.state.checkedItem.length; j++) {
-              if(this.state.checkedItem[j].id==this.state.mainContent[i].id){
-                // console.log(this.state.mainContent[i],this.state.checkedItem[j]);
-                // this.setState({
-                //   this.state.mainContent[i].price:this.state.checkedItem[j].price
-                // })
-                this.state.mainContent[i].price == this.state.checkedItem[j].price
-              }
-            }
+          this.setState({checkedItem:state})
+          for (var i = 0; i < this.state.checkedItem.length; i++) {
+            this.refs[(this.state.checkedItem[i].id+'_price')].innerHTML = this.state.checkedItem[i].price
           }
           //this.createPriceList()
         }
@@ -184,23 +179,24 @@ class PriceList extends React.Component {
   ifChecked(id){
     if(this.refs[id].checked){
       if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
-
-        this.setState({
-          checkedItem:this.state.checkedItem.concat([{id:this.refs[id].value, price:this.refs.inputprice.value}])
-        })
+        this.setState({checkedItem: this.state.checkedItem.concat([{id:this.refs[id].value, price: this.refs.inputprice.value}])})
       }
     }
     else{
         var array = this.state.checkedItem;
         var index = array.indexOf(this.refs[id].value)
-        array.splice(index, 1);
+        for (var i = 0; i < array.length; i++) {
+          if(array[i].id==this.refs[id].value){
+            array.splice(i, 1);
+          }
+        }
+
         this.setState({checkedItem: array });
       }
 
   }
 
   render() {
-    console.log(this.state.mainContent);
       return(
         <div className='page-style'>
             <div className='page-head'>
