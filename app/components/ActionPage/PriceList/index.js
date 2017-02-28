@@ -136,6 +136,7 @@ class PriceList extends React.Component {
         if (this.refs[i].innerHTML) {
           let getId = i.split("_")
           this.setState({pricetagItem:this.state.pricetagItem.concat([{id: getId[1], price: this.refs[i].innerHTML}])})
+          console.log(this.state.pricetagItem);
         }
       }
     }
