@@ -135,17 +135,21 @@ class PriceList extends React.Component {
       if(i[0]=='p'){
         if (this.refs[i].innerHTML) {
           let getId = i.split("_")
-          this.setState({pricetagItem:this.state.pricetagItem.concat([{id: getId[1], price: this.refs[i].innerHTML}])})
-          console.log(this.state.pricetagItem);
+          let newItem = {id: getId[1], price: this.refs[i].innerHTML}
+          var newArray = this.state.pricetagItem    //check in array
+          newArray.push(newItem)
+          this.setState({pricetagItem:newArray})
+          console.log('after:',this.state.pricetagItem);
         }
       }
     }
   }
 
   createPriceList(){
+    this.getPriceTagedItem()
     let name = this.refs.name.value
     let status = "In Process"
-    let obj = {name,status,list_item: this.state.pricetagItem}  //objArray this.getPriceTagedItem()
+    let obj = {name,status,list_item: this.state.pricetagItem}
     if(name&&status){
       post('/api/price_list/create',obj)
       .then((response)=> {
@@ -179,7 +183,6 @@ class PriceList extends React.Component {
           for (var i = 0; i < this.state.checkedItem.length; i++) {
             this.refs[('price_'+this.state.checkedItem[i].id)].innerHTML = this.state.checkedItem[i].price
           }
-          this.getPriceTagedItem()
           this.setState({inputModal:{show:false}})
         }
       }
