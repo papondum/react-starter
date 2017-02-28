@@ -30,8 +30,10 @@ class UserAccount extends React.Component {
       let password = this.refs.password.value
       let email = this.refs.email.value
       let role = this.refs.role.value
+      let url = this.props.type=='create'? '/api/user/create':'/api/user/update'
+
       if(firstname&&lastname&&password&&email&&role){
-        post('/user/create',{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
+        post(url,{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -63,10 +65,35 @@ class UserAccount extends React.Component {
       return result
     }
 
-    componentDidMount(){
-      this.getRoleList()
+    getInitialVal(){        //Edit    2
+      post('/api/user/id',{"user_id":this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        //Notify fn value added
+        // this.setState({editItem:response})
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
     }
 
+    componentDidMount(){
+      this.getRoleList()
+      this.getInitialVal()    //Edit    1
+    }
+
+
+    setEditItem(obj){         //Edit    3
+      if(obj){
+        this.refs['firstname'].value = obj[0].firstname
+        this.refs['lastname'].value = obj[0].lastname
+        this.refs['username'].value = obj[0].username
+        this.refs['password'].value = obj[0].password
+        this.refs['email'].value = obj[0].email
+        this.refs['role'].value = obj[0].role_id
+      }
+    }
 
 
     render() {
