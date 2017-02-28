@@ -87,7 +87,7 @@ class PriceList extends React.Component {
       result.push((<td key={o}>{obj[o]}</td>))
     }
     result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
-    result.push((<td key='pricelist' ref= {obj.id+'_price'}></td>))
+    result.push((<td key='pricelist' ref= {'price_' + obj.id}></td>))   //cant use td value to store id
     return result
   }
 
@@ -130,17 +130,27 @@ class PriceList extends React.Component {
     return result
   }
 
+  getPriceTagedItem(){
+    for (var i in this.refs) {
+      if(i[0]=='p'){
+        if (this.refs[i].innerHTML) {
+          let getId = i.split("_")
+          this.setState({pricetagItem:this.state.pricetagItem.concat([{id: getId[1], price: this.refs[i].innerHTML}])})
+        }
+      }
+    }
+  }
+
   createPriceList(){
     let name = this.refs.name.value
     let status = "In Process"
-    let obj = {name,status,list_item: this.state.pricetagItem}  //objArray
+    let obj = {name,status,list_item: this.state.pricetagItem}  //objArray this.getPriceTagedItem()
     if(name&&status){
       post('/api/price_list/create',obj)
       .then((response)=> {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        //Notify fn value added
         this.props.getContent('Price list')
       })
       .catch(err=>console.log(err))
@@ -151,7 +161,6 @@ class PriceList extends React.Component {
   }
 
   openInputModal(){
-    console.log(this.state.checkedItem);
     this.setState({
       inputModal: {
         show: true,
@@ -161,16 +170,16 @@ class PriceList extends React.Component {
           this.setState({inputModal:{show:false}})
         },
         confirm: ()=>{
-          console.log(this.state.checkedItem);
           let state = this.state.checkedItem
           for (var i = 0; i < state.length; i++) {
             state[i].price = this.refs['inputprice'].value
           }
           this.setState({checkedItem:state})
           for (var i = 0; i < this.state.checkedItem.length; i++) {
-            this.refs[(this.state.checkedItem[i].id+'_price')].innerHTML = this.state.checkedItem[i].price
+            this.refs[('price_'+this.state.checkedItem[i].id)].innerHTML = this.state.checkedItem[i].price
           }
-          //this.createPriceList()
+          this.getPriceTagedItem()
+          this.setState({inputModal:{show:false}})
         }
       }
     })
@@ -193,9 +202,7 @@ class PriceList extends React.Component {
 
         this.setState({checkedItem: array });
       }
-
   }
-
   render() {
       return(
         <div className='page-style'>
