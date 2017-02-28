@@ -26,8 +26,9 @@ class Customer extends React.Component {
       let email = this.refs.email.value
       let contact_person = this.refs.contact_person.value
       let create_by = 1
+      let url = this.props.type=='create'? '/api/customer/create':'/api/customer/update'
       if(code&&name){
-        post('/api/customer/create',{
+        post(url,{
           "code":code,
           "name":name,
           "address":address,
@@ -50,6 +51,35 @@ class Customer extends React.Component {
         console.log('Invalid Input');
       }
     }
+
+
+    getInitialVal(){        //Edit    2
+      post('/api/customer/id',{"customer_id":this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
+    }
+    componentDidMount(){
+      this.getInitialVal()    //Edit    1
+    }
+    setEditItem(obj){         //Edit    3
+      console.log(obj);
+      if(obj){
+        this.refs['code'].value = obj[0].code
+        this.refs['telephone'].value = obj[0].telephone
+        this.refs['invoice_to'].value = obj[0].invoice_to
+        this.refs['name'].value = obj[0].name
+        this.refs['fax'].value = obj[0].fax
+        this.refs['ship_to'].value = obj[0].ship_to
+        this.refs['contact_person'].value = obj[0].contact_person
+        this.refs['email'].value = obj[0].email
+      }
+    }
+
 
     render() {
         return(

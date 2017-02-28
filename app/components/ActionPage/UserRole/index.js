@@ -104,8 +104,9 @@ class UserRole extends React.Component {
           "customer":{view:this.refs.customer_view.checked,email:this.refs.customer_email.checked,print:this.refs.customer_print.checked,export:this.refs.customer_export.checked,edit:this.refs.customer_edit.checked}
         }
     }
+    let url = this.props.type=='create'? '/api/role/create':'/api/role/update'
       if(name&&description){
-        post('/api/role/create',result)
+        post(url,result)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -120,6 +121,28 @@ class UserRole extends React.Component {
       }
     }
 
+    getInitialVal(){
+      post('/api/role/id',{"role_id":this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
+    }
+    componentDidMount(){
+      this.getInitialVal()
+    }
+    setEditItem(obj){
+      console.log(obj);
+      if(obj){
+        this.refs['name'].value = obj[0].name
+        this.refs['description'].value = obj[0].description
+        //obj[0].role_detail
+      }
+    }
+      //****** need to set checkbox edit
     render() {
         return(
           <div className='page-style'>

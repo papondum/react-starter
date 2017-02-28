@@ -257,11 +257,21 @@ class PriceList extends React.Component {
             </div>
             <ModalCustom show = {this.state.inputModal.show} options = {this.state.inputModal}>
                 <div>
-                    {this.state.inputModal.message}
-                    <input type = 'number' ref = 'inputprice'/>
-                    <button onClick = {()=>this.state.inputModal.confirm()}>Add</button>
-                    <button onClick = {()=>this.state.inputModal.close()}>Cancel</button>
+
+                    <div className='modal-content-body'>
+                        <div className="w3-medium primary-text modal-txt">{this.state.inputModal.message}</div>
+                        <input type = 'number' ref = 'inputprice'/>
+                    </div>
+                    <div className="modal-content-bot actions button">
+                        <button className="material-btn cancel-style" onClick = {()=>this.state.inputModal.close()}>Cancel</button>
+                        <button className="material-btn confirm-style" onClick = {()=>this.state.inputModal.confirm()}>Add</button>
+
+                    </div>
                 </div>
+
+
+
+
             </ModalCustom>
         </div>
             )

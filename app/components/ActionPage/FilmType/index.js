@@ -20,8 +20,9 @@ class FilmType extends React.Component {
     createFilmType(){
       let film_code = this.refs.film_code.value
       let film_name = this.refs.film_name.value
+      let url = this.props.type=='create'? '/api/film/create':'/api/film/update'
       if(film_code&&film_name){
-        post('/api/film/create',{"film_code":film_code, "film_name":film_name})
+        post(url,{"film_code":film_code, "film_name":film_name})
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -35,6 +36,32 @@ class FilmType extends React.Component {
         console.log('Invalid Input');
       }
     }
+
+    getInitialVal(){        //Edit    2
+      post('/api/film/id',{"film_id":this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        //Notify fn value added
+        // this.setState({editItem:response})
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
+    }
+
+    componentDidMount(){
+      this.getInitialVal()    //Edit    1
+    }
+
+
+    setEditItem(obj){         //Edit    3
+      if(obj){
+        this.refs['film_code'].value = obj[0].film_code
+        this.refs['film_name'].value = obj[0].film_name
+      }
+    }
+
 
     render() {
         return(

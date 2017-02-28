@@ -95,7 +95,7 @@ class ActionMenu extends React.Component {
         case 'User role':
           this.setState({
             createAction:()=>this.props.setContent((<Userrole type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<Userrole type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<Userrole type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',
@@ -107,7 +107,7 @@ class ActionMenu extends React.Component {
         case 'Customer':
           this.setState({
             createAction:()=>this.props.setContent((<Customer type='create' getContent={(item)=>this.props.getContent(item)}/>)),   //set new content when click this menu
-            editAction:()=>this.props.setContent((<Customer type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<Customer type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(), //no need change contnt just popup modal cover old
             emailAction:'',
@@ -119,7 +119,7 @@ class ActionMenu extends React.Component {
         case 'Supplier':
           this.setState({
             createAction:()=>this.props.setContent((<Supplier type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<Supplier type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<Supplier type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',
@@ -131,7 +131,7 @@ class ActionMenu extends React.Component {
         case 'Price list':
           this.setState({
             createAction:()=>this.props.setContent((<PriceList type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<PriceList type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<PriceList type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',
@@ -143,7 +143,7 @@ class ActionMenu extends React.Component {
         case 'Product':
           this.setState({
             createAction:()=>this.props.setContent((<Product type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<Product type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<Product type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',
@@ -155,7 +155,7 @@ class ActionMenu extends React.Component {
         case 'Brand':
           this.setState({
             createAction:()=>this.props.setContent((<Brand type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<Brand type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<Brand type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',
@@ -167,7 +167,7 @@ class ActionMenu extends React.Component {
         case 'Film Type':
           this.setState({
             createAction:()=>this.props.setContent((<FilmType type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<FilmType type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<FilmType type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',
@@ -179,7 +179,7 @@ class ActionMenu extends React.Component {
         case 'Grade':
           this.setState({
             createAction:()=>this.props.setContent((<Grade type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-            editAction:()=>this.props.setContent((<Grade type='edit' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<Grade type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',

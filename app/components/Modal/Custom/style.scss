@@ -86,6 +86,9 @@
   padding: 24px;
   min-height: 75px;
   min-width: 490px;
+  input{
+    margin:16px 0;
+  }
 }
 .modal-content-bot{
   padding:8px;
@@ -98,7 +101,6 @@
     outline: 0;
     display: table;
     min-width: 350px;
-    padding:24px;
     border-radius: 3px;
 }
 .z-index3{
@@ -123,4 +125,8 @@
 .delete-style{
   color:#fff;
   background-color: #d62c2c;
+}
+.confirm-style{
+  color:#fff;
+  background-color: #006be5;
 }

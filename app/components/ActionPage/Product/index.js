@@ -89,9 +89,9 @@ class Product extends React.Component {
       let thickness = this.refs.thickness.value
       let rounding = this.refs.rounding.value
       let product_length = this.refs.product_length.value
-
+      let url = this.props.type =='create'? '/api/product/create':'/api/product/update'
       if(width&&density&&decimal&&thickness&&rounding&&product_length){
-        post('/api/product/create',{
+        post(url,{
           "film":film,
           "brand":brand,
           "grade":grade,
@@ -116,6 +116,36 @@ class Product extends React.Component {
       }
       else{
         console.log('invalid Input');
+      }
+    }
+
+    getInitialVal(){        //Edit    2
+      post('/api/product/id',{"product_id":this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
+    }
+
+    componentDidMount(){
+      this.getInitialVal()
+    }
+
+
+    setEditItem(obj){
+      if(obj){
+        this.refs.film.value = obj[0].film
+        this.refs.brand.value = obj[0].brand
+        this.refs.grade.value = obj[0].grade
+        this.refs.width.value = obj[0].width
+        this.refs.density.value = obj[0].density
+        this.refs.decimal.value = obj[0].decimal
+        this.refs.thickness.value = obj[0].thickness
+        this.refs.rounding.value = obj[0].rounding
+        this.refs.product_length.value = obj[0].product_length
       }
     }
 

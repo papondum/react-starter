@@ -20,8 +20,9 @@ class Grade extends React.Component {
     createGrade(){
       let grade_code = this.refs.grade_code.value
       let grade_name = this.refs.grade_name.value
+      let url = this.props.type=='create'? '/api/grade/create':'/api/grade/update'
       if(grade_code&&grade_name){
-        post('/api/grade/create',{"grade_code":grade_code, "grade_name":grade_name})
+        post(url,{"grade_code":grade_code, "grade_name":grade_name})
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -35,6 +36,29 @@ class Grade extends React.Component {
         console.log('Invalid Input');
       }
     }
+    getInitialVal(){        //Edit    2
+      post('/api/grade/id',{"grade_id":this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
+    }
+
+    componentDidMount(){
+      this.getInitialVal()
+    }
+
+
+    setEditItem(obj){
+      if(obj){
+        this.refs['grade_code'].value = obj[0].grade_code
+        this.refs['grade_name'].value = obj[0].grade_name
+      }
+    }
+
 
     render() {
         return(
