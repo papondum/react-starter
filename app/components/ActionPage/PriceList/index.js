@@ -148,7 +148,7 @@ class PriceList extends React.Component {
   createPriceList(){
     this.getPriceTagedItem()
     let name = this.refs.name.value
-    let status = "In Process"
+    let status = this.refs.status.value
     let obj = {name,status,list_item: this.state.pricetagItem}
     if(name&&status){
       post('/api/price_list/create',obj)
@@ -225,6 +225,13 @@ class PriceList extends React.Component {
                 <div className='input-box left flex'>
                     <label>Name:*</label>
                     <input className='flex' type="text" ref='name'/>
+                </div>
+                <div className='input-box left flex'>
+                    <label>Status:</label>
+                    <select style={{'width': '173px'}} ref = 'status'>
+                        <option value='In Process'>In Process</option>
+                        <option value='Released'>Released</option>
+                    </select>
                 </div>
             </div>
 
