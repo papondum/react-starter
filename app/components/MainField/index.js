@@ -108,7 +108,12 @@ class MainField extends React.Component {
         return ''
       }
       else{
-        return <ActionMenu activePage={this.props.tab.activeTabs} getContent={(item)=>this._getContent(item)} setContent={(item)=>this.setContent(item)} showModal={()=>this.showModal()} editItem = {this.state.editItem}/>
+        return <ActionMenu
+            activePage={this.props.tab.activeTabs}
+            getContent={(item)=>this._getContent(item)}
+            setContent={(item)=>this.setContent(item)}
+            showModal={()=>this.showModal()}
+            editItem = {this.state.editItem}/>
       }
     }
 

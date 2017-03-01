@@ -27,8 +27,33 @@ class LeftMenu extends React.Component {
               <img src={submenuIcon}/>
               <div><p>{i.name}</p></div>
           </div>)});
-        let result = this._genMasterFileGroup(subMenu)
+          let result = subMenu
+          switch (item.name) {
+            case 'Master file':
+                result = this._genMasterFileGroup(subMenu)
+              break;
+            case 'Sales':
+                result = this._genSaleGroup(subMenu)
+              break;
+            default:
+
+          }
+        // let result = this._genMasterFileGroup(subMenu)
         this.setState({'submenu': result});
+    }
+    _genSaleGroup(item){
+      let itemArray = {general:[]}
+      for (var i = 0; i < item.length; i++) {
+        itemArray.general.push(item[i])
+      }
+      return (
+        <div>
+            <div>
+                <div className="sub-head-text">General</div>
+                {itemArray.general}
+            </div>
+        </div>
+      )
     }
 
     _genMasterFileGroup(item){
@@ -53,22 +78,22 @@ class LeftMenu extends React.Component {
       }
       return (
         <div>
-          <div>
-            <div className="sub-head-text">User</div>
-            {clusteringFromSet.user}
-          </div>
-          <div>
-            <div className="sub-head-text">Business Partner</div>
-            {clusteringFromSet.business}
-          </div>
-          <div>
-            <div className="sub-head-text">Pricing</div>
-            {clusteringFromSet.price}
-          </div>
-          <div>
-            <div className="sub-head-text">Product</div>
-            {clusteringFromSet.product}
-          </div>
+            <div>
+                <div className="sub-head-text">User</div>
+                {clusteringFromSet.user}
+            </div>
+            <div>
+                <div className="sub-head-text">Business Partner</div>
+                {clusteringFromSet.business}
+            </div>
+            <div>
+                <div className="sub-head-text">Pricing</div>
+                {clusteringFromSet.price}
+            </div>
+            <div>
+                <div className="sub-head-text">Product</div>
+                {clusteringFromSet.product}
+            </div>
         </div>)
     }
 

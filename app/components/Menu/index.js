@@ -6,10 +6,13 @@ class Menu extends React.Component {
         super(props);
         this.state = {
             'menu': [
-            {'name': 'Sales', 'icon': 's', 'submenu': [{'key': 1, 'uniq': 11}, {'key': 2, 'uniq': 12}, {'key': 3, 'uniq': 13}, {'key': 4, 'uniq': 14}]},
+            {'name': 'Sales', 'submenu': [
+              {'name': 'Quotation', type: 'General'},
+              {'name': 'Sales Order', type: 'General'}
+            ]},
             {'name': 'Purchase', 'icon': 'h', 'submenu': [{'key': 3, 'uniq': 18}, {'key': 2, 'uniq': 17}, {'key': 3, 'uniq': 16}, {'key': 1, 'uniq': 15}]},
             {'name': 'Inventory', 'icon': 'a', 'submenu': [{'key': 1, 'uniq': 19}, {'key': 2, 'uniq': 20}, {'key': 2, 'uniq': 21}, {'key': 4, 'uniq': 22}]},
-            {'name': 'Master file', 'icon': 'q', 'submenu': [
+            {'name': 'Master file', 'submenu': [
               {'name': 'User account', 'type': 'User'},
               {'name': 'User role', 'type': 'User'},
               {'name': 'Customer', 'type': 'Business Partner'},
