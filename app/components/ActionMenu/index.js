@@ -14,15 +14,16 @@ import * as DeleteAction from '../../actions/deleteCall'
 import Modal from '../Modal/Custom'
 import ModalC from '../Modal/Confirm'
 
-import UserAccount from '../ActionPage/UserAccount'
-import Customer from '../ActionPage/Customer'
-import Userrole from '../ActionPage/UserRole'
-import Supplier from '../ActionPage/Supplier'
-import PriceList from '../ActionPage/PriceList'
-import Product from '../ActionPage/Product'
-import Brand from '../ActionPage/Brand'
-import FilmType from '../ActionPage/FilmType'
-import Grade from '../ActionPage/Grade'
+import UserAccount from '../ActionPage/MasterFile/UserAccount'
+import Customer from '../ActionPage/MasterFile/Customer'
+import Userrole from '../ActionPage/MasterFile/UserRole'
+import Supplier from '../ActionPage/MasterFile/Supplier'
+import PriceList from '../ActionPage/MasterFile/PriceList'
+import Product from '../ActionPage/MasterFile/Product'
+import Brand from '../ActionPage/MasterFile/Brand'
+import FilmType from '../ActionPage/MasterFile/FilmType'
+import Grade from '../ActionPage/MasterFile/Grade'
+import Quotation from '../ActionPage/Sales/Quotation'
 class ActionMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -180,6 +181,18 @@ class ActionMenu extends React.Component {
           this.setState({
             createAction:()=>this.props.setContent((<Grade type='create' getContent={(item)=>this.props.getContent(item)}/>)),
             editAction:()=>this.props.setContent((<Grade type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+            copyAction:'',
+            deleteAction:()=>this.showDeleteModal(),
+            emailAction:'',
+            printAction:'',
+            exportAction:'',
+            refreshAction:'',
+          })
+          break;
+        case 'Quotation':
+          this.setState({
+            createAction:()=>this.props.setContent((<Quotation type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+            editAction:()=>this.props.setContent((<Quotation type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
             copyAction:'',
             deleteAction:()=>this.showDeleteModal(),
             emailAction:'',

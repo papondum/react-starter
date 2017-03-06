@@ -9,6 +9,7 @@ class Tab extends React.Component {
 
 
     generateTab() {
+      console.log('test');
         const tab = this.props.tab.tabs;
         const tabs = tab.map(item=><div key={item} onClick={()=>this.props.openContent(item)} className="tab-style">{item}<span onClick={()=>this.props.closeTab(item)}>x</span></div>);
         return tabs;

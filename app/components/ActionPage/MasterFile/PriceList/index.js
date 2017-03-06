@@ -1,13 +1,13 @@
 import React, {PropTypes} from 'react';
 import './style.scss';
-import cancelIcon from '../../../resource/Icon/button_cancel.png'
-import saveIcon from '../../../resource/Icon/button_save.png'
-import ModalCustom from '../../Modal/Custom'
-import attachIcon from '../../../resource/Icon/button_create.png'
-import emailIcon from '../../../resource/Icon/button_email.png'
-import printIcon from '../../../resource/Icon/button_print.png'
-import exportIcon from '../../../resource/Icon/button_export.png'
-import { post ,get } from '../../../../utils'
+import cancelIcon from '../../../../resource/Icon/button_cancel.png'
+import saveIcon from '../../../../resource/Icon/button_save.png'
+import ModalCustom from '../../../Modal/Custom'
+import attachIcon from '../../../../resource/Icon/button_create.png'
+import emailIcon from '../../../../resource/Icon/button_email.png'
+import printIcon from '../../../../resource/Icon/button_print.png'
+import exportIcon from '../../../../resource/Icon/button_export.png'
+import { post ,get } from '../../../../../utils'
 class PriceList extends React.Component {
   constructor(props) {
       super(props);

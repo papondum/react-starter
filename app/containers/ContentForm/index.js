@@ -123,8 +123,6 @@ class ContentForm extends React.Component {
     }
 
     render() {
-      //flow >> click delete  >> get checked value >>  send to delete
-      // how delete fn get checked value from this?
       return (<div>
           <table>
               <thead>
@@ -135,7 +133,9 @@ class ContentForm extends React.Component {
               <tbody>
                   {this._contentGen(this.props.content)}
               </tbody>
-          </table></div>)
+          </table>
+          <div>{this.props.type=='Quotation'? this.props.type:''}</div>
+        </div>)
     }
 }
 

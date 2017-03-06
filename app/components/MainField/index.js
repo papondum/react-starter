@@ -12,7 +12,7 @@ class MainField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mainField: '',
+            openedTab: '',
             mainContent:'',
             showModal:{
               show:false
@@ -38,7 +38,7 @@ class MainField extends React.Component {
     _getMainFieldFromTab(item) {
         this.props.onOpenTab([item])
         this.setState({
-            mainField: item
+            openedTab: item
         });
     }
 
@@ -81,14 +81,23 @@ class MainField extends React.Component {
           break;
         case 'Grade':
           this.getJson('/api/grade/all')
+        case 'Quotation':
+          this.getJson('/api/sales/quotation/all')
         default:
           this.setState({'mainContent':''})
           break;
       }
     }
 
-    componentWillReceiveProps(nextProps) {
+    openContentWhenActiveTabChange(nextProps){
       this._getContent(nextProps.tab.activeTabs)
+      this.setState({
+          openedTab: nextProps.tab.activeTabs
+      });
+    }
+
+    componentWillReceiveProps(nextProps) {
+      this.openContentWhenActiveTabChange(nextProps)
     }
 
     setContent(content){
@@ -118,16 +127,24 @@ class MainField extends React.Component {
     }
 
     render() {
+      //mainContent is raw data from api return as array object
+        // {this.showActionMenu()}
         return(
 
           <div className="mainContent">
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)} closeTab= {(tab) => this.props.closeTab(tab)}/>
 
 
-              {this.showActionMenu()}
-
               {/* content will recieve some prop that from ticked */}
-              <Content contentHeader = {this.state.mainField} mainContent={this.state.mainContent} checkedSingleItem = {(item)=>this.checkedSingleItem(item)}/>
+              <Content
+                contentHeader = {this.state.openedTab}
+                mainContent={this.state.mainContent}
+                checkedSingleItem = {(item)=>this.checkedSingleItem(item)}
+                activePage={this.props.tab.activeTabs}
+                getContent={(item)=>this._getContent(item)}
+                setContent={(item)=>this.setContent(item)}
+                showModal={()=>this.showModal()}
+                editItem = {this.state.editItem}/>
               <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
               <Modal show = {this.state.showModal.show} options = {this.state.showModal.show}/>
           </div>)
