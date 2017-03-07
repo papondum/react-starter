@@ -1,20 +1,23 @@
 import React, {PropTypes} from 'react';
 import { post ,get } from '../../../../../utils'
+import cancelIcon from '../../../../resource/Icon/button_cancel.png'
+import saveIcon from '../../../../resource/Icon/button_save.png'
+import './style.scss'
 class Quotation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          roleList: [],
+          customerList: [],
           inputValid:true
         }
     }
 
     _genHeader(type){
       if(type=='create'){
-        return 'Create - User account'
+        return 'Create - Quotaion'
       }
       else if(type=='edit'){
-        return 'Edit - User account'
+        return 'Edit - Quotation'
       }
     }
 
@@ -44,14 +47,14 @@ class Quotation extends React.Component {
       }
     }
 
-    getRoleList(){
-      let url = '/api/role/raw'
+    getCustomerList(){
+      let url = '/api/customer/raw'
       get(url)
       .then((response)=> {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({roleList:response})
+        this.setState({customerList:response})
       })
       .catch(err=>console.log(err))
     }
@@ -75,7 +78,7 @@ class Quotation extends React.Component {
     }
 
     componentDidMount(){
-      this.getRoleList()
+      this.getCustomerList()
       this.getInitialVal()    //Edit    1
     }
 
@@ -95,9 +98,62 @@ class Quotation extends React.Component {
     render() {
         return(
           <div className='page-style'>
+              <div className='page-head'>
+                  <h2>{this._genHeader(this.props.type)}</h2>
+                  <div className='action-group-btn'>
+                      <button><p>Email</p></button>
+                      <button><p>Print</p></button>
+                      <button onClick={()=>this.props.getContent('Customer')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick = {() => this.createCustomer()} ><img src={saveIcon}/><p>Save</p></button>
+                  </div>
+              </div>
+
+              <div>
+                  <div className='flex flex-row'><div className='tab-quo'>General</div><div className='tab-quo'>Contact</div></div>
+                  <hr/>
+                  <div className="flex flex-row">
+                      <div className='flex flex-1 flex-col'>
+                          <div className='input-box flex'>
+                              <label>Customer :</label>
+                              <input className='flex' type="text" ref='customer'/>
+                          </div>
+                          <div className='input-box flex'>
+                              <label>Date :</label>
+                              <input className='flex' type="date" ref='date'/>
+                          </div>
+                          <div className='input-box flex'>
+                              <label>Payment Term :</label>
+                              <input className='flex' type="text" ref='payment'/>
+                          </div>
+                      </div>
+                      <div className="flex flex-1 flex-col">
+                          <div className='input-box flex'>
+                              <label>Deliver Term :</label>
+                              <input className='flex' type="text" ref='deliver'/>
+                          </div>
+                      </div>
+                      <div className="flex flex-1 flex-col">
+                          <div className='input-box flex'>
+                              <label>Status :</label>
+                              <input className='flex' type="text" ref='status'/>
+                          </div>
+                          <div className='input-box flex'>
+                              <label>Saleperson :</label>
+                              <input className='flex' type="text" ref='saleprtson'/>
+                          </div>
+                          <div className='input-box flex'>
+                              <label>Price list :</label>
+                              <input className='flex' type="text" ref='pricelist'/>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <hr/>
+              <div className="flex flex-row"><div className='tab-quo'>Contact</div><div>+</div></div>
+
           </div>)
+        }
     }
-}
 
 
 export default Quotation;
