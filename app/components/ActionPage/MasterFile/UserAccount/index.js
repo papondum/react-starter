@@ -31,10 +31,21 @@ class UserAccount extends React.Component {
       let email = this.refs.email.value
       let role = this.refs.role.value
       let url = this.props.type=='create'? '/api/user/create':'/api/user/update'
+      let data = {}
+      if (this.props.type=='create') {
+        data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role}
+      } else {
+        let user_id = this.refs.user_id.value
+        data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role_id": role, "id": user_id}
+      }
+
+      console.log(url)
+      console.log(data)
 
       if(firstname&&lastname&&password&&email&&role){
-        post(url,{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
+        post(url,data)
         .then((response)=> {
+          console.log(response)
           if (response.status >= 400) {
             throw new Error("Bad response from server");
           }
@@ -86,12 +97,14 @@ class UserAccount extends React.Component {
 
     setEditItem(obj){         //Edit    3
       if(obj){
+        console.log(obj)
         this.refs['firstname'].value = obj[0].firstname
         this.refs['lastname'].value = obj[0].lastname
         this.refs['username'].value = obj[0].username
         this.refs['password'].value = obj[0].password
         this.refs['email'].value = obj[0].email
         this.refs['role'].value = obj[0].role_id
+        this.refs['user_id'].value = obj[0].id
       }
     }
 
@@ -109,6 +122,7 @@ class UserAccount extends React.Component {
               <hr/>
 
               <div className='flex'>
+                  <input type="hidden" ref = 'user_id' />
                   <div className='input-box left flex'>
                       <label><i>Firstname : </i></label>
                       <input className='flex' type="text" ref = 'firstname'/>
