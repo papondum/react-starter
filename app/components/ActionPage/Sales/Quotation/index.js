@@ -64,7 +64,7 @@ class Quotation extends React.Component {
       return result
     }
 
-    getInitialVal(){        //Edit    2
+    getInitialVal(){
       post('/api/user/id',{"user_id":this.props.editItem})
       .then((response)=> {
         if (response.status >= 400) {
@@ -75,6 +75,18 @@ class Quotation extends React.Component {
         this.setEditItem(response)
       })
       .catch(err=>console.log(err))
+    }
+
+    getFilmType(){
+      get('/api/quotation/filmtype')
+      .then((response)=>{
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        return response
+      })
+      .catch(err=>console.log(err))
+
     }
 
     componentDidMount(){
@@ -94,6 +106,57 @@ class Quotation extends React.Component {
       }
     }
 
+    genContentTable(){
+      return (<table>
+        <tr>
+          <td><input type='checkbox'/>Line No.</td>
+          <td>Film Type</td>
+          <td>Brand</td>
+          <td>Grade</td>
+          <td>Thickness</td>
+          <td></td>
+          <td>Length</td>
+          <td>Weight(Kg)</td>
+          <td>Remarks</td>
+          <td>Based Price</td>
+          <td>Unit Price(THB/Kg)</td>
+          <td>Subtotal(THB)</td>
+        </tr>
+        {this.getChildItem()}
+      </table>)
+    }
+
+    getChildItem(){
+      //get +1 more item child
+      let itemNo = '0001'
+      let child = this.getSingleChild(itemNo)
+    }
+
+    getFilmTypeOption(){
+      let filmList = this.getFilmType()
+      console.log(filmList);
+      // let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i.name}</option>))
+      // return (<select style={{'width': '173px'}} ref = 'role'></select>)
+    }
+
+    getSingleChild(item){
+      return (
+        <tr>
+          <td><input type='checkbox'/>{item}</td>
+          <td> {this.getFilmTypeOption()}</td>
+          <td>Brand</td>
+          <td>Grade</td>
+          <td>Thickness</td>
+          <td></td>
+          <td>Length</td>
+          <td>Weight(Kg)</td>
+          <td>Remarks</td>
+          <td>Based Price</td>
+          <td>Unit Price(THB/Kg)</td>
+          <td>Subtotal(THB)</td>
+        </tr>
+      )
+    }
 
     render() {
         return(
@@ -150,7 +213,7 @@ class Quotation extends React.Component {
               </div>
               <hr/>
               <div className="flex flex-row"><div className='tab-quo'>Contact</div><div>+</div></div>
-
+              {this.genContentTable()}
           </div>)
         }
     }

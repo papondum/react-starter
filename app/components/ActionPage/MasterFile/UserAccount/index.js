@@ -39,9 +39,6 @@ class UserAccount extends React.Component {
         data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role_id": role, "id": user_id}
       }
 
-      console.log(url)
-      console.log(data)
-
       if(firstname&&lastname&&password&&email&&role){
         post(url,data)
         .then((response)=> {
