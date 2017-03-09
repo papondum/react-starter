@@ -21,8 +21,17 @@ class Grade extends React.Component {
       let grade_code = this.refs.grade_code.value
       let grade_name = this.refs.grade_name.value
       let url = this.props.type=='create'? '/api/grade/create':'/api/grade/update'
+      let data = {}
+
+      if (this.props.type=='create') {
+        data = {"grade_code":grade_code, "grade_name":grade_name}
+      } else {
+        let grade_id = this.refs.grade_id.value
+        data = {"grade_code":grade_code, "grade_name":grade_name, "id": grade_id}
+      }
+
       if(grade_code&&grade_name){
-        post(url,{"grade_code":grade_code, "grade_name":grade_name})
+        post(url,data)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -56,6 +65,7 @@ class Grade extends React.Component {
       if(obj){
         this.refs['grade_code'].value = obj[0].grade_code
         this.refs['grade_name'].value = obj[0].grade_name
+        this.refs['grade_id'].value = obj[0].id
       }
     }
 
@@ -75,6 +85,7 @@ class Grade extends React.Component {
 
 
               <div className='flex'>
+                  <input type="hidden" ref = 'grade_id' />
                   <div className='input-box flex left'>
                       <label><i>Grade Code :</i></label>
                       <input className='flex' type="text" ref='grade_code'/>
