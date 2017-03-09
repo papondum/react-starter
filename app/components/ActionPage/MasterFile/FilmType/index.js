@@ -21,8 +21,18 @@ class FilmType extends React.Component {
       let film_code = this.refs.film_code.value
       let film_name = this.refs.film_name.value
       let url = this.props.type=='create'? '/api/film/create':'/api/film/update'
+
+      let data = {}
+
+      if (this.props.type=='create') {
+        data = {"film_code":film_code, "film_name":film_name}
+      } else {
+        let id = this.refs.id.value
+        data = {"film_code":film_code, "film_name":film_name, "id": id}
+      }
+
       if(film_code&&film_name){
-        post(url,{"film_code":film_code, "film_name":film_name})
+        post(url,data)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -59,6 +69,7 @@ class FilmType extends React.Component {
       if(obj){
         this.refs['film_code'].value = obj[0].film_code
         this.refs['film_name'].value = obj[0].film_name
+        this.refs['id'].value = obj[0].id
       }
     }
 
@@ -78,6 +89,7 @@ class FilmType extends React.Component {
 
 
               <div className='flex'>
+                  <input type="hidden" ref = 'id' />
                   <div className='input-box flex left'>
                       <label><i>Film Type Code:</i></label>
                       <input className='flex' type="text" ref='film_code'/>
