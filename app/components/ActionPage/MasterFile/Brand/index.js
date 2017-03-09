@@ -20,8 +20,19 @@ class Brand extends React.Component {
     createBrand(){
       let brand_code = this.refs.brand_code.value
       let brand_name = this.refs.brand_name.value
+      let url = this.props.type=='create'? '/api/brand/create':'/api/brand/update'
+
+      let data = {}
+
+      if (this.props.type=='create') {
+        data = {"brand_code":brand_code, "brand_name":brand_name}
+      } else {
+        let id = this.refs.id.value
+        data = {"brand_code":brand_code, "brand_name":brand_name, "id": id}
+      }
+
       if(brand_code&&brand_name){
-        post('/api/brand/create',{"brand_code":brand_code, "brand_name":brand_name})
+        post(url,data)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -33,6 +44,31 @@ class Brand extends React.Component {
       }
       else{
         console.log('Invalid Input');
+      }
+    }
+
+    getInitialVal(){        //Edit    2
+      post('/api/brand/id',{"brand_id":this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        //Notify fn value added
+        // this.setState({editItem:response})
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
+    }
+
+    componentDidMount(){
+      this.getInitialVal()    //Edit    1
+    }
+
+    setEditItem(obj){         //Edit    3
+      if(obj){
+        this.refs['brand_code'].value = obj[0].brand_code
+        this.refs['brand_name'].value = obj[0].brand_name
+        this.refs['id'].value = obj[0].id
       }
     }
 
@@ -51,6 +87,7 @@ class Brand extends React.Component {
 
 
               <div className='flex'>
+                  <input type="hidden" ref = 'id' />
                   <div className='input-box flex left'>
                       <label><i>Brand Code :</i></label>
                       <input className='flex' type="text" ref = 'brand_code'/>
