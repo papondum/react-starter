@@ -88,7 +88,7 @@ class UserAccount extends React.Component {
 
     componentDidMount(){
       this.getRoleList()
-      this.getInitialVal()    //Edit    1
+      this.props.type=='edit'? this.getInitialVal():''    //Edit    1
     }
 
 

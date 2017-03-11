@@ -89,6 +89,14 @@ class Quotation extends React.Component {
 
     }
 
+    getBrandType(){
+      post('/api/quatation.brand',{filmtype_id:this.refs.filmType})
+      .then((response)=>{
+        return response
+      })
+      .catch(err=>console.log(err))
+    }
+
     componentDidMount(){
       this.getCustomerList()
       this.getInitialVal()    //Edit    1
@@ -108,46 +116,51 @@ class Quotation extends React.Component {
 
     genContentTable(){
       return (<table>
-        <tr>
-          <td><input type='checkbox'/>Line No.</td>
-          <td>Film Type</td> //  FIlm Type  fetch  onChange checker by ref id and gen Brand selector  GET /api/quotation/filmtype
-          <td>Brand</td> // onChange send ref id go check Grade   POST /api/quotation/brand {filmtype_id: 1}
-          <td>Grade</td>  //  POST /api/quotation/grade {filmtype_id: 1, brand_id: 1}
-          <td>Thickness</td>  //  POST /api/quotation/thickness {filmtype_id: 1, brand_id: 1, grade_id: 1}
-          <td>Length</td>
-          <td>Weight(Kg)</td>
-          <td>Remarks</td>
-          <td>Based Price</td>
-          <td>Unit Price(THB/Kg)</td>
-          <td>Subtotal(THB)</td>
-        </tr>
-        {this.getChildItem()}
+          <tr>
+              <td><input type='checkbox'/>Line No.</td>
+              <td>Film Type</td>
+              {/* FIlm Type  fetch  onChange checker by ref id and gen Brand selector  GET /api/quotation/filmtype */}
+              <td>Brand</td>
+              {/* onChange send ref id go check Grade   POST /api/quotation/brand {filmtype_id: 1} */}
+              <td>Grade</td>
+              {/* POST /api/quotation/grade {filmtype_id: 1, brand_id: 1} */}
+              <td>Thickness</td>
+              {/* POST /api/quotation/thickness {filmtype_id: 1, brand_id: 1, grade_id: 1} */}
+              <td>Length</td>
+              <td>Weight(Kg)</td>
+              <td>Remarks</td>
+              <td>Based Price</td>
+              <td>Unit Price(THB/Kg)</td>
+              <td>Subtotal(THB)</td>
+          </tr>
+          {this.getChildItem()}
       </table>)
     }
 
     getChildItem(){
       //get +1 more item child
-      let itemNo = '0001'
-      let child = this.getSingleChild(itemNo)
+      let itemNo = ['0001', '0002', '0003']
+      let child = itemNo.map(i =>(this.getSingleChild(i)))
+      return child
     }
 
-    getFilmTypeOption(){
+    getFilmTypeOption(item){
       let filmList = this.getFilmType()
       console.log(filmList);
       // let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i.name}</option>))
-      // return (<select style={{'width': '173px'}} ref = 'role'></select>)
+      // return (<select id = {item} style={{'width': '173px'}} ref = 'filmType' onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
     }
 
     getSingleChild(item){
       return (
         <tr>
-          <td><input type='checkbox'/>{item}</td>
-          <td> {this.getFilmTypeOption()}</td>
-          <td>Brand</td>
-          <td>Grade</td>
-          <td>Thickness</td>
-          <td></td>
-          <td>Length</td>
+            <td><input type='checkbox'/>{item}</td>
+            <td> {this.getFilmTypeOption(item)}</td>
+            <td>{this.state.BrandTypeOption}</td>
+            <td>Grade</td>
+            <td>Thickness</td>
+            <td></td>
+            <td>Length</td>
           <td>Weight(Kg)</td>
           <td>Remarks</td>
           <td>Based Price</td>

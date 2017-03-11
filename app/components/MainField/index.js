@@ -81,8 +81,10 @@ class MainField extends React.Component {
           break;
         case 'Grade':
           this.getJson('/api/grade/all')
+          break;
         case 'Quotation':
           this.getJson('/api/sales/quotation/all')
+          break;
         default:
           this.setState({'mainContent':''})
           break;

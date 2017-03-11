@@ -59,6 +59,7 @@ class ActionMenu extends React.Component {
           confirm:()=>{
             this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
             this.props.getContent(this.props.activePage)
+            this.setState({showModal:{show:false}})
           },
           submitTxt:'SUMMIT'
         }

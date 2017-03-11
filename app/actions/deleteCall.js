@@ -68,6 +68,9 @@ export function deleteProductToIdle(){
 export function deleteBrandToIdle(){
   return {type:DELETE_BRAND_IDLE}
 }
+export function deleteGradeToIdle(){
+  return {type:DELETE_GRADE_IDLE}
+}
 export function deleteFilmToIdle(){
   return {type:DELETE_FILM_IDLE}
 }
