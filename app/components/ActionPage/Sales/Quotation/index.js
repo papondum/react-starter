@@ -110,11 +110,10 @@ class Quotation extends React.Component {
       return (<table>
         <tr>
           <td><input type='checkbox'/>Line No.</td>
-          <td>Film Type</td>
-          <td>Brand</td>
-          <td>Grade</td>
-          <td>Thickness</td>
-          <td></td>
+          <td>Film Type</td> //  FIlm Type  fetch  onChange checker by ref id and gen Brand selector  GET /api/quotation/filmtype
+          <td>Brand</td> // onChange send ref id go check Grade   POST /api/quotation/brand {filmtype_id: 1}
+          <td>Grade</td>  //  POST /api/quotation/grade {filmtype_id: 1, brand_id: 1}
+          <td>Thickness</td>  //  POST /api/quotation/thickness {filmtype_id: 1, brand_id: 1, grade_id: 1}
           <td>Length</td>
           <td>Weight(Kg)</td>
           <td>Remarks</td>
