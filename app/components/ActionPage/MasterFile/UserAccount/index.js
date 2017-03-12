@@ -94,7 +94,6 @@ class UserAccount extends React.Component {
 
     setEditItem(obj){         //Edit    3
       if(obj){
-        console.log(obj)
         this.refs['firstname'].value = obj[0].firstname
         this.refs['lastname'].value = obj[0].lastname
         this.refs['username'].value = obj[0].username
@@ -117,7 +116,7 @@ class UserAccount extends React.Component {
                   </div>
               </div>
               <hr/>
-
+              
               <div className='flex'>
                   <input type="hidden" ref = 'user_id' />
                   <div className='input-box left flex'>

@@ -2,13 +2,20 @@ import React, {PropTypes} from 'react';
 import { post ,get } from '../../../../../utils'
 import cancelIcon from '../../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../../resource/Icon/button_save.png'
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 import './style.scss'
 class Quotation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
           customerList: [],
-          inputValid:true
+          inputValid:true,
+          brandOption:[],
+          option:[
+                { value: 'one', label: 'One' },
+                { value: 'two', label: 'Two' }
+            ]
         }
     }
 
@@ -54,7 +61,8 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({customerList:response})
+        this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
+
       })
       .catch(err=>console.log(err))
     }
@@ -90,16 +98,16 @@ class Quotation extends React.Component {
     }
 
     getBrandType(){
-      post('/api/quatation.brand',{filmtype_id:this.refs.filmType})
+      post('/api/quatation/brand',{filmtype_id:this.refs.filmType})
       .then((response)=>{
-        return response
+        this.setState({brandOption:response.map(i=><option>{i}</option>)})
       })
       .catch(err=>console.log(err))
     }
 
     componentDidMount(){
       this.getCustomerList()
-      this.getInitialVal()    //Edit    1
+      //this.getInitialVal()    //Edit    1
     }
 
 
@@ -145,10 +153,10 @@ class Quotation extends React.Component {
     }
 
     getFilmTypeOption(item){
-      let filmList = this.getFilmType()
-      console.log(filmList);
-      // let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i.name}</option>))
-      // return (<select id = {item} style={{'width': '173px'}} ref = 'filmType' onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
+      // let filmList = this.getFilmType()
+      let filmList = ['aaa', 'bbbb', 'ccc']
+      let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i}</option>))
+      return (<select id = {item} style={{'width': '173px'}} ref = 'filmType' onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
     }
 
     getSingleChild(item){
@@ -170,7 +178,20 @@ class Quotation extends React.Component {
       )
     }
 
+    getCustomerOption(){
+      let result = this.state.customerList.map(i=>{re
+        return (<option key = {i.id} value = {i.id}>{i.name}</option>)
+      })
+      return result
+    }
+
+    logChange(val) {
+      console.log(val);
+      console.log("Selected: " + val);
+    }
+
     render() {
+      console.log(this.state.customerList);
         return(
           <div className='page-style'>
               <div className='page-head'>
@@ -190,7 +211,14 @@ class Quotation extends React.Component {
                       <div className='flex flex-1 flex-col'>
                           <div className='input-box flex'>
                               <label>Customer :</label>
-                              <input className='flex' type="text" ref='customer'/>
+                              {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
+                              <Select
+                                  name="form-field-name"
+                                  value="one"
+                                  options={this.state.customerList}
+                                  onChange={this.logChange}
+                              />
+
                           </div>
                           <div className='input-box flex'>
                               <label>Date :</label>

@@ -55,7 +55,7 @@ module.exports = {
               options: {
                 name: '[path][name].[hash].[ext]',
               },
-            },            
+            },
             {
                 test: /\.json?$/,
                 loader: 'json'
@@ -65,7 +65,17 @@ module.exports = {
                 loader: 'style!css!sass?modules&localIdentName=[name]---[local]---[hash:base64:5]'
             },
             { test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
-            { test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/, loader: 'file' }
+            { test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/, loader: 'file' },
+            {
+              test: /\.css$/,
+              loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]',
+              include: path.join(__dirname, 'app')
+            },
+            {
+              test: /\.css$/,
+              loader: 'style!css',
+              include: path.join(__dirname, 'node_modules')
+            }
         ]
     }
 };
