@@ -27,7 +27,6 @@ const actions = {
         return Object.assign({}, state, {userAcc: 'active'});
     },
     [DELETE_USERACC_IDLE]: (state, payload) => {
-      console.log('setto idle');
         return Object.assign({}, state, {userAcc: 'idle'});
     },
     [DELETE_USERROLE_TRIGGER]: (state, payload) => {

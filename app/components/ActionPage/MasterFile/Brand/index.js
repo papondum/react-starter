@@ -61,7 +61,7 @@ class Brand extends React.Component {
     }
 
     componentDidMount(){
-      this.getInitialVal()    //Edit    1
+      this.props.type=='edit'? this.getInitialVal():''    //Edit    1
     }
 
     setEditItem(obj){         //Edit    3

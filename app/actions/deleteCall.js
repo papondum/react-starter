@@ -47,7 +47,6 @@ export function deleteGrade(){
 }
 
 export function deleteAccToIdle(){
-  console.log('lag');
   return {type:DELETE_USERACC_IDLE}
 }
 export function deleteRoleToIdle(){
@@ -222,7 +221,6 @@ export function deleteItem(item,type){
         dispatch(deleteGradeToIdle())
       }
     default:
-      console.log(item);
       break;
     }
 

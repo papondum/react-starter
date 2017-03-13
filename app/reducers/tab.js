@@ -33,10 +33,21 @@ const actions = {
     [CLOSE_TAB] :(state,payload) => {
       let result = state.tabs
       var index = result.indexOf(payload);
+      let newActive = ''
+      if(result.length>0){
+          if(index-1>=0){
+            newActive = index-1
+          }
+          else{
+            newActive = index
+          }
+      }
+
+
       if (index > -1) {
           result.splice(index, 1);
       }
-      return Object.assign({},state,{tabs:result})
+      return Object.assign({},state,{tabs:result, activeTabs:result[newActive]})
     }
 };
 export default createReducer(initialState, actions);

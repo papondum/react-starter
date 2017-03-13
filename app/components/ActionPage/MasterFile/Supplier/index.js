@@ -17,6 +17,38 @@ class Supplier extends React.Component {
       }
     }
 
+    getInitialVal(){        //Edit    2
+      post('/api/supplier/id',{supplier_id:this.props.editItem})
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        //Notify fn value added
+        // this.setState({editItem:response})
+        console.log(response)
+        this.setEditItem(response)
+      })
+      .catch(err=>console.log(err))
+    }
+
+
+    componentDidMount(){
+        this.props.type=='edit'? this.getInitialVal():''
+    }
+
+
+    setEditItem(obj){         //Edit    3
+      if(obj){
+        this.refs['code'].value = obj[0].firstname
+        this.refs['tel'].value = obj[0].lastname
+        this.refs['contact'].value = obj[0].username
+        this.refs['name'].value = obj[0].password
+        this.refs['fax'].value = obj[0].email
+        this.refs['address'].value = obj[0].role_id
+        this.refs['email'].value = obj[0].id
+      }
+    }
+
     createSupplier(){
       let code = this.refs.code.value
       let name = this.refs.name.value

@@ -61,7 +61,7 @@ class FilmType extends React.Component {
     }
 
     componentDidMount(){
-      this.getInitialVal()    //Edit    1
+      this.props.type=='edit'? this.getInitialVal():''    //Edit    1
     }
 
 

@@ -57,7 +57,7 @@ class Grade extends React.Component {
     }
 
     componentDidMount(){
-      this.getInitialVal()
+      this.props.type=='edit'? this.getInitialVal():''
     }
 
 
