@@ -57,6 +57,7 @@ class Product extends React.Component {
     }
 
     getFilmList(){
+      console.log('triggered');
       let url = '/api/film/raw'
       get(url)
       .then((response)=> {
@@ -69,14 +70,16 @@ class Product extends React.Component {
     }
 
     filmListToElem(){
+      console.log(this.state.filmList);
       let result = this.state.filmList.map(i=><option key = {i.id} value = {i.id}>{i.film_name}</option>)
       return result
     }
-
+    
     componentDidMount(){
+      this.props.type=='edit'? this.getInitialVal():''
       this.getGradeList()
       this.getBrandList()
-      this.getFilmList()
+        this.getFilmList()
     }
 
     createProduct(){
@@ -129,11 +132,6 @@ class Product extends React.Component {
       })
       .catch(err=>console.log(err))
     }
-
-    componentDidMount(){
-      this.props.type=='edit'? this.getInitialVal():''
-    }
-
 
     setEditItem(obj){
       if(obj){

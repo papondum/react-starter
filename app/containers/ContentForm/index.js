@@ -99,7 +99,7 @@ class ContentForm extends React.Component {
       }
       if(nextProps.deleteCall.price=='active'){
         let obj = {pricelist_id:this.state.checkedItem}
-        this.props.deleteItem(obj,'Price')
+        this.props.deleteItem(obj,'Price list')
       }
       if(nextProps.deleteCall.product=='active'){
         let obj = {product_id:this.state.checkedItem}
