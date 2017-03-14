@@ -28,8 +28,12 @@ class Customer extends React.Component {
       let contact_person = this.refs.contact_person.value
       let create_by = 1
       let url = this.props.type=='create'? '/api/customer/create':'/api/customer/update'
-      if(code&&name){
-        post(url,{
+      console.log(url)
+
+      let data = {}
+
+      if (this.props.type=='create') {
+        data = {
           "code":code,
           "name":name,
           "address":address,
@@ -39,7 +43,25 @@ class Customer extends React.Component {
           "email":email,
           "contact_person":contact_person,
           "create_by":create_by
-        })
+        }
+      } else {
+        let id = this.refs.id.value
+        data = {
+          "code":code,
+          "name":name,
+          "address":address,
+          "invoice_to":invoice_to,
+          "telephone":telephone,
+          "fax":fax,
+          "email":email,
+          "contact_person":contact_person,
+          "id": id,
+          "create_by":create_by
+        }
+      }
+      console.log(data)
+      if(code&&name){
+        post(url,data)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -56,8 +78,10 @@ class Customer extends React.Component {
 
 
     getInitialVal(){        //Edit    2
+      console.log(this.props.editItem)
       post('/api/customer/id',{"customer_id":this.props.editItem})
       .then((response)=> {
+        console.log(response)
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
@@ -71,12 +95,13 @@ class Customer extends React.Component {
     setEditItem(obj){         //Edit    3
       console.log(obj);
       if(obj){
+        this.refs['id'].value = obj[0].id
         this.refs['code'].value = obj[0].code
         this.refs['telephone'].value = obj[0].telephone
         this.refs['invoice_to'].value = obj[0].invoice_to
         this.refs['name'].value = obj[0].name
         this.refs['fax'].value = obj[0].fax
-        this.refs['ship_to'].value = obj[0].ship_to
+        this.refs['ship_to'].value = obj[0].address
         this.refs['contact_person'].value = obj[0].contact_person
         this.refs['email'].value = obj[0].email
       }
@@ -98,6 +123,7 @@ class Customer extends React.Component {
 
 
               <div className='flex'>
+                  <input type="hidden" ref = 'id' />
                   <div className='input-box flex left'>
                       <label>Code :</label>
                       <input className='flex' type="text" ref='code'/>
