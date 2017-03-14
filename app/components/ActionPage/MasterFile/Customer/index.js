@@ -21,6 +21,7 @@ class Customer extends React.Component {
       let code = this.refs.code.value
       let name = this.refs.name.value
       let address = this.refs.ship_to.value
+      let invoice_to = this.refs.invoice_to.value
       let telephone = this.refs.telephone.value
       let fax = this.refs.fax.value
       let email = this.refs.email.value
@@ -32,6 +33,7 @@ class Customer extends React.Component {
           "code":code,
           "name":name,
           "address":address,
+          "invoice_to":invoice_to,
           "telephone":telephone,
           "fax":fax,
           "email":email,
