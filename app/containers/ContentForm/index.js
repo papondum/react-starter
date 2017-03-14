@@ -73,6 +73,9 @@ class ContentForm extends React.Component {
           if(this.state.checkedItem.length==1){
             this.props.checkedSingleItem(this.state.checkedItem[0])
           }
+          else{
+            this.props.checkedSingleItem(this.state.checkedItem[0])
+          }
         }
 
     }

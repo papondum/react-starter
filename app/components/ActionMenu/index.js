@@ -13,7 +13,6 @@ import refreshIcon from '../../resource/Icon/button_create.png'
 import * as DeleteAction from '../../actions/deleteCall'
 import Modal from '../Modal/Custom'
 import ModalC from '../Modal/Confirm'
-import NotificationSystem from 'react-notification-system'
 import UserAccount from '../ActionPage/MasterFile/UserAccount'
 import Customer from '../ActionPage/MasterFile/Customer'
 import Userrole from '../ActionPage/MasterFile/UserRole'
@@ -40,7 +39,6 @@ class ActionMenu extends React.Component {
             showModal:{
               show:false
             },
-            _notificationSystem:null
         };
     }
 
@@ -60,7 +58,6 @@ class ActionMenu extends React.Component {
           confirm:()=>{
             this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
             this.props.getContent(this.props.activePage)
-            this._addNotification(this.props.activePage)
             this.setState({showModal:{show:false}})
           },
           submitTxt:'SUMMIT'
@@ -70,7 +67,6 @@ class ActionMenu extends React.Component {
 
     componentDidMount(){
       this._setActionCategory()
-       this.state._notificationSystem = this.refs.notificationSystem;
     }
 
     componentWillReceiveProps(nextProps){
@@ -209,10 +205,10 @@ class ActionMenu extends React.Component {
       }
     }
 
-    _addNotification(event) {
+    _addNotification(event , type) {
       this.state._notificationSystem.addNotification({
-        message: event+' ' + 'just again',
-        level: 'success'
+        message: event+' ' + 'item was deleted',
+        level: type
       })
     }
 
@@ -224,12 +220,11 @@ class ActionMenu extends React.Component {
                   <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
                   <button onClick={() =>this.state.editAction() }><img src={editIcon}/> <p>Edit</p></button>
                   <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
-                  <button onClick={() =>this.state.deleteAction() }><img src={deleteIcon}/> <p>Delete</p></button>
+                  <button onClick={() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
                   <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
                   <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
                   <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
                   <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
-                  <NotificationSystem ref="notificationSystem" />
               </div>
 
               <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>

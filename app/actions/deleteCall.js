@@ -1,4 +1,5 @@
 import {post } from '../../utils'
+import { addNotification } from './notification'
 export const DELETE_USERACC_TRIGGER = 'DELETE_USERACC_TRIGGER'
 export const DELETE_USERROLE_TRIGGER = 'DELETE_USERROLE_TRIGGER'
 export const DELETE_CUSTOMER_TRIGGER = 'DELETE_CUSTOMER_TRIGGER'
@@ -134,9 +135,11 @@ export function apiSelector(url,item){
       }
       //Notify fn value deleted
       console.log(response);
-
+      dispatch(addNotification(' Item has been deleted.', 'info', {title: 'Delete', autoDismiss: 2}))
     })
-    .catch(err=>console.log(err))
+    .catch(err=>{
+      dispatch(addNotification('Cannot connect to the server', 'error', {title: 'Error', autoDismiss: 2}))
+      console.log(err)})
   }
 }
 

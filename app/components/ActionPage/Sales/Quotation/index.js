@@ -203,7 +203,6 @@ class Quotation extends React.Component {
                       <button onClick = {() => this.createCustomer()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
-
               <div>
                   <div className='flex flex-row'><div className='tab-quo'>General</div><div className='tab-quo'>Contact</div></div>
                   <hr/>
@@ -218,7 +217,6 @@ class Quotation extends React.Component {
                                   options={this.state.customerList}
                                   onChange={this.logChange}
                               />
-
                           </div>
                           <div className='input-box flex'>
                               <label>Date :</label>

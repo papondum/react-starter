@@ -1,6 +1,12 @@
 import React from 'react';
 import LeftMenu from '../LeftMenu';
 import MainField from '../MainField';
+import NotificationContainer from '../Notification'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { browserHistory,Link } from 'react-router'
+import * as NotificationAction from '../../actions/notification'
+
 class Menu extends React.Component {
     constructor(props) {
         super(props);
@@ -35,8 +41,19 @@ class Menu extends React.Component {
         <div className="row content">
             <LeftMenu menu={this.state.menu}/>
             <MainField/>
+            <NotificationContainer notification={this.props.notification} removeNotification={this.props.removeNotification}/>
         </div>
     </div>);}
 }
 
-export default Menu;
+function mapStateToProps(state) {
+  return {
+    notification: state.notification,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},NotificationAction), dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu)
