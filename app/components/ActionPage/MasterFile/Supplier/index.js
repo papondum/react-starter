@@ -20,6 +20,7 @@ class Supplier extends React.Component {
     getInitialVal(){        //Edit    2
       post('/api/supplier/id',{supplier_id:this.props.editItem})
       .then((response)=> {
+        console.log(response)
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
@@ -39,13 +40,14 @@ class Supplier extends React.Component {
 
     setEditItem(obj){         //Edit    3
       if(obj){
-        this.refs['code'].value = obj[0].firstname
-        this.refs['tel'].value = obj[0].lastname
-        this.refs['contact'].value = obj[0].username
-        this.refs['name'].value = obj[0].password
-        this.refs['fax'].value = obj[0].email
-        this.refs['address'].value = obj[0].role_id
-        this.refs['email'].value = obj[0].id
+        this.refs['code'].value = obj[0].code
+        this.refs['tel'].value = obj[0].tel
+        this.refs['contact'].value = obj[0].contact
+        this.refs['name'].value = obj[0].name
+        this.refs['fax'].value = obj[0].fax
+        this.refs['address'].value = obj[0].address
+        this.refs['email'].value = obj[0].email
+        this.refs['id'].value = obj[0].id
       }
     }
 
@@ -57,18 +59,33 @@ class Supplier extends React.Component {
       let tel = this.refs.tel.value
       let fax = this.refs.fax.value
       let contact = this.refs.contact.value
+
+      let url = this.props.type=='create'? '/api/supplier/create':'/api/supplier/update'
+
+      let data = {}
+
+      if (this.props.type=='create') {
+        data = {"code":code,
+        "name":name,
+        "address":address,
+        "email":email,
+        "tel":tel,
+        "fax":fax,
+        "contact":contact}
+      } else {
+        let id = this.refs.id.value
+        data = {"code":code,
+        "name":name,
+        "address":address,
+        "email":email,
+        "tel":tel,
+        "fax":fax,
+        "contact":contact,
+        "id": id}
+      }
+
       if(code&&name){
-        post('/api/supplier/create',
-          {
-            "code":code,
-            "name":name,
-            "address":address,
-            "email":email,
-            "tel":tel,
-            "fax":fax,
-            "contact":contact
-          }
-        )
+        post(url,data)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -98,6 +115,7 @@ class Supplier extends React.Component {
 
 
               <div className='flex'>
+                <input type="hidden" ref = 'id' />
                 <div className='input-box flex left'>
                     <label>Code :</label>
                     <input className='flex' type="text" ref = 'code'/>
