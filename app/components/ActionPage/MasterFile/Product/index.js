@@ -74,7 +74,7 @@ class Product extends React.Component {
       let result = this.state.filmList.map(i=><option key = {i.id} value = {i.id}>{i.film_name}</option>)
       return result
     }
-    
+
     componentDidMount(){
       this.props.type=='edit'? this.getInitialVal():''
       this.getGradeList()
@@ -143,7 +143,7 @@ class Product extends React.Component {
         this.refs.decimal.value = obj[0].decimal
         this.refs.thickness.value = obj[0].thickness
         this.refs.rounding.value = obj[0].rounding
-        this.refs.product_length.value = obj[0].product_length
+        this.refs.product_length.value = obj[0].length
       }
     }
 

@@ -76,6 +76,7 @@ export function deleteFilmToIdle(){
 }
 
 export function deleteTrig(item){           //Trigger state   do noti
+  console.log(item)
   switch (item) {
     case 'User account':
       return dispatch =>{
@@ -144,6 +145,7 @@ export function apiSelector(url,item){
 }
 
 export function deleteItem(item,type){
+  console.log(item)
   switch (type) {
     case 'User account':
     let url = '/user/delete'
