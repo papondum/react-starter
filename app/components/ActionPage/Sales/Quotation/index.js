@@ -15,8 +15,13 @@ class Quotation extends React.Component {
           option:[
                 { value: 'one', label: 'One' },
                 { value: 'two', label: 'Two' }
-            ]
+            ],
+          selectedCustomer:'',
+          selectedTab:'Gen',
+          filmType:'',
+          childItem:[]
         }
+        this.logChange = this.logChange.bind(this)
     }
 
     _genHeader(type){
@@ -86,16 +91,18 @@ class Quotation extends React.Component {
     }
 
     getFilmType(){
-      get('/api/quotation/filmtype')
-      .then((response)=>{
-        if (response.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-        return response
+      return new Promise((resolve, reject) => {
+        get('/api/film/raw')
+          .then((response)=>{
+            if (response.status >= 400) {
+              throw new Error("Bad response from server");
+            }
+            return resolve(response)
+          })
+          .catch(err=>reject())
       })
-      .catch(err=>console.log(err))
-
     }
+
 
     getBrandType(){
       post('/api/quatation/brand',{filmtype_id:this.refs.filmType})
@@ -107,9 +114,9 @@ class Quotation extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
+      this.getInitailChild()
       //this.getInitialVal()    //Edit    1
     }
-
 
     setEditItem(obj){         //Edit    3
       if(obj){
@@ -124,32 +131,43 @@ class Quotation extends React.Component {
 
     genContentTable(){
       return (<table>
-          <tr>
-              <td><input type='checkbox'/>Line No.</td>
-              <td>Film Type</td>
-              {/* FIlm Type  fetch  onChange checker by ref id and gen Brand selector  GET /api/quotation/filmtype */}
-              <td>Brand</td>
-              {/* onChange send ref id go check Grade   POST /api/quotation/brand {filmtype_id: 1} */}
-              <td>Grade</td>
-              {/* POST /api/quotation/grade {filmtype_id: 1, brand_id: 1} */}
-              <td>Thickness</td>
-              {/* POST /api/quotation/thickness {filmtype_id: 1, brand_id: 1, grade_id: 1} */}
-              <td>Length</td>
-              <td>Weight(Kg)</td>
-              <td>Remarks</td>
-              <td>Based Price</td>
-              <td>Unit Price(THB/Kg)</td>
-              <td>Subtotal(THB)</td>
-          </tr>
+          <thead>
+              <tr>
+                  <td><input type='checkbox'/>Line No.</td>
+                  <td>Film Type</td>
+                  {/* FIlm Type  fetch  onChange checker by ref id and gen Brand selector  GET /api/quotation/filmtype */}
+                  <td>Brand</td>
+                  {/* onChange send ref id go check Grade   POST /api/quotation/brand {filmtype_id: 1} */}
+                  <td>Grade</td>
+                  {/* POST /api/quotation/grade {filmtype_id: 1, brand_id: 1} */}
+                  <td>Thickness</td>
+                  {/* POST /api/quotation/thickness {filmtype_id: 1, brand_id: 1, grade_id: 1} */}
+                  <td>Length</td>
+                  <td>Weight(Kg)</td>
+                  <td>Remarks</td>
+                  <td>Based Price</td>
+                  <td>Unit Price(THB/Kg)</td>
+                  <td>Subtotal(THB)</td>
+              </tr>
+          </thead>
           {this.getChildItem()}
       </table>)
     }
 
     getChildItem(){
-      //get +1 more item child
-      let itemNo = ['0001', '0002', '0003']
-      let child = itemNo.map(i =>(this.getSingleChild(i)))
-      return child
+      //get +1 more item childconst
+      let items = []
+
+      items = this.getFilmType().then((response)=>response).catch((err)=>console.log(err));
+      for (var i in items){
+        console.log(i);
+      }
+
+      if(this.state.childItem.length>0){
+        let child = this.state.childItem.map(i =>(this.getSingleChild(i)))
+        return <tbody>{child}</tbody>
+      }
+
     }
 
     getFilmTypeOption(item){
@@ -161,21 +179,26 @@ class Quotation extends React.Component {
 
     getSingleChild(item){
       return (
-        <tr>
-            <td><input type='checkbox'/>{item}</td>
-            <td> {this.getFilmTypeOption(item)}</td>
+        <tr key={item.id}>
+            <td><input type='checkbox'/>{item.id}</td>
+            <td> {this.getFilmTypeOption(item.id)}</td>
             <td>{this.state.BrandTypeOption}</td>
             <td>Grade</td>
             <td>Thickness</td>
             <td></td>
             <td>Length</td>
-          <td>Weight(Kg)</td>
-          <td>Remarks</td>
-          <td>Based Price</td>
-          <td>Unit Price(THB/Kg)</td>
-          <td>Subtotal(THB)</td>
+            <td>Weight(Kg)</td>
+            <td>Remarks</td>
+            <td>Based Price</td>
+            <td>Unit Price(THB/Kg)</td>
+            <td>Subtotal(THB)</td>
         </tr>
       )
+    }
+
+    getInitailChild(){
+      let item = [{'id':'0001'}]
+      this.setState({childItem:item})
     }
 
     getCustomerOption(){
@@ -185,13 +208,75 @@ class Quotation extends React.Component {
       return result
     }
 
-    logChange(val) {
-      console.log(val);
-      console.log("Selected: " + val);
+    logChange(newVal) {
+      this.setState({selectedCustomer:newVal})
+    }
+
+    getGeneralContent(){
+    return (  <div className="flex flex-row">
+        <div className='flex flex-1 flex-col'>
+            <div className='input-box flex'>
+                <label>Customer :</label>
+                {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
+                <Select
+                    name="form-field-name"
+                    value={this.state.selectedCustomer}
+                    options={this.state.customerList}
+                    onChange={this.logChange}
+                    className = 'selector-class'
+                    autosize = {true}
+                />
+            </div>
+            <div className='input-box flex'>
+                <label>Date :</label>
+                <input className='flex' type="date" ref='date'/>
+            </div>
+            <div className='input-box flex'>
+                <label>Payment Term :</label>
+                <input className='flex' type="text" ref='payment'/>
+            </div>
+        </div>
+        <div className="flex flex-1 flex-col">
+            <div className='input-box flex'>
+                <label>Deliver Term :</label>
+                <input className='flex' type="text" ref='deliver'/>
+            </div>
+        </div>
+        <div className="flex flex-1 flex-col">
+            <div className='input-box flex'>
+                <label>Status :</label>
+                <input className='flex' type="text" ref='status'/>
+            </div>
+            <div className='input-box flex'>
+                <label>Saleperson :</label>
+                <input className='flex' type="text" ref='saleprtson'/>
+            </div>
+            <div className='input-box flex'>
+                <label>Price list :</label>
+                <input className='flex' type="text" ref='pricelist'/>
+            </div>
+        </div>
+    </div>)
+    }
+
+    addChild(){
+      let items = this.state.childItem
+      items[length-1]
+      this.setState({childItem:items})
+    }
+
+    setContent(item){
+      console.log(item);
+      this.setState({selectedTab:item})
+    }
+
+    getContactContent(){
+      console.log(this.state.selectedCustomer);
+      return <div>Test</div>
     }
 
     render() {
-      console.log(this.state.customerList);
+      console.log(this.state.selectedTab)
         return(
           <div className='page-style'>
               <div className='page-head'>
@@ -204,53 +289,20 @@ class Quotation extends React.Component {
                   </div>
               </div>
               <div>
-                  <div className='flex flex-row'><div className='tab-quo'>General</div><div className='tab-quo'>Contact</div></div>
-                  <hr/>
-                  <div className="flex flex-row">
-                      <div className='flex flex-1 flex-col'>
-                          <div className='input-box flex'>
-                              <label>Customer :</label>
-                              {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
-                              <Select
-                                  name="form-field-name"
-                                  value="one"
-                                  options={this.state.customerList}
-                                  onChange={this.logChange}
-                              />
-                          </div>
-                          <div className='input-box flex'>
-                              <label>Date :</label>
-                              <input className='flex' type="date" ref='date'/>
-                          </div>
-                          <div className='input-box flex'>
-                              <label>Payment Term :</label>
-                              <input className='flex' type="text" ref='payment'/>
-                          </div>
+                  <div className='flex flex-row'>
+                      <div className='tab-quo' onClick={()=>this.setContent('Gen')}>
+                          General
                       </div>
-                      <div className="flex flex-1 flex-col">
-                          <div className='input-box flex'>
-                              <label>Deliver Term :</label>
-                              <input className='flex' type="text" ref='deliver'/>
-                          </div>
-                      </div>
-                      <div className="flex flex-1 flex-col">
-                          <div className='input-box flex'>
-                              <label>Status :</label>
-                              <input className='flex' type="text" ref='status'/>
-                          </div>
-                          <div className='input-box flex'>
-                              <label>Saleperson :</label>
-                              <input className='flex' type="text" ref='saleprtson'/>
-                          </div>
-                          <div className='input-box flex'>
-                              <label>Price list :</label>
-                              <input className='flex' type="text" ref='pricelist'/>
-                          </div>
+                      <div className='tab-quo' onClick={()=>this.setContent('Con')}>
+                          Customers Contact
                       </div>
                   </div>
+                  <hr/>
+                  {this.state.selectedTab=='Gen'? this.getGeneralContent():this.getContactContent()}
+
               </div>
               <hr/>
-              <div className="flex flex-row"><div className='tab-quo'>Contact</div><div>+</div></div>
+              <div className="flex flex-row" onClick = {()=>this.addChild()}><div className='tab-quo'>Content</div><div>+</div></div>
               {this.genContentTable()}
           </div>)
         }

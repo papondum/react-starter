@@ -54,6 +54,7 @@ class MainField extends React.Component {
     }
 
     _getContent(category){
+
       switch (category) {
         case 'User account':
           this.getJson('/api/user/all')
@@ -139,14 +140,14 @@ class MainField extends React.Component {
 
               {/* content will recieve some prop that from ticked */}
               <Content
-                contentHeader = {this.state.openedTab}
-                mainContent={this.state.mainContent}
-                checkedSingleItem = {(item)=>this.checkedSingleItem(item)}
-                activePage={this.props.tab.activeTabs}
-                getContent={(item)=>this._getContent(item)}
-                setContent={(item)=>this.setContent(item)}
-                showModal={()=>this.showModal()}
-                editItem = {this.state.editItem}/>
+                  contentHeader = {this.state.openedTab}
+                  mainContent={this.state.mainContent}
+                  checkedSingleItem = {(item)=>this.checkedSingleItem(item)}
+                  activePage={this.props.tab.activeTabs}
+                  getContent={(item)=>this._getContent(item)}
+                  setContent={(item)=>this.setContent(item)}
+                  showModal={()=>this.showModal()}
+                  editItem = {this.state.editItem}/>
               <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
               <Modal show = {this.state.showModal.show} options = {this.state.showModal.show}/>
           </div>)
