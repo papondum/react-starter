@@ -132,7 +132,9 @@ class Quotation extends React.Component {
 
 
     getBrandType(){
-      post('/api/quatation/brand',{filmtype_id:this.refs.filmType})
+      var ft = this.refs.filmType;
+      console.log(ft)
+      post('/api/sales/quotation/brand',{filmtype_id: ft})
       .then((response)=>{
         this.setState({brandOption:response.map(i=><option>{i}</option>)})
       })
