@@ -10,16 +10,20 @@ class Quotation extends React.Component {
         super(props);
         this.state = {
           customerList: [],
-          inputValid:true,
-          brandOption:[],
-          option:[
-                { value: 'one', label: 'One' },
-                { value: 'two', label: 'Two' }
+          saleList: [],
+          priceList: [],
+          inputValid: true,
+          brandOption: [],
+          companyList: [
+                { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
+                { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
             ],
-          selectedCustomer:'',
-          selectedTab:'Gen',
-          filmType:'',
-          childItem:[]
+          statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
+          selectedCustomer: '',
+          selectedTab: 'Gen',
+          filmType: '',
+          filmList:[],
+          childItem: []
         }
         this.logChange = this.logChange.bind(this)
     }
@@ -66,15 +70,36 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
+        this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.name,label:i.name})})})
 
       })
       .catch(err=>console.log(err))
     }
 
-    roleListToElem(){
-      let result = this.state.roleList.map(i=><option key = {i.id} value = {i.id}>{i.name}</option>)
-      return result
+    getSaleList(){
+      let url = '/api/user/all'
+      get(url)
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.Firstname,label:i.Firstname})})})
+
+      })
+      .catch(err=>console.log(err))
+    }
+
+    getPriceList(){
+      let url = '/api/price_list/all'
+      get(url)
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        this.setState({priceList:response.map(i=>{return Object.assign({},{value:i.Name,label:i.Name})})})
+
+      })
+      .catch(err=>console.log(err))
     }
 
     getInitialVal(){
@@ -91,16 +116,17 @@ class Quotation extends React.Component {
     }
 
     getFilmType(){
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve,reject)=>{
         get('/api/film/raw')
           .then((response)=>{
             if (response.status >= 400) {
               throw new Error("Bad response from server");
             }
-            return resolve(response)
+            this.setState({filmList:response.map(i=>{return Object.assign({}, {value: i.film_name, label: i.film_name, id:i.id})})})
+            resolve()
           })
           .catch(err=>reject())
-      })
+        })
     }
 
 
@@ -114,6 +140,9 @@ class Quotation extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
+      this.getSaleList()
+      this.getPriceList()
+      this.getFilmType()
       this.getInitailChild()
       //this.getInitialVal()    //Edit    1
     }
@@ -129,58 +158,29 @@ class Quotation extends React.Component {
       }
     }
 
-    genContentTable(){
-      return (<table>
-          <thead>
-              <tr>
-                  <td><input type='checkbox'/>Line No.</td>
-                  <td>Film Type</td>
-                  {/* FIlm Type  fetch  onChange checker by ref id and gen Brand selector  GET /api/quotation/filmtype */}
-                  <td>Brand</td>
-                  {/* onChange send ref id go check Grade   POST /api/quotation/brand {filmtype_id: 1} */}
-                  <td>Grade</td>
-                  {/* POST /api/quotation/grade {filmtype_id: 1, brand_id: 1} */}
-                  <td>Thickness</td>
-                  {/* POST /api/quotation/thickness {filmtype_id: 1, brand_id: 1, grade_id: 1} */}
-                  <td>Length</td>
-                  <td>Weight(Kg)</td>
-                  <td>Remarks</td>
-                  <td>Based Price</td>
-                  <td>Unit Price(THB/Kg)</td>
-                  <td>Subtotal(THB)</td>
-              </tr>
-          </thead>
-          {this.getChildItem()}
-      </table>)
-    }
-
-    getChildItem(){
-      //get +1 more item childconst
-      let items = []
-
-      this.getFilmType().then((response)=>{
-        console.log("Boob")
-        console.log(response)
-      }).catch((err)=>console.log(err));
-      for (var i in items){
-        console.log(i);
-      }
-
-      if(this.state.childItem.length>0){
-        let child = this.state.childItem.map(i =>(this.getSingleChild(i)))
-        return <tbody>{child}</tbody>
-      }
-
-    }
-
     getFilmTypeOption(item){
       // let filmList = this.getFilmType()
-      let filmList = ['aaa', 'bbbb', 'ccc']
-      let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i}</option>))
-      return (<select id = {item} style={{'width': '173px'}} ref = 'filmType' onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
+
+        // if(this.state.filmList<0){
+        //   console.log(this.state.filmList);
+        //   this.getFilmType().then(response=>console.log(response))
+        // }
+        // else{
+        //   console.log(this.state.filmList);
+        // }
+
+
+        let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
+        return (<select id = {item} style={{'width': '173px'}} key={item} onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
+
+
+
+      //let filmList = ['aaa', 'bbbb', 'ccc']
+      //let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i}</option>))
+      //return (<select id = {item} style={{'width': '173px'}} ref = 'filmType' onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
     }
 
-    getSingleChild(item){
+    createChild(item){
       return (
         <tr key={item.id}>
             <td><input type='checkbox'/>{item.id}</td>
@@ -200,8 +200,22 @@ class Quotation extends React.Component {
     }
 
     getInitailChild(){
-      let item = [{'id':'0001'}]
-      this.setState({childItem:item})
+      let item = this.createChild({'id':'0001'})
+      this.setState({childItem:[item]})
+    }
+
+    addChild(){
+      let items = this.state.childItem
+      let idNo = ''+(items.length+1)+''
+      if(idNo.length<4){
+        for (var i = 0; i < 6-idNo.length; i++) {;
+          idNo = "0" + idNo
+        }
+      }
+      let newObj = {'id':idNo}
+      let newItem = this.createChild(newObj)
+      let newArr = items.concat(newItem)
+      this.setState({childItem:newArr})
     }
 
     getCustomerOption(){
@@ -219,6 +233,10 @@ class Quotation extends React.Component {
     return (  <div className="flex flex-row">
         <div className='flex flex-1 flex-col'>
             <div className='input-box flex'>
+                <label>Company :</label>
+                <select>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+            </div>
+            <div className='input-box flex'>
                 <label>Customer :</label>
                 {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
                 <Select
@@ -234,12 +252,13 @@ class Quotation extends React.Component {
                 <label>Date :</label>
                 <input className='flex' type="date" ref='date'/>
             </div>
+
+        </div>
+        <div className="flex flex-1 flex-col">
             <div className='input-box flex'>
                 <label>Payment Term :</label>
                 <input className='flex' type="text" ref='payment'/>
             </div>
-        </div>
-        <div className="flex flex-1 flex-col">
             <div className='input-box flex'>
                 <label>Deliver Term :</label>
                 <input className='flex' type="text" ref='deliver'/>
@@ -248,38 +267,29 @@ class Quotation extends React.Component {
         <div className="flex flex-1 flex-col">
             <div className='input-box flex'>
                 <label>Status :</label>
-                <input className='flex' type="text" ref='status'/>
+                <select>{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
             </div>
             <div className='input-box flex'>
                 <label>Saleperson :</label>
-                <input className='flex' type="text" ref='saleprtson'/>
+                <select>{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
             </div>
             <div className='input-box flex'>
                 <label>Price list :</label>
-                <input className='flex' type="text" ref='pricelist'/>
+                <select>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
             </div>
         </div>
     </div>)
     }
 
-    addChild(){
-      let items = this.state.childItem
-      items[length-1]
-      this.setState({childItem:items})
-    }
-
     setContent(item){
-      console.log(item);
       this.setState({selectedTab:item})
     }
 
     getContactContent(){
-      console.log(this.state.selectedCustomer);
       return <div>Test</div>
     }
 
     render() {
-      console.log(this.state.selectedTab)
         return(
           <div className='page-style'>
               <div className='page-head'>
@@ -306,7 +316,28 @@ class Quotation extends React.Component {
               </div>
               <hr/>
               <div className="flex flex-row" onClick = {()=>this.addChild()}><div className='tab-quo'>Content</div><div>+</div></div>
-              {this.genContentTable()}
+              <div>
+                  <table>
+                      <thead>
+                          <tr>
+                              <td><input type='checkbox'/>Line No.</td>
+                              <td>Film Type</td>
+                              <td>Brand</td>
+                              <td>Grade</td>
+                              <td>Thickness</td>
+                              <td>Length</td>
+                              <td>Weight(Kg)</td>
+                              <td>Remarks</td>
+                              <td>Based Price</td>
+                              <td>Unit Price(THB/Kg)</td>
+                              <td>Subtotal(THB)</td>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {this.state.childItem}
+                      </tbody>
+                  </table>
+              </div>
           </div>)
         }
     }
