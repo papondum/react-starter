@@ -126,6 +126,7 @@ class ContentForm extends React.Component {
     }
 
     render() {
+
       return (<div>
           <table>
               <thead>
@@ -137,8 +138,44 @@ class ContentForm extends React.Component {
                   {this._contentGen(this.props.content)}
               </tbody>
           </table>
-          <div>{this.props.type=='Quotation'? this.props.type:''}</div>
+          <div>{this.props.type=='Quotation'? this.renderQuotationLine(): ''}</div>
         </div>)
+    }
+
+    renderQuotationLine() {
+      return (<div>
+          <div className='action-bar'>
+            <h2>Quotation Line(s)</h2>
+          </div>
+          <table>
+              <thead>
+                  <tr>
+                      {this._headerQuotationGen(this.props.content)}
+                  </tr>
+              </thead>
+              <tbody>
+                  {this._quotationLineGen(this.props.content)}
+              </tbody>
+          </table>
+        </div>)
+    }
+
+    _headerQuotationGen(content){
+      // var result = []
+      // for(var i=0 ;i<content.length;i++){
+      //   let eachRow = this._getEachVal(content[i])
+      //   result.push((<tr key = {i}>{eachRow}</tr>))
+      // }
+      // return result
+    }
+
+    _quotationLineGen(content){
+      // var result = []
+      // for(var i=0 ;i<content.length;i++){
+      //   let eachRow = this._getEachVal(content[i])
+      //   result.push((<tr key = {i}>{eachRow}</tr>))
+      // }
+      // return result
     }
 }
 

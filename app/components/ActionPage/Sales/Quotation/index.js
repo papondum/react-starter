@@ -280,6 +280,7 @@ class Quotation extends React.Component {
 
     render() {
       console.log(this.state.selectedTab)
+      console.log("Hello Render")
         return(
           <div className='page-style'>
               <div className='page-head'>
