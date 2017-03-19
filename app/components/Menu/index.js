@@ -16,8 +16,13 @@ class Menu extends React.Component {
               {'name': 'Quotation', type: 'General'},
               {'name': 'Sales Order', type: 'General'}
             ]},
-            {'name': 'Purchase', 'icon': 'h', 'submenu': [{'key': 3, 'uniq': 18}, {'key': 2, 'uniq': 17}, {'key': 3, 'uniq': 16}, {'key': 1, 'uniq': 15}]},
-            {'name': 'Inventory', 'icon': 'a', 'submenu': [{'key': 1, 'uniq': 19}, {'key': 2, 'uniq': 20}, {'key': 2, 'uniq': 21}, {'key': 4, 'uniq': 22}]},
+            {'name': 'Purchase', 'submenu': [
+              {'name': 'Purchase Order', type: 'General'}
+            ]},
+            {'name': 'Inventory', 'submenu': [
+              {'name': 'Delivery Order', type: 'General'},
+              {'name': 'Good Receipt', type: 'General'}
+            ]},
             {'name': 'Master file', 'submenu': [
               {'name': 'User account', 'type': 'User'},
               {'name': 'User role', 'type': 'User'},
@@ -29,8 +34,22 @@ class Menu extends React.Component {
               {'name': 'Film Type', 'type': 'Product'},
               {'name': 'Grade', 'type': 'Product'},
             ]},
-            {'name': 'Report', 'icon': 'w', 'submenu': [{'key': 1, 'uniq': 27}, {'key': 2, 'uniq': 28}, {'key': 1, 'uniq': 29}]},
-            {'name': 'Dashboard', 'icon': 'g', 'submenu': [{'key': 3, 'uniq': 33}, {'key': 4, 'uniq': 30}]},
+            {'name': 'Report', 'submenu': [
+              {'name': 'Stock Balance', type: 'General'},
+              {'name': 'Shelf Life', type: 'General'},
+              {'name': 'Stock on Hand', type: 'General'}
+            ]},
+            {'name': 'Dashboard', 'submenu': [
+              {'name': 'Sales - Purchase - Profit', 'type': 'Overall'},
+              {'name': 'Top 10 Customers', 'type': 'Sales'},
+              {'name': 'Top 10 Salesperson', 'type': 'Sales'},
+              {'name': 'Top 10 Profitable Product', 'type': 'Sales'},
+              {'name': 'Sales Amount of each Brand', 'type': 'Sales'},
+              {'name': 'Sales Amount of each Film Type', 'type': 'Sales'},
+              {'name': 'Top 10 Suppliers', 'type': 'Purchase'},
+              {'name': 'Sales Amount of each Brand', 'type': 'Purchase'},
+              {'name': 'Sales Amount of each Film Type', 'type': 'Purchase'},
+            ]},
             ]
         };
     }

@@ -35,6 +35,18 @@ class LeftMenu extends React.Component {
             case 'Sales':
                 result = this._genSaleGroup(subMenu)
               break;
+            case 'Purchase':
+                result = this._genPurchaseGroup(subMenu)
+              break;
+            case 'Inventory':
+                result = this._genInventoryGroup(subMenu)
+              break;
+            case 'Report':
+                result = this._genReportGroup(subMenu)
+              break;
+            case 'Dashboard':
+                result = this._genDashboardGroup(subMenu)
+              break;
             default:
 
           }
@@ -54,6 +66,82 @@ class LeftMenu extends React.Component {
             </div>
         </div>
       )
+    }
+    _genPurchaseGroup(item){
+      let itemArray = {general:[]}
+      for (var i = 0; i < item.length; i++) {
+        itemArray.general.push(item[i])
+      }
+      return (
+        <div>
+            <div>
+                <div className="sub-head-text">General</div>
+                {itemArray.general}
+            </div>
+        </div>
+      )
+    }
+    _genInventoryGroup(item){
+      let itemArray = {general:[]}
+      for (var i = 0; i < item.length; i++) {
+        itemArray.general.push(item[i])
+      }
+      return (
+        <div>
+            <div>
+                <div className="sub-head-text">General</div>
+                {itemArray.general}
+            </div>
+        </div>
+      )
+    }
+    _genReportGroup(item){
+      let itemArray = {general:[]}
+      for (var i = 0; i < item.length; i++) {
+        itemArray.general.push(item[i])
+      }
+      return (
+        <div>
+            <div>
+                <div className="sub-head-text">General</div>
+                {itemArray.general}
+            </div>
+        </div>
+      )
+    }
+
+    _genDashboardGroup(item){
+      let clusteringFromSet = {overall:[],sales:[],purchase:[]}
+      for (var i = 0; i < item.length; i++) {
+        switch (item[i].props.value) {
+          case 'Overall':
+            clusteringFromSet.overall.push(item[i])
+            break;
+          case 'Sales':
+            clusteringFromSet.sales.push(item[i])
+            break;
+          case 'Purchase':
+            clusteringFromSet.purchase.push(item[i])
+            break;
+          default:
+
+        }
+      }
+      return (
+        <div>
+            <div>
+                <div className="sub-head-text">Overall</div>
+                {clusteringFromSet.overall}
+            </div>
+            <div>
+                <div className="sub-head-text">Sales</div>
+                {clusteringFromSet.sales}
+            </div>
+            <div>
+                <div className="sub-head-text">Purchase</div>
+                {clusteringFromSet.purchase}
+            </div>
+        </div>)
     }
 
     _genMasterFileGroup(item){
