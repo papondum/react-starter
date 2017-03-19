@@ -25,7 +25,7 @@ class Quotation extends React.Component {
           filmList:[],
           childItem: []
         }
-        this.logChange = this.logChange.bind(this)
+        this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
 
     _genHeader(type){
@@ -70,7 +70,7 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.name,label:i.name})})})
+        this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
 
       })
       .catch(err=>console.log(err))
@@ -225,8 +225,34 @@ class Quotation extends React.Component {
       return result
     }
 
-    logChange(newVal) {
-      this.setState({selectedCustomer:newVal})
+    updateSelectedCustomer(newVal) {
+      console.log(newVal)
+      this.getCustomerAsync(newVal.value).then((customer) => {
+        console.log(customer[0])
+        console.log(this.refs)
+        // this.refs['contact'].value = 'bob'
+        // this.refs['tel'].value = 'bob'
+        // this.refs['fax'].value = 'bob'
+        // this.refs['email'].value = 'bob'
+        this.setState({contact: customer[0].contact_person})
+        this.setState({tel: customer[0].telephone})
+        this.setState({fax: customer[0].fax})
+        this.setState({email: customer[0].email})
+        this.setState({selectedCustomer:newVal})
+      })
+    }
+
+    getCustomerAsync(customer_id) {
+      return new Promise((resolve,reject)=>{
+        post('/api/customer/id', {customer_id: customer_id})
+          .then((response)=>{
+            if (response.status >= 400) {
+              throw new Error("Bad response from server");
+            }
+            resolve(response)
+          })
+          .catch(err=>reject())
+        })
     }
 
     getGeneralContent(){
@@ -240,10 +266,10 @@ class Quotation extends React.Component {
                   <label>Customer :</label>
                   {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
                 <Select
-                    name="form-field-name"
+                    name="customer"
                     value={this.state.selectedCustomer}
                     options={this.state.customerList}
-                    onChange={this.logChange}
+                    onChange={this.updateSelectedCustomer}
                     className = 'selector-class'
                     autosize = {true}
                 />
@@ -286,7 +312,32 @@ class Quotation extends React.Component {
     }
 
     getContactContent(){
-      return <div>Test</div>
+      return (  <div className="flex flex-row">
+          <div className='flex flex-1 flex-col'>
+            <div className='input-box flex'>
+                <label>Contact Person :</label>
+                <input className='flex' type="text" ref='contact' value={this.state.contact}/>
+            </div>
+            <div className='input-box flex'>
+                <label>Tel :</label>
+                <input className='flex' type="text" ref='tel'  value={this.state.tel}/>
+            </div>
+            <div className='input-box flex'>
+                <label>Fax :</label>
+                <input className='flex' type="text" ref='fax' value={this.state.fax}/>
+            </div>
+
+          </div>
+          <div className="flex flex-1 flex-col">
+              <div className='input-box flex'>
+                  <label>Email :</label>
+                  <input className='flex' type="text" ref='email' value={this.state.email}/>
+              </div>
+          </div>
+          <div className="flex flex-1 flex-col">
+
+          </div>
+      </div>)
     }
 
     render() {
