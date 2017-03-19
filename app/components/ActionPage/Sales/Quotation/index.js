@@ -116,25 +116,23 @@ class Quotation extends React.Component {
     }
 
     getFilmType(){
-      return new Promise((resolve,reject)=>{
+
         get('/api/film/raw')
           .then((response)=>{
             if (response.status >= 400) {
               throw new Error("Bad response from server");
             }
-            this.setState({filmList:response.map(i=>{return Object.assign({}, {value: i.film_name, label: i.film_name, id:i.id})})})
             this.getInitailChild()
-            resolve()
+            this.setState({filmList:response.map(i=>{return Object.assign({}, {value: i.film_name, label: i.film_name, id:i.id})})})
+
           })
-          .catch(err=>reject())
-        })
+          .catch(err=>console.log(err))
     }
 
 
-    getBrandType(){
-      var ft = this.refs.filmType;
-      console.log(ft)
-      post('/api/sales/quotation/brand',{filmtype_id: ft})
+    getBrandType(item){
+      console.log(this.refs);
+      post('/api/sales/quotation/brand',{filmtype_id: item})
       .then((response)=>{
         this.setState({brandOption:response.map(i=><option>{i}</option>)})
       })
@@ -143,9 +141,7 @@ class Quotation extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
-      this.getSaleList()
-      this.getPriceList()
-      this.getFilmType()
+
       //this.getInitialVal()    //Edit    1
     }
 
@@ -160,9 +156,8 @@ class Quotation extends React.Component {
       }
     }
 
-    getFilmTypeOption(item){
+    getFilmTypeOption(){
       // let filmList = this.getFilmType()
-
         // if(this.state.filmList<0){
         //   console.log(this.state.filmList);
         //   this.getFilmType().then(response=>console.log(response))
@@ -171,24 +166,25 @@ class Quotation extends React.Component {
         //   console.log(this.state.filmList);
         // }
 
-        console.log("BOB: getFilmTypeOption")
-        console.log(item)
-
         let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
-        return (<select id = {item} style={{'width': '173px'}} key={item} onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
-
-
+        return result
 
       //let filmList = ['aaa', 'bbbb', 'ccc']
       //let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i}</option>))
       //return (<select id = {item} style={{'width': '173px'}} ref = 'filmType' onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
     }
 
-    createChild(item){
-      return (
-        <tr key={item.id}>
-            <td><input type='checkbox'/>{item.id}</td>
-            <td> {this.getFilmTypeOption(item.id)}</td>
+    getChildItem(){
+      let items = this.state.childItem
+      console.log(items);
+      items.map(i=>{
+        <tr key={i}>
+            <td><input type='checkbox'/>{i.id}</td>
+            <td>
+                <select style={{'width': '173px'}} ref = {'filmType'+i} key={i} onChange = {() => this.getBrandType(this.refs[('filmType'+i)])}>
+                    {this.getFilmTypeOption()}
+                </select>
+            </td>
             <td>{this.state.BrandTypeOption}</td>
             <td>Grade</td>
             <td>Thickness</td>
@@ -200,11 +196,12 @@ class Quotation extends React.Component {
             <td>Unit Price(THB/Kg)</td>
             <td>Subtotal(THB)</td>
         </tr>
-      )
+      })
+      return items
     }
 
     getInitailChild(){
-      let item = this.createChild({'id':'0001'})
+      let item = {'id':'0001'}
       this.setState({childItem:[item]})
     }
 
@@ -217,8 +214,7 @@ class Quotation extends React.Component {
         }
       }
       let newObj = {'id':idNo}
-      let newItem = this.createChild(newObj)
-      let newArr = items.concat(newItem)
+      let newArr = items.concat(newObj)
       this.setState({childItem:newArr})
     }
 
@@ -234,15 +230,15 @@ class Quotation extends React.Component {
     }
 
     getGeneralContent(){
-    return (  <div className="flex flex-row">
-        <div className='flex flex-1 flex-col'>
-            <div className='input-box flex'>
-                <label>Company :</label>
-                <select>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
-            </div>
-            <div className='input-box flex'>
-                <label>Customer :</label>
-                {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
+      return (  <div className="flex flex-row">
+          <div className='flex flex-1 flex-col'>
+              <div className='input-box flex'>
+                  <label>Company :</label>
+                  <select>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+              </div>
+              <div className='input-box flex'>
+                  <label>Customer :</label>
+                  {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
                 <Select
                     name="form-field-name"
                     value={this.state.selectedCustomer}
@@ -338,7 +334,7 @@ class Quotation extends React.Component {
                           </tr>
                       </thead>
                       <tbody>
-                          {this.state.childItem}
+                          {this.getChildItem()}
                       </tbody>
                   </table>
               </div>
