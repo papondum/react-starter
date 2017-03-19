@@ -123,6 +123,7 @@ class Quotation extends React.Component {
               throw new Error("Bad response from server");
             }
             this.setState({filmList:response.map(i=>{return Object.assign({}, {value: i.film_name, label: i.film_name, id:i.id})})})
+            this.getInitailChild()
             resolve()
           })
           .catch(err=>reject())
@@ -143,7 +144,6 @@ class Quotation extends React.Component {
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
-      this.getInitailChild()
       //this.getInitialVal()    //Edit    1
     }
 
@@ -169,6 +169,8 @@ class Quotation extends React.Component {
         //   console.log(this.state.filmList);
         // }
 
+        console.log("BOB: getFilmTypeOption")
+        console.log(item)
 
         let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
         return (<select id = {item} style={{'width': '173px'}} key={item} onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
