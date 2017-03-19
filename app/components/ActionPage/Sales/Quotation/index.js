@@ -158,7 +158,10 @@ class Quotation extends React.Component {
       //get +1 more item childconst
       let items = []
 
-      items = this.getFilmType().then((response)=>response).catch((err)=>console.log(err));
+      this.getFilmType().then((response)=>{
+        console.log("Boob")
+        console.log(response)
+      }).catch((err)=>console.log(err));
       for (var i in items){
         console.log(i);
       }
