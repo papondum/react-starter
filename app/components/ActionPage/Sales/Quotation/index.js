@@ -16,7 +16,8 @@ class Quotation extends React.Component {
           brandList: [],
           gradeList: [],
           thickList: [],
-          length:[],
+          length: [],
+          basedPrice: '',
           companyList: [
                 { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
                 { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
@@ -144,7 +145,7 @@ class Quotation extends React.Component {
     }
 
     getThickNess(film, brand, grade){
-      post('/api/sales/quotation/thickness',{ "filmtype_id": 1,  "brand_id": 11, "grade_id": 18 })
+      post('/api/sales/quotation/thickness',{ "filmtype_id": film,  "brand_id": brand, "grade_id": grade })
       .then((response)=>{
         this.setState({thickList:response})
       })
@@ -157,6 +158,25 @@ class Quotation extends React.Component {
         this.setState({length:response})
       })
       .catch(err=>console.log(err))
+    }
+
+    getBasedPrice(id){
+      if(!this.state.basedPrice){
+        setTimeout(()=>{
+          post('/api/sales/quotation/based_price',{
+            "filmtype_id": this.refs['filmType'+id].value,
+            "brand_id": this.refs['brandType'+id].value,
+            "grade_id": this.refs['gradeType'+id].value,
+            "thickness": this.refs['thickNess'+id].value,
+            "length": this.refs['length'+id].value,
+            "pricelist_id": this.refs['priceListId'].value })
+            .then((response)=>{
+              this.setState({basedPrice:response})
+            })
+            .catch(err=>console.log(err))
+          return this.state.basedPrice
+        }, 3000);
+      }
     }
 
     componentDidMount(){
@@ -172,21 +192,32 @@ class Quotation extends React.Component {
         return result
     }
 
-    getBrandTypeOption(){
+    getBrandTypeOption(id){
       let result =  this.state.brandList.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
+      if(result.length==1 && !this.refs[('gradeType'+ id)].value){
+        this.getGradeType(this.refs[('filmType'+ id)].value, this.state.brandList[0].brand_id)
+      }
       return result
     }
 
-    getGradeTypeOption(){
+    getGradeTypeOption(id){
       let result =  this.state.gradeList.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
+      if(result.length==1 && !this.refs[('thickNess'+ id)].value){
+        this.getThickNess(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value)
+      }
       return result
     }
 
-    getThickNessOption(){
-      let result =  this.state.thickList.map((i=>{
-        console.log(i);
-        return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
-      console.log(this.state.thickList);
+    getThickNessOption(id){
+      let result =  this.state.thickList.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
+      if(result.length==1 && !this.refs[('length'+ id)].value){
+        this.getLength(
+          this.refs[('filmType'+id)].value,
+          this.refs[('brandType'+id)].value,
+          this.refs[('gradeType'+id)].value,
+          this.refs[('thickNess'+id)].value
+        )
+      }
       return result
     }
 
@@ -195,24 +226,26 @@ class Quotation extends React.Component {
       return result
     }
 
+
+
     getChildItem(){
       let items = this.state.childItem
       let result = items.map(i=>{
         return (<tr key={i.id}>
             <td><input type='checkbox'/>{i.id}</td>
             <td>
-                <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(this.refs[('filmType'+i.id)].value)} >
-                    {this.getFilmTypeOption().length==1? this.getBrandType(this.refs[('filmType'+i.id)].value):this.getFilmTypeOption()}
-                </select>
+              <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(this.refs[('filmType'+i.id)].value)} >
+                  {this.getFilmTypeOption()}
+              </select>
             </td>
             <td>
               <select ref = {'brandType'+i.id} key={i.id}  onChange = {() => this.getGradeType((this.refs[('filmType'+i.id)].value), this.refs[('brandType'+i.id)].value)}>
-                {this.getBrandTypeOption()}
+                {this.getBrandTypeOption(i.id)}
               </select>
             </td>
             <td>
               <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(this.refs[('filmType'+i.id)].value, this.refs[('brandType'+i.id)].value, this.refs[('gradeType'+i.id)].value)}>
-                {this.getGradeTypeOption()}
+                {this.getGradeTypeOption(i.id)}
               </select>
             </td>
             <td>
@@ -225,7 +258,7 @@ class Quotation extends React.Component {
                   )
                 }
                 }>
-                {this.getThickNessOption()}
+                {this.getThickNessOption(i.id)}
               </select>
             </td>
             <td>
@@ -233,10 +266,10 @@ class Quotation extends React.Component {
                 {this.getLengthOption()}
               </select>
             </td>
-            <td>Weight(Kg)</td>
-            <td>Remarks</td>
-            <td>Based Price</td>
-            <td>Unit Price(THB/Kg)</td>
+            <td><input type='number' ref = {'weight'+i.id}/></td>
+            <td><input type='text' ref = {'remark'+i.id}/></td>
+            <td>{this.getBasedPrice(i.id)}</td>
+            <td><input type='number' ref = {'unitPrice'+i.id}/></td>
             <td>Subtotal(THB)</td>
         </tr>)
       })
@@ -340,7 +373,7 @@ class Quotation extends React.Component {
             </div>
             <div className='input-box flex'>
                 <label>Price list :</label>
-                <select>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                <select ref = 'priceListId'>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
             </div>
         </div>
     </div>)
