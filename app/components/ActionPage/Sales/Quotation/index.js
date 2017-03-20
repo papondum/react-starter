@@ -209,13 +209,14 @@ class Quotation extends React.Component {
     }
 
     getThickNessOption(id){
+      console.log(this.state.thickList)
       let result =  this.state.thickList.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
       if(result.length==1 && !this.refs[('length'+ id)].value){
         this.getLength(
           this.refs[('filmType'+id)].value,
           this.refs[('brandType'+id)].value,
           this.refs[('gradeType'+id)].value,
-          this.refs[('thickNess'+id)].value
+          this.state.thickList[0].thickness
         )
       }
       return result
@@ -270,7 +271,7 @@ class Quotation extends React.Component {
             <td><input type='text' ref = {'remark'+i.id}/></td>
             <td>{this.getBasedPrice(i.id)}</td>
             <td><input type='number' ref = {'unitPrice'+i.id}/></td>
-            <td>Subtotal(THB)</td>
+            <td><input type='number' ref = {'subtotal'+i.id} /></td>
         </tr>)
       })
       return result
