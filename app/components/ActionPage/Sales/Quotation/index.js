@@ -13,7 +13,8 @@ class Quotation extends React.Component {
           saleList: [],
           priceList: [],
           inputValid: true,
-          brandOption: [],
+          brandList: [],
+          gradeList: [],
           companyList: [
                 { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
                 { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
@@ -23,7 +24,7 @@ class Quotation extends React.Component {
           selectedTab: 'Gen',
           filmType: '',
           filmList:[],
-          childItem: []
+          childItem: [{id:'0001'}]
         }
         this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
@@ -122,7 +123,7 @@ class Quotation extends React.Component {
             if (response.status >= 400) {
               throw new Error("Bad response from server");
             }
-            this.getInitailChild()
+
             this.setState({filmList:response.map(i=>{return Object.assign({}, {value: i.film_name, label: i.film_name, id:i.id})})})
 
           })
@@ -131,17 +132,26 @@ class Quotation extends React.Component {
 
 
     getBrandType(item){
-      console.log(this.refs);
       post('/api/sales/quotation/brand',{filmtype_id: item})
       .then((response)=>{
-        this.setState({brandOption:response.map(i=><option>{i}</option>)})
+        this.setState({brandList:response})
+      })
+      .catch(err=>console.log(err))
+    }
+
+    getGradeType(film, brand){
+      post('/api/sales/quotation/grade',{ "filmtype_id": film,  "brand_id": brand })
+      .then((response)=>{
+        this.setState({gradeList:response})
       })
       .catch(err=>console.log(err))
     }
 
     componentDidMount(){
       this.getCustomerList()
-
+      this.getSaleList()
+      this.getPriceList()
+      this.getFilmType()
       //this.getInitialVal()    //Edit    1
     }
 
@@ -157,36 +167,40 @@ class Quotation extends React.Component {
     }
 
     getFilmTypeOption(){
-      // let filmList = this.getFilmType()
-        // if(this.state.filmList<0){
-        //   console.log(this.state.filmList);
-        //   this.getFilmType().then(response=>console.log(response))
-        // }
-        // else{
-        //   console.log(this.state.filmList);
-        // }
-
         let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
         return result
+    }
 
-      //let filmList = ['aaa', 'bbbb', 'ccc']
-      //let result = filmList.map((i=><option key = {i.id} value = {i.id}>{i}</option>))
-      //return (<select id = {item} style={{'width': '173px'}} ref = 'filmType' onChange = {() => this.getBrandType(this.refs.filmType)}>{result}</select>)
+    getBrandTypeOption(){
+      let result =  this.state.brandList.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
+      return result
+    }
+
+    getGradeTypeOption(){
+      let result =  this.state.gradeList.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
+      return result
     }
 
     getChildItem(){
       let items = this.state.childItem
-      console.log(items);
-      items.map(i=>{
-        <tr key={i}>
+      let result = items.map(i=>{
+        return (<tr key={i.id}>
             <td><input type='checkbox'/>{i.id}</td>
             <td>
-                <select style={{'width': '173px'}} ref = {'filmType'+i} key={i} onChange = {() => this.getBrandType(this.refs[('filmType'+i)])}>
+                <select style={{'width': '173px'}} ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(this.refs[('filmType'+i.id)].value)}>
                     {this.getFilmTypeOption()}
                 </select>
             </td>
-            <td>{this.state.BrandTypeOption}</td>
-            <td>Grade</td>
+            <td>
+              <select style={{'width': '173px'}} ref = {'brandType'+i.id} key={i.id}  onChange = {() => this.getGradeType((this.refs[('filmType'+i.id)].value), this.refs[('brandType'+i.id)].value)}>
+                {this.getBrandTypeOption()}
+              </select>
+            </td>
+            <td>
+              <select style={{'width': '173px'}} ref = {'gradeType'+i.id} key={i.id}>
+                {this.getGradeTypeOption()}
+              </select>
+            </td>
             <td>Thickness</td>
             <td></td>
             <td>Length</td>
@@ -195,15 +209,11 @@ class Quotation extends React.Component {
             <td>Based Price</td>
             <td>Unit Price(THB/Kg)</td>
             <td>Subtotal(THB)</td>
-        </tr>
+        </tr>)
       })
-      return items
+      return result
     }
 
-    getInitailChild(){
-      let item = {'id':'0001'}
-      this.setState({childItem:[item]})
-    }
 
     addChild(){
       let items = this.state.childItem
