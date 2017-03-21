@@ -269,7 +269,8 @@ class Quotation extends React.Component {
             </td>
             <td><input type='number' ref = {'weight'+i.id}/></td>
             <td><input type='text' ref = {'remark'+i.id}/></td>
-            <td>{this.getBasedPrice(i.id)}</td>
+            {/* <td>{this.getBasedPrice(i.id)}</td> */}
+            <td>0</td>
             <td><input type='number' ref = {'unitPrice'+i.id}/></td>
             <td><input type='number' ref = {'subtotal'+i.id} /></td>
         </tr>)
