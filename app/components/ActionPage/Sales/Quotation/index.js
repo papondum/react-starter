@@ -161,21 +161,20 @@ class Quotation extends React.Component {
     }
 
     getBasedPrice(id){
-      if(!this.state.basedPrice){
-        setTimeout(()=>{
-          post('/api/sales/quotation/based_price',{
-            "filmtype_id": this.refs['filmType'+id].value,
-            "brand_id": this.refs['brandType'+id].value,
-            "grade_id": this.refs['gradeType'+id].value,
-            "thickness": this.refs['thickNess'+id].value,
-            "length": this.refs['length'+id].value,
-            "pricelist_id": this.refs['priceListId'].value })
-            .then((response)=>{
-              this.setState({basedPrice:response})
-            })
-            .catch(err=>console.log(err))
-          return this.state.basedPrice
-        }, 3000);
+      if(this.state.basedPrice){
+        console.log(this.state.basedPrice);
+      post('/api/sales/quotation/based_price',{
+        "filmtype_id": this.refs['filmType'+id].value||'',
+        "brand_id": this.refs['brandType'+id].value,
+        "grade_id": this.refs['gradeType'+id].value,
+        "thickness": this.refs['thickNess'+id].value,
+        "length": this.refs['length'+id].value,
+        "pricelist_id": this.refs['priceListId'].value })
+        .then((response)=>{
+          this.setState({basedPrice:response})
+        })
+        .catch(err=>console.log(err))
+        return this.state.basedPrice
       }
     }
 
@@ -186,6 +185,38 @@ class Quotation extends React.Component {
       this.getFilmType()
     }
 
+    save(){
+      //send Quatations
+      let obj = Object.assign({},
+      {
+        company: this.refs[company].value,
+        customer: this.state.selectedCustomer,
+        date: this.refs[date].value,
+        payterm: this.refs[payterm].value,
+        deliver: this.refs[deliver].value,
+        status: this.refs[status].value,
+        sale_person: this.refs[salePerson].value,
+        price_listId: this.refs[priceListId].value,
+        content:// list of content
+        this.state.childItem.map(i=>
+        {return Object.assign({},{
+          id:i.id,
+          content:{
+            film_type:  this.refs['filmType'+i.id].value,
+            brand_type: this.refs['brandType'+i.id].value,
+            grade_type: this.refs['gradeType'+i.id].value,
+            thickness: this.refs['thickNess'+i.id].value,
+            length: this.refs['length'+i.id].value,
+            weight: this.refs['weight'+i.id].value,
+            remark: this.refs['remark'+i.id].value,
+            based_price: this.state.basedPrice,//   need select id
+            unitprice: this.refs['unitPrice'+i.id].value,
+            subtotal: this.state.subTotal//   need select id
+          }
+          })
+        })
+      }
+    )}
 
     getFilmTypeOption(){
         let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
@@ -209,14 +240,13 @@ class Quotation extends React.Component {
     }
 
     getThickNessOption(id){
-      console.log(this.state.thickList)
       let result =  this.state.thickList.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
       if(result.length==1 && !this.refs[('length'+ id)].value){
         this.getLength(
           this.refs[('filmType'+id)].value,
           this.refs[('brandType'+id)].value,
           this.refs[('gradeType'+id)].value,
-          this.state.thickList[0].thickness
+          this.refs[('thickNess'+id)].value
         )
       }
       return result
@@ -271,7 +301,7 @@ class Quotation extends React.Component {
             <td><input type='text' ref = {'remark'+i.id}/></td>
             <td>{this.getBasedPrice(i.id)}</td>
             <td><input type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input type='number' ref = {'subtotal'+i.id} /></td>
+            <td>Subtotal(THB)</td>
         </tr>)
       })
       return result
@@ -333,13 +363,14 @@ class Quotation extends React.Component {
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Company :</label>
-                  <select>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'company'>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Customer :</label>
                   {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
                 <Select
                     name="customer"
+                    ref = 'customer'
                     value={this.state.selectedCustomer}
                     options={this.state.customerList}
                     onChange={this.updateSelectedCustomer}
@@ -356,7 +387,7 @@ class Quotation extends React.Component {
         <div className="flex flex-1 flex-col">
             <div className='input-box flex'>
                 <label>Payment Term :</label>
-                <input className='flex' type="text" ref='payment'/>
+                <input className='flex' type="text" ref='payterm'/>
             </div>
             <div className='input-box flex'>
                 <label>Deliver Term :</label>
@@ -366,11 +397,11 @@ class Quotation extends React.Component {
         <div className="flex flex-1 flex-col">
             <div className='input-box flex'>
                 <label>Status :</label>
-                <select>{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                <select ref = 'status' >{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
             </div>
             <div className='input-box flex'>
                 <label>Saleperson :</label>
-                <select>{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                <select ref = 'salePerson' >{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
             </div>
             <div className='input-box flex'>
                 <label>Price list :</label>
@@ -422,7 +453,7 @@ class Quotation extends React.Component {
                       <button><p>Email</p></button>
                       <button><p>Print</p></button>
                       <button onClick={()=>this.props.getContent('Customer')}><img src={cancelIcon}/><p>Cancel</p></button>
-                      <button onClick = {() => this.createCustomer()} ><img src={saveIcon}/><p>Save</p></button>
+                      <button onClick = {() => this.save()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
               <div>
