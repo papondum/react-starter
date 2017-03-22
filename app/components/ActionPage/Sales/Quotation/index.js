@@ -211,7 +211,7 @@ class Quotation extends React.Component {
             remark: this.refs['remark'+i.id].value,
             based_price: this.state.basedPrice,//   need select id
             unitprice: this.refs['unitPrice'+i.id].value,
-            subtotal: this.state.subTotal//   need select id
+            subtotal: this.refs['subTotal'+i.id].value,
           }
           })
         })
@@ -257,6 +257,12 @@ class Quotation extends React.Component {
       return result
     }
 
+    updateSubTotal(id) {
+      let price = this.refs['unitPrice'+id].value;
+      let weight = this.refs['weight'+id].value;
+      this.refs['subTotal'+id].value = price * weight
+    }
+
 
 
     getChildItem(){
@@ -297,12 +303,12 @@ class Quotation extends React.Component {
                 {this.getLengthOption()}
               </select>
             </td>
-            <td><input type='number' ref = {'weight'+i.id}/></td>
+            <td><input onChange={() => {this.updateSubTotal(i.id)}} type='number' ref = {'weight'+i.id}/></td>
             <td><input type='text' ref = {'remark'+i.id}/></td>
             {/* <td>{this.getBasedPrice(i.id)}</td> */}
             <td>0</td>
-            <td><input type='number' ref = {'unitPrice'+i.id}/></td>
-            <td>Subtotal(THB)</td>
+            <td><input onChange={() => {this.updateSubTotal(i.id)}}  type='number' ref = {'unitPrice'+i.id}/></td>
+            <td><input disabled type='number' ref = {'subTotal'+i.id} value="0"/></td>
         </tr>)
       })
       return result
@@ -319,6 +325,7 @@ class Quotation extends React.Component {
       }
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
+      console.log(newArr)
       this.setState({childItem:newArr})
     }
 
