@@ -2,6 +2,10 @@ import React, {PropTypes} from 'react';
 import { post ,get } from '../../../../../utils'
 import cancelIcon from '../../../../resource/Icon/button_cancel.png'
 import saveIcon from '../../../../resource/Icon/button_save.png'
+import printIcon from '../../../../resource/Icon/button_print.png'
+import emailIcon from '../../../../resource/Icon/button_email.png'
+import createIcon from '../../../../resource/Icon/button_create.png'
+import deleteIcon from '../../../../resource/Icon/button_delete.png'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import './style.scss'
@@ -197,6 +201,10 @@ class Quotation extends React.Component {
         status: this.refs[status].value,
         sale_person: this.refs[salePerson].value,
         price_listId: this.refs[priceListId].value,
+        customer_contact: this.state.contact,
+        customer_tel: this.state.tel,
+        customer_fax: this.state.fax,
+        customer_email: this.state.email,
         content:// list of content
         this.state.childItem.map(i=>
         {return Object.assign({},{
@@ -299,8 +307,7 @@ class Quotation extends React.Component {
             </td>
             <td><input type='number' ref = {'weight'+i.id}/></td>
             <td><input type='text' ref = {'remark'+i.id}/></td>
-            {/* <td>{this.getBasedPrice(i.id)}</td> */}
-            <td>0</td>
+            <td>{this.getBasedPrice(i.id)}</td>
             <td><input type='number' ref = {'unitPrice'+i.id}/></td>
             <td>Subtotal(THB)</td>
         </tr>)
@@ -451,8 +458,8 @@ class Quotation extends React.Component {
               <div className='page-head'>
                   <h2>{this._genHeader(this.props.type)}</h2>
                   <div className='action-group-btn'>
-                      <button><p>Email</p></button>
-                      <button><p>Print</p></button>
+                      <button><img src={emailIcon}/><p>Email</p></button>
+                      <button><img src={printIcon}/><p>Print</p></button>
                       <button onClick={()=>this.props.getContent('Customer')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.save()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
@@ -471,7 +478,13 @@ class Quotation extends React.Component {
 
               </div>
               <hr/>
-              <div className="flex flex-row" onClick = {()=>this.addChild()}><div className='tab-quo'>Content</div><div>+</div></div>
+              <div className="flex flex-row space-bet" >
+                <div className='tab-quo'>Content</div>
+                  <div className='action-group-btn'>
+                    <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
+                    <button><img src={deleteIcon}/></button>
+                  </div>
+              </div>
               <div>
                   <table>
                       <thead>
@@ -493,6 +506,23 @@ class Quotation extends React.Component {
                           {this.getChildItem()}
                       </tbody>
                   </table>
+              </div>
+              <div className = 'flex'>
+                <div className = 'flex-1'>
+                  <p>Remarks</p>
+                  <input type = 'textarea' ref = 'remarks' />
+              </div>
+                <div className = 'flex-1'>
+                  <p>Revise Message</p>
+                  <input type = 'text' ref = 'revisemessage'/>
+                </div>
+                <div className = 'flex-1'>
+                  <div>Total before discount</div>
+                  <div>Discount  <input type = 'number' ref = 'discount'/></div>
+                  <div>Taxes <input type = 'number' ref = 'taxes'/></div>
+                  <div>Withholding Taxes <input type = 'number' ref = 'wotaxes '/></div>
+                  <div>Total</div>
+                </div>
               </div>
           </div>)
         }

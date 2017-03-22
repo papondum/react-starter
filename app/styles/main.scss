@@ -38,6 +38,9 @@ body {
 .flex{
   display: flex;
 }
+.space-bet{
+	justify-content: space-between;
+}
 .box .row {
   border: 1px dotted grey;
 }
