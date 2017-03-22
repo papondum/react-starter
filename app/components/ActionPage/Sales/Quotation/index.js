@@ -74,6 +74,7 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
+        console.log(response)
         this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
 
       })
@@ -87,7 +88,8 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.Firstname,label:i.Firstname})})})
+        console.log(response)
+        this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
 
       })
       .catch(err=>console.log(err))
@@ -100,7 +102,8 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({priceList:response.map(i=>{return Object.assign({},{value:i.Name,label:i.Name})})})
+        console.log(response)
+        this.setState({priceList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Name})})})
 
       })
       .catch(err=>console.log(err))
@@ -122,7 +125,7 @@ class Quotation extends React.Component {
     getFilmType(){
         get('/api/sales/quotation/filmtype')
           .then((response)=>{
-            this.setState({filmList:response.map(i=>{return Object.assign({}, {value: i.film_name, label: i.film_name, id:i.id})})})
+            this.setState({filmList:response.map(i=>{return Object.assign({}, {value: i.id, label: i.film_name, id:i.id})})})
           })
           .catch(err=>console.log(err))
     }
@@ -189,14 +192,14 @@ class Quotation extends React.Component {
       //send Quatations
       let obj = Object.assign({},
       {
-        company: this.refs[company].value,
+        company: this.refs['company'].value,
         customer: this.state.selectedCustomer,
-        date: this.refs[date].value,
-        payterm: this.refs[payterm].value,
-        deliver: this.refs[deliver].value,
-        status: this.refs[status].value,
-        sale_person: this.refs[salePerson].value,
-        price_listId: this.refs[priceListId].value,
+        date: this.refs['date'].value,
+        payterm: this.refs['payterm'].value,
+        deliver: this.refs['deliver'].value,
+        status: this.refs['status'].value,
+        sale_person: this.refs['salePerson'].value,
+        price_listId: this.refs['priceListId'].value,
         content:// list of content
         this.state.childItem.map(i=>
         {return Object.assign({},{
@@ -215,8 +218,10 @@ class Quotation extends React.Component {
           }
           })
         })
-      }
-    )}
+      })
+
+      console.log(obj)
+    }
 
     getFilmTypeOption(){
         let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
@@ -242,12 +247,11 @@ class Quotation extends React.Component {
     getThickNessOption(id){
       let result =  this.state.thickList.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
       if(result.length==1 && !this.refs[('length'+ id)].value){
-        this.getLength(
-          this.refs[('filmType'+id)].value,
-          this.refs[('brandType'+id)].value,
-          this.refs[('gradeType'+id)].value,
-          this.refs[('thickNess'+id)].value
-        )
+        this.refs[('filmType'+id)].value,
+        this.refs[('brandType'+id)].value,
+        this.refs[('gradeType'+id)].value,
+        this.refs[('thickNess'+id)].value
+
       }
       return result
     }
@@ -409,11 +413,11 @@ class Quotation extends React.Component {
             </div>
             <div className='input-box flex'>
                 <label>Saleperson :</label>
-                <select ref = 'salePerson' >{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                <select ref = 'salePerson' >{this.state.saleList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
             </div>
             <div className='input-box flex'>
                 <label>Price list :</label>
-                <select ref = 'priceListId'>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                <select ref = 'priceListId'>{this.state.priceList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
             </div>
         </div>
     </div>)
