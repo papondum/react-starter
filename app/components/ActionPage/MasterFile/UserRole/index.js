@@ -90,20 +90,40 @@ class UserRole extends React.Component {
     createRole(){
       let name = this.refs.name.value
       let description = this.refs.description.value
-      let result  = {
-        "name":name,
-        "description":description,
-        "role_detail": {
-          "sale_quo":{view:this.refs.sale_quo_view.checked,email:this.refs.sale_quo_email.checked,print:this.refs.sale_quo_print.checked,export:this.refs.sale_quo_export.checked,edit:this.refs.sale_quo_edit.checked},
-          "sale_rol":{view:this.refs.sale_ord_view.checked,email:this.refs.sale_ord_email.checked,print:this.refs.sale_ord_print.checked,export:this.refs.sale_ord_export.checked,edit:this.refs.sale_ord_edit.checked},
-          "purchase_ord":{view:this.refs.purchase_ord_view.checked,email:this.refs.purchase_ord_email.checked,print:this.refs.purchase_ord_print.checked,export:this.refs.purchase_ord_export.checked,edit:this.refs.purchase_ord_edit.checked},
-          "good_rec":{view:this.refs.good_rec_view.checked,email:this.refs.good_rec_email.checked,print:this.refs.good_rec_print.checked,export:this.refs.good_rec_export.checked,edit:this.refs.good_rec_edit.checked},
-          "deliver_ord":{view:this.refs.deliver_ord_view.checked,email:this.refs.deliver_ord_email.checked,print:this.refs.deliver_ord_print.checked,export:this.refs.deliver_ord_export.checked,edit:this.refs.deliver_ord_edit.checked},
-          "user_acc":{view:this.refs.user_acc_view.checked,email:this.refs.user_acc_email.checked,print:this.refs.user_acc_print.checked,export:this.refs.user_acc_export.checked,edit:this.refs.user_acc_edit.checked},
-          "user_rol":{view:this.refs.user_rol_view.checked,email:this.refs.user_rol_email.checked,print:this.refs.user_rol_print.checked,export:this.refs.user_rol_export.checked,edit:this.refs.user_rol_edit.checked},
-          "customer":{view:this.refs.customer_view.checked,email:this.refs.customer_email.checked,print:this.refs.customer_print.checked,export:this.refs.customer_export.checked,edit:this.refs.customer_edit.checked}
+      var result = {}
+      if (this.props.type=='create') {
+        result  = {
+          "name":name,
+          "description":description,
+          "role_detail": {
+            "sale_quo":{view:this.refs.sale_quo_view.checked,email:this.refs.sale_quo_email.checked,print:this.refs.sale_quo_print.checked,export:this.refs.sale_quo_export.checked,edit:this.refs.sale_quo_edit.checked},
+            "sale_ord":{view:this.refs.sale_ord_view.checked,email:this.refs.sale_ord_email.checked,print:this.refs.sale_ord_print.checked,export:this.refs.sale_ord_export.checked,edit:this.refs.sale_ord_edit.checked},
+            "purchase_ord":{view:this.refs.purchase_ord_view.checked,email:this.refs.purchase_ord_email.checked,print:this.refs.purchase_ord_print.checked,export:this.refs.purchase_ord_export.checked,edit:this.refs.purchase_ord_edit.checked},
+            "good_rec":{view:this.refs.good_rec_view.checked,email:this.refs.good_rec_email.checked,print:this.refs.good_rec_print.checked,export:this.refs.good_rec_export.checked,edit:this.refs.good_rec_edit.checked},
+            "deliver_ord":{view:this.refs.deliver_ord_view.checked,email:this.refs.deliver_ord_email.checked,print:this.refs.deliver_ord_print.checked,export:this.refs.deliver_ord_export.checked,edit:this.refs.deliver_ord_edit.checked},
+            "user_acc":{view:this.refs.user_acc_view.checked,email:this.refs.user_acc_email.checked,print:this.refs.user_acc_print.checked,export:this.refs.user_acc_export.checked,edit:this.refs.user_acc_edit.checked},
+            "user_rol":{view:this.refs.user_rol_view.checked,email:this.refs.user_rol_email.checked,print:this.refs.user_rol_print.checked,export:this.refs.user_rol_export.checked,edit:this.refs.user_rol_edit.checked},
+            "customer":{view:this.refs.customer_view.checked,email:this.refs.customer_email.checked,print:this.refs.customer_print.checked,export:this.refs.customer_export.checked,edit:this.refs.customer_edit.checked}
+          }
         }
+      } else {
+        result  = {
+          "id": this.refs.id.value,
+          "name":name,
+          "description":description,
+          "role_detail": {
+            "sale_quo":{view:this.refs.sale_quo_view.checked,email:this.refs.sale_quo_email.checked,print:this.refs.sale_quo_print.checked,export:this.refs.sale_quo_export.checked,edit:this.refs.sale_quo_edit.checked},
+            "sale_ord":{view:this.refs.sale_ord_view.checked,email:this.refs.sale_ord_email.checked,print:this.refs.sale_ord_print.checked,export:this.refs.sale_ord_export.checked,edit:this.refs.sale_ord_edit.checked},
+            "purchase_ord":{view:this.refs.purchase_ord_view.checked,email:this.refs.purchase_ord_email.checked,print:this.refs.purchase_ord_print.checked,export:this.refs.purchase_ord_export.checked,edit:this.refs.purchase_ord_edit.checked},
+            "good_rec":{view:this.refs.good_rec_view.checked,email:this.refs.good_rec_email.checked,print:this.refs.good_rec_print.checked,export:this.refs.good_rec_export.checked,edit:this.refs.good_rec_edit.checked},
+            "deliver_ord":{view:this.refs.deliver_ord_view.checked,email:this.refs.deliver_ord_email.checked,print:this.refs.deliver_ord_print.checked,export:this.refs.deliver_ord_export.checked,edit:this.refs.deliver_ord_edit.checked},
+            "user_acc":{view:this.refs.user_acc_view.checked,email:this.refs.user_acc_email.checked,print:this.refs.user_acc_print.checked,export:this.refs.user_acc_export.checked,edit:this.refs.user_acc_edit.checked},
+            "user_rol":{view:this.refs.user_rol_view.checked,email:this.refs.user_rol_email.checked,print:this.refs.user_rol_print.checked,export:this.refs.user_rol_export.checked,edit:this.refs.user_rol_edit.checked},
+            "customer":{view:this.refs.customer_view.checked,email:this.refs.customer_email.checked,print:this.refs.customer_print.checked,export:this.refs.customer_export.checked,edit:this.refs.customer_edit.checked}
+          }
+      }
     }
+    console.log(result)
     let url = this.props.type=='create'? '/api/role/create':'/api/role/update'
       if(name&&description){
         post(url,result)
@@ -135,11 +155,61 @@ class UserRole extends React.Component {
       this.props.type=='edit'? this.getInitialVal():''
     }
     setEditItem(obj){
-      console.log(obj);
       if(obj){
+        this.refs['id'].value = obj[0].id
         this.refs['name'].value = obj[0].name
         this.refs['description'].value = obj[0].description
-        //obj[0].role_detail
+        // Set existing role_detail
+        var detail = JSON.parse(obj[0].role_detail);
+        console.log(detail)
+        this.refs.sale_quo_view.checked = detail.sale_quo.view;
+        this.refs.sale_quo_edit.checked = detail.sale_quo.edit;
+        this.refs.sale_quo_email.checked = detail.sale_quo.email;
+        this.refs.sale_quo_export.checked = detail.sale_quo.export;
+        this.refs.sale_quo_print.checked = detail.sale_quo.print;
+
+        this.refs.sale_ord_view.checked = detail.sale_ord.view;
+        this.refs.sale_ord_edit.checked = detail.sale_ord.edit;
+        this.refs.sale_ord_email.checked = detail.sale_ord.email;
+        this.refs.sale_ord_export.checked = detail.sale_ord.export;
+        this.refs.sale_ord_print.checked = detail.sale_ord.print;
+
+        this.refs.purchase_ord_view.checked = detail.purchase_ord.view;
+        this.refs.purchase_ord_edit.checked = detail.purchase_ord.edit;
+        this.refs.purchase_ord_email.checked = detail.purchase_ord.email;
+        this.refs.purchase_ord_export.checked = detail.purchase_ord.export;
+        this.refs.purchase_ord_print.checked = detail.purchase_ord.print;
+
+        this.refs.good_rec_view.checked = detail.good_rec.view;
+        this.refs.good_rec_edit.checked = detail.good_rec.edit;
+        this.refs.good_rec_email.checked = detail.good_rec.email;
+        this.refs.good_rec_export.checked = detail.good_rec.export;
+        this.refs.good_rec_print.checked = detail.good_rec.print;
+
+        this.refs.deliver_ord_view.checked = detail.deliver_ord.view;
+        this.refs.deliver_ord_edit.checked = detail.deliver_ord.edit;
+        this.refs.deliver_ord_email.checked = detail.deliver_ord.email;
+        this.refs.deliver_ord_export.checked = detail.deliver_ord.export;
+        this.refs.deliver_ord_print.checked = detail.deliver_ord.print;
+
+        this.refs.user_acc_view.checked = detail.user_acc.view;
+        this.refs.user_acc_edit.checked = detail.user_acc.edit;
+        this.refs.user_acc_email.checked = detail.user_acc.email;
+        this.refs.user_acc_export.checked = detail.user_acc.export;
+        this.refs.user_acc_print.checked = detail.user_acc.print;
+
+        this.refs.user_rol_view.checked = detail.user_rol.view;
+        this.refs.user_rol_edit.checked = detail.user_rol.edit;
+        this.refs.user_rol_email.checked = detail.user_rol.email;
+        this.refs.user_rol_export.checked = detail.user_rol.export;
+        this.refs.user_rol_print.checked = detail.user_rol.print;
+
+        this.refs.customer_view.checked = detail.customer.view;
+        this.refs.customer_edit.checked = detail.customer.edit;
+        this.refs.customer_email.checked = detail.customer.email;
+        this.refs.customer_export.checked = detail.customer.export;
+        this.refs.customer_print.checked = detail.customer.print;
+
       }
     }
       //****** need to set checkbox edit
@@ -155,6 +225,7 @@ class UserRole extends React.Component {
               </div>
               <hr/>
               <div className='flex'>
+                  <input type="hidden" ref = 'id'/>
                   <div className='input-box left flex'>
                       <label><i>User role :</i></label>
                       <input className='flex' type="text" ref = 'name'/>
