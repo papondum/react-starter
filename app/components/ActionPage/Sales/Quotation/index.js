@@ -132,22 +132,37 @@ class Quotation extends React.Component {
           .catch(err=>console.log(err))
     }
 
+    updateStateItemSet(listType, response, id){
+      let result = this.state[listType]
+      let itemSet = this.state[listType].find(i=> i.id==id)
+      if(itemSet){
+        var index = indexOf(this.state[listType], itemSet);
+        result.splice(index, 1, {id:id, content:response});
+      }
+      else{
+        result = result.concat([{id:id, content:response}])
+      }
+      var obj  = {}
+      obj[listType] = result
+      this.setState(obj)
 
+    }
     getBrandType(item, id){
       post('/api/sales/quotation/brand',{filmtype_id: item.filmType})
       .then((response)=>{
         // push if no have id does not exist
         // replace if have
-        let result = this.state.brandList
-        let itemSet = this.state.brandList.find(i=> i.id==id)
-        if(itemSet){
-          var index = indexOf(this.state.brandList, itemSet);
-          result.splice(index, 1, {id:id, content:response});
-        }
-        else{
-          result = result.concat([{id:id, content:response}])
-        }
-        this.setState({brandList:result})
+        // let result = this.state.brandList
+        // let itemSet = this.state.brandList.find(i=> i.id==id)
+        // if(itemSet){
+        //   var index = indexOf(this.state.brandList, itemSet);
+        //   result.splice(index, 1, {id:id, content:response});
+        // }
+        // else{
+        //   result = result.concat([{id:id, content:response}])
+        // }
+        // this.setState({brandList:result})
+        this.updateStateItemSet('brandList', response, id)
       })
       .catch(err=>console.log(err))
     }
@@ -155,7 +170,8 @@ class Quotation extends React.Component {
     getGradeType(item, id){
       post('/api/sales/quotation/grade',{ "filmtype_id": item.filmType,  "brand_id": item.brandType })
       .then((response)=>{
-        this.setState({gradeList:response})
+          this.updateStateItemSet('gradeList', response, id)
+        // this.setState({gradeList:response})
       })
       .catch(err=>console.log(err))
     }
@@ -164,7 +180,9 @@ class Quotation extends React.Component {
       console.log(item);
       post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
-        this.setState({thickList:response})
+
+          this.updateStateItemSet('thickList', response, id)
+        // this.setState({thickList:response})
       })
       .catch(err=>console.log(err))
     }
@@ -172,6 +190,8 @@ class Quotation extends React.Component {
     getLength(item){
       post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
       .then((response)=>{
+
+        this.updateStateItemSet('length', response, id)
         this.setState({length:response})
       })
       .catch(err=>console.log(err))
@@ -247,7 +267,7 @@ class Quotation extends React.Component {
     }
 
     getBrandTypeOption(id){
-      let getBrand = this.state.brandList.find(i=>i.id==('filmType'+id))
+      let getBrand = this.state.brandList.find(i=>i.id==('brandType'+id))
       if(getBrand){
         let result =  getBrand.content.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
         if(result.length==1 && !this.refs[('gradeType'+ id)].value){
@@ -258,23 +278,31 @@ class Quotation extends React.Component {
     }
 
     getGradeTypeOption(id){
-      let result =  this.state.gradeList.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
-      if(result.length==1 && !this.refs[('thickNess'+ id)].value){
-        this.getThickNess(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value)
+      let getGrade = this.state.gradeList.find(i=>i.id==('gradeType'+id))
+      if(getGrade){
+        let result =  getGrade.content.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
+        if(result.length==1 && !this.refs[('thickNess'+ id)].value){
+          console.log(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value);
+          this.getThickNess(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value)
+        }
+        return result
       }
-      return result
     }
 
     getThickNessOption(id){
-      let result =  this.state.thickList.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
-      if(result.length==1 && !this.refs[('length'+ id)].value){
-        this.refs[('filmType'+id)].value,
-        this.refs[('brandType'+id)].value,
-        this.refs[('gradeType'+id)].value,
-        this.refs[('thickNess'+id)].value
+      let getThick = this.state.thickList.find(i=>i.id==('thickNess'+id))
+      if(getThick){
+        let result =  getThick.content.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
+        if(result.length==1 && !this.refs[('length'+ id)].value){
+          this.refs[('filmType'+id)].value,
+          this.refs[('brandType'+id)].value,
+          this.refs[('gradeType'+id)].value,
+          this.refs[('thickNess'+id)].value
 
+        }
+        return result
       }
-      return result
+
     }
 
     getLengthOption(){
@@ -304,22 +332,22 @@ class Quotation extends React.Component {
         return (<tr key={i.id}>
             <td><input type='checkbox'/>{i.id}</td>
             <td>
-                <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('filmType'+i.id))} >
+                <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
                     {this.getFilmTypeOption()}
                 </select>
             </td>
             <td>
-                <select ref = {'brandType'+i.id} key={i.id}  onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('brandType'+i.id))}>
+                <select ref = {'brandType'+i.id} key={i.id}  onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('gradeType'+i.id))}>
                     {this.getBrandTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('gradeType'+i.id))}>
+                <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('thickNess'+i.id))}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'],i.id), ('thickNess'+i.id))
+                <select ref = {'thickNess'+i.id} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'],i.id), ('length'+i.id))
                 }>
                     {this.getThickNessOption(i.id)}
                 </select>
@@ -327,7 +355,7 @@ class Quotation extends React.Component {
             <td>
                 <select ref = {'length'+i.id} key={i.id}>
                     {this.getLengthOption()}
-              </select>
+                </select>
             </td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}} type='number' ref = {'weight'+i.id}/></td>
             <td><input type='text' ref = {'remark'+i.id}/></td>
