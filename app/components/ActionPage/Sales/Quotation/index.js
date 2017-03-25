@@ -7,6 +7,7 @@ import emailIcon from '../../../../resource/Icon/button_email.png'
 import createIcon from '../../../../resource/Icon/button_create.png'
 import deleteIcon from '../../../../resource/Icon/button_delete.png'
 import Select from 'react-select';
+import { indexOf, find } from 'lodash'
 import 'react-select/dist/react-select.css';
 import './style.scss'
 class Quotation extends React.Component {
@@ -78,7 +79,6 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        console.log(response)
         this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
 
       })
@@ -92,7 +92,6 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        console.log(response)
         this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
 
       })
@@ -106,7 +105,6 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        console.log(response)
         this.setState({priceList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Name})})})
 
       })
@@ -134,34 +132,66 @@ class Quotation extends React.Component {
           .catch(err=>console.log(err))
     }
 
+    updateStateItemSet(listType, response, id){
+      let result = this.state[listType]
+      let itemSet = this.state[listType].find(i=> i.id==id)
+      if(itemSet){
+        var index = indexOf(this.state[listType], itemSet);
+        result.splice(index, 1, {id:id, content:response});
+      }
+      else{
+        result = result.concat([{id:id, content:response}])
+      }
+      var obj  = {}
+      obj[listType] = result
+      this.setState(obj)
 
-    getBrandType(item){
-      post('/api/sales/quotation/brand',{filmtype_id: item})
+    }
+    getBrandType(item, id){
+      post('/api/sales/quotation/brand',{filmtype_id: item.filmType})
       .then((response)=>{
-        this.setState({brandList:response})
+        // push if no have id does not exist
+        // replace if have
+        // let result = this.state.brandList
+        // let itemSet = this.state.brandList.find(i=> i.id==id)
+        // if(itemSet){
+        //   var index = indexOf(this.state.brandList, itemSet);
+        //   result.splice(index, 1, {id:id, content:response});
+        // }
+        // else{
+        //   result = result.concat([{id:id, content:response}])
+        // }
+        // this.setState({brandList:result})
+        this.updateStateItemSet('brandList', response, id)
       })
       .catch(err=>console.log(err))
     }
 
-    getGradeType(film, brand){
-      post('/api/sales/quotation/grade',{ "filmtype_id": film,  "brand_id": brand })
+    getGradeType(item, id){
+      post('/api/sales/quotation/grade',{ "filmtype_id": item.filmType,  "brand_id": item.brandType })
       .then((response)=>{
-        this.setState({gradeList:response})
+          this.updateStateItemSet('gradeList', response, id)
+        // this.setState({gradeList:response})
       })
       .catch(err=>console.log(err))
     }
 
-    getThickNess(film, brand, grade){
-      post('/api/sales/quotation/thickness',{ "filmtype_id": film,  "brand_id": brand, "grade_id": grade })
+    getThickNess(item, id){
+      console.log(item);
+      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
-        this.setState({thickList:response})
+
+          this.updateStateItemSet('thickList', response, id)
+        // this.setState({thickList:response})
       })
       .catch(err=>console.log(err))
     }
 
-    getLength(film, brand, grade, thick){
-      post('/api/sales/quotation/length',{ "filmtype_id": film,  "brand_id": brand, "grade_id": grade, "thickness": thick })
+    getLength(item){
+      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
       .then((response)=>{
+
+        this.updateStateItemSet('length', response, id)
         this.setState({length:response})
       })
       .catch(err=>console.log(err))
@@ -237,31 +267,42 @@ class Quotation extends React.Component {
     }
 
     getBrandTypeOption(id){
-      let result =  this.state.brandList.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
-      if(result.length==1 && !this.refs[('gradeType'+ id)].value){
-        this.getGradeType(this.refs[('filmType'+ id)].value, this.state.brandList[0].brand_id)
+      let getBrand = this.state.brandList.find(i=>i.id==('brandType'+id))
+      if(getBrand){
+        let result =  getBrand.content.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
+        if(result.length==1 && !this.refs[('gradeType'+ id)].value){
+          this.getGradeType(this.refs[('filmType'+ id)].value, this.state.brandList[0].brand_id)
+        }
+        return result
       }
-      return result
     }
 
     getGradeTypeOption(id){
-      let result =  this.state.gradeList.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
-      if(result.length==1 && !this.refs[('thickNess'+ id)].value){
-        this.getThickNess(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value)
+      let getGrade = this.state.gradeList.find(i=>i.id==('gradeType'+id))
+      if(getGrade){
+        let result =  getGrade.content.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
+        if(result.length==1 && !this.refs[('thickNess'+ id)].value){
+          console.log(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value);
+          this.getThickNess(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value)
+        }
+        return result
       }
-      return result
     }
 
     getThickNessOption(id){
-      let result =  this.state.thickList.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
-      if(result.length==1 && !this.refs[('length'+ id)].value){
-        this.refs[('filmType'+id)].value,
-        this.refs[('brandType'+id)].value,
-        this.refs[('gradeType'+id)].value,
-        this.refs[('thickNess'+id)].value
+      let getThick = this.state.thickList.find(i=>i.id==('thickNess'+id))
+      if(getThick){
+        let result =  getThick.content.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
+        if(result.length==1 && !this.refs[('length'+ id)].value){
+          this.refs[('filmType'+id)].value,
+          this.refs[('brandType'+id)].value,
+          this.refs[('gradeType'+id)].value,
+          this.refs[('thickNess'+id)].value
 
+        }
+        return result
       }
-      return result
+
     }
 
     getLengthOption(){
@@ -280,40 +321,41 @@ class Quotation extends React.Component {
     getChildItem(){
       let items = this.state.childItem
       let result = items.map(i=>{
+        let genArg = (arr,id)=>{
+          //return as object filmType:val brandType:val
+          let result = {}
+          for (var i=0; i<arr.length; i++) {
+            result[arr[i]] = this.refs[arr[i]+id].value;
+          }
+          return result
+        }
         return (<tr key={i.id}>
             <td><input type='checkbox'/>{i.id}</td>
             <td>
-              <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(this.refs[('filmType'+i.id)].value)} >
-                  {this.getFilmTypeOption()}
-              </select>
+                <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
+                    {this.getFilmTypeOption()}
+                </select>
             </td>
             <td>
-              <select ref = {'brandType'+i.id} key={i.id}  onChange = {() => this.getGradeType((this.refs[('filmType'+i.id)].value), this.refs[('brandType'+i.id)].value)}>
-                {this.getBrandTypeOption(i.id)}
-              </select>
+                <select ref = {'brandType'+i.id} key={i.id}  onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('gradeType'+i.id))}>
+                    {this.getBrandTypeOption(i.id)}
+                </select>
             </td>
             <td>
-              <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(this.refs[('filmType'+i.id)].value, this.refs[('brandType'+i.id)].value, this.refs[('gradeType'+i.id)].value)}>
-                {this.getGradeTypeOption(i.id)}
-              </select>
+                <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('thickNess'+i.id))}>
+                    {this.getGradeTypeOption(i.id)}
+                </select>
             </td>
             <td>
-              <select ref = {'thickNess'+i.id} key={i.id} onChange = {() =>
-                  {this.getLength(
-                    this.refs[('filmType'+i.id)].value,
-                    this.refs[('brandType'+i.id)].value,
-                    this.refs[('gradeType'+i.id)].value,
-                    this.refs[('thickNess'+i.id)].value
-                  )
-                }
+                <select ref = {'thickNess'+i.id} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'],i.id), ('length'+i.id))
                 }>
-                {this.getThickNessOption(i.id)}
-              </select>
+                    {this.getThickNessOption(i.id)}
+                </select>
             </td>
             <td>
-              <select ref = {'length'+i.id} key={i.id}>
-                {this.getLengthOption()}
-              </select>
+                <select ref = {'length'+i.id} key={i.id}>
+                    {this.getLengthOption()}
+                </select>
             </td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}} type='number' ref = {'weight'+i.id}/></td>
             <td><input type='text' ref = {'remark'+i.id}/></td>
@@ -389,47 +431,48 @@ class Quotation extends React.Component {
               <div className='input-box flex'>
                   <label>Customer :</label>
                   {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
-                <Select
-                    name="customer"
-                    ref = 'customer'
-                    value={this.state.selectedCustomer}
-                    options={this.state.customerList}
-                    onChange={this.updateSelectedCustomer}
-                    className = 'selector-class'
-                    autosize = {true}
-                />
-            </div>
-            <div className='input-box flex'>
-                <label>Date :</label>
-                <input className='flex' type="date" ref='date'/>
-            </div>
+                  <Select
+                      name="customer"
+                      ref = 'customer'
+                      value={this.state.selectedCustomer}
+                      options={this.state.customerList}
+                      onChange={this.updateSelectedCustomer}
+                      className = 'selector-class'
+                      autosize = {true}
+                  />
+              </div>
+              <div className='input-box flex'>
+                  <label>Date :</label>
+                  <input className='flex' type="date" ref='date'/>
+              </div>
 
-        </div>
-        <div className="flex flex-1 flex-col">
-            <div className='input-box flex'>
-                <label>Payment Term :</label>
-                <input className='flex' type="text" ref='payterm'/>
-            </div>
-            <div className='input-box flex'>
-                <label>Deliver Term :</label>
-                <input className='flex' type="text" ref='deliver'/>
-            </div>
-        </div>
-        <div className="flex flex-1 flex-col">
-            <div className='input-box flex'>
-                <label>Status :</label>
-                <select ref = 'status' >{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
-            </div>
-            <div className='input-box flex'>
-                <label>Saleperson :</label>
-                <select ref = 'salePerson' >{this.state.saleList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
-            </div>
-            <div className='input-box flex'>
-                <label>Price list :</label>
-                <select ref = 'priceListId'>{this.state.priceList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
-            </div>
-        </div>
-    </div>)
+          </div>
+          <div className="flex flex-1 flex-col">
+              <div className='input-box flex'>
+                  <label>Payment Term :</label>
+                  <input className='flex' type="text" ref='payterm'/>
+              </div>
+              <div className='input-box flex'>
+                  <label>Deliver Term :</label>
+                  <input className='flex' type="text" ref='deliver'/>
+              </div>
+          </div>
+          <div className="flex flex-1 flex-col">
+              <div className='input-box flex'>
+                  <label>Status :</label>
+                  <select ref = 'status' >{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+              </div>
+              <div className='input-box flex'>
+                  <label>Saleperson :</label>
+                  <select ref = 'salePerson' >{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+              </div>
+              <div className='input-box flex'>
+                  <label>Price list :</label>
+
+                  <select ref = 'priceListId'>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+              </div>
+          </div>
+      </div>)
     }
 
     setContent(item){
@@ -473,7 +516,7 @@ class Quotation extends React.Component {
                   <div className='action-group-btn'>
                       <button><img src={emailIcon}/><p>Email</p></button>
                       <button><img src={printIcon}/><p>Print</p></button>
-                      <button onClick={()=>this.props.getContent('Customer')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick={()=>this.props.getContent('Quotation')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.save()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
@@ -492,10 +535,10 @@ class Quotation extends React.Component {
               </div>
               <hr/>
               <div className="flex flex-row space-bet" >
-                <div className='tab-quo'>Content</div>
+                  <div className='tab-quo'>Content</div>
                   <div className='action-group-btn'>
-                    <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
-                    <button><img src={deleteIcon}/></button>
+                      <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
+                      <button><img src={deleteIcon}/></button>
                   </div>
               </div>
               <div>
