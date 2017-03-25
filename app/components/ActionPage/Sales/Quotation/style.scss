@@ -6,3 +6,18 @@
 .selector-class{
   min-width: 150px;
 }
+.content-quo-table{
+  overflow: auto;
+}
+.create-quo-btm{
+  font-style: italic;
+  color:#424242;
+  .create-quo-btm-input-label-left{
+    display: flex;
+    width: 200px;
+    justify-content: flex-end;
+    input{
+          width: 50px;
+    }
+  }
+}
