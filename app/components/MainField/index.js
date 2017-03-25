@@ -43,14 +43,44 @@ class MainField extends React.Component {
     }
 
     getJson(url){
-          get(url)
-          .then((response)=> {
-            if (response.status >= 400) {
-              throw new Error("Bad response from server");
+      if(url === 'Purchase Order'){
+        this.setState({
+          'mainContent': [
+            {
+              no : 111111,
+              orderdate: new Date('2015-05-11').toString(),
+              etd:3333,
+              eta:44444,
+              supplyname : 'hello',
+              buyer : 'hello',
+              total : 100,
+              status : 'waiting',
+              recieve : '100%'
+            },
+            {
+              no : 2222,
+              orderdate:new Date('2014-05-11').toString(),
+              etd:2222,
+              eta:222,
+              supplyname : 'hello',
+              buyer : 'hello',
+              total : 100,
+              status : 'waiting',
+              recieve : '0%'
             }
-            this.setState({'mainContent': response})
-          })
-          .catch(err=>console.log(err))
+          ]
+        })
+      }
+      else{
+        get(url)
+        .then((response)=> {
+          if (response.status >= 400) {
+            throw new Error("Bad response from server");
+          }
+          this.setState({'mainContent': response})
+        })
+        .catch(err=>console.log(err))
+      }
     }
 
     _getContent(category){
@@ -85,6 +115,9 @@ class MainField extends React.Component {
           break;
         case 'Quotation':
           this.getJson('/api/sales/quotation/all')
+          break;
+        case 'Purchase Order':
+          this.getJson('Purchase Order')
           break;
         default:
           this.setState({'mainContent':''})

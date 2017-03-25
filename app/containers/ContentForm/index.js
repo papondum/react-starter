@@ -125,6 +125,18 @@ class ContentForm extends React.Component {
 
     }
 
+    getSecondSection(type){
+      if(type ==='Quotation'){
+        return this.renderQuotationLine()
+      }
+      else if(type === 'Purchase Order'){
+        return this.renderPurchaseOrder()
+      }
+      else {
+        return ''
+      }
+    }
+
     render() {
 
       return (<div>
@@ -138,7 +150,11 @@ class ContentForm extends React.Component {
                   {this._contentGen(this.props.content)}
               </tbody>
           </table>
-          <div>{this.props.type=='Quotation'? this.renderQuotationLine(): ''}</div>
+          <div>
+            {
+              this.getSecondSection(this.props.type)
+            }
+          </div>
         </div>)
     }
 
@@ -158,6 +174,26 @@ class ContentForm extends React.Component {
               </tbody>
           </table>
         </div>)
+    }
+
+    renderPurchaseOrder(){
+      return(
+        <div>
+          <div className='action-bar'>
+            <h2>Purchase Order Line(s)</h2>
+          </div>
+          <table>
+              <thead>
+                  <tr>
+                      {this._headerQuotationGen(this.props.content)}
+                  </tr>
+              </thead>
+              <tbody>
+                  {this._quotationLineGen(this.props.content)}
+              </tbody>
+          </table>
+        </div>
+      )
     }
 
     _headerQuotationGen(content){
