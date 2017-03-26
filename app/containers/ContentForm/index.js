@@ -216,7 +216,7 @@ class ContentForm extends React.Component {
                   {this.getPurchaseOrderLineContent(this.props.content)}
               </tbody>
           </table>
-          <div className="flex flex-space-between">
+          {/* <div className="flex flex-space-between">
             <div className="flex flex-col remark">
               Remark :
               <div>
@@ -259,24 +259,24 @@ class ContentForm extends React.Component {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       )
     }
 
     getHeaderPurchaseOrderLine(content){
-      let genHead=[]
-      if(content.length>0){
-        var head = Object.keys(content[0])
-        genHead = head.map(item=>{
-          if (item == 'id') {
-            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
-          } else {
-            return (<td key= {item}>{item}</td>)
-          }
-        })
-      }
-      return genHead
+      // let genHead=[]
+      // if(content.length>0){
+      //   var head = Object.keys(content[0])
+      //   genHead = head.map(item=>{
+      //     if (item == 'id') {
+      //       return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+      //     } else {
+      //       return (<td key= {item}>{item}</td>)
+      //     }
+      //   })
+      // }
+      // return genHead
     }
 
     getPurchaseOrderLineContent(content){
