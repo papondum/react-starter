@@ -32,7 +32,14 @@ class Quotation extends React.Component {
           selectedTab: 'Gen',
           filmType: '',
           filmList:[],
-          childItem: [{id:'0001'}]
+          childItem: [{id:'0001'}],
+          state_company:'',
+          state_date:'',
+          state_payterm:'',
+          state_deliver:'',
+          state_status:'',
+          state_salePerson:'',
+          state_priceListId:'',
         }
         this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
@@ -140,7 +147,7 @@ class Quotation extends React.Component {
         result.splice(index, 1, {id:id, content:response});
       }
       else{
-        result = result.concat([{id:id, content:response}])
+        result = result.concat([{id: id, content:response}])
       }
       var obj  = {}
       obj[listType] = result
@@ -150,18 +157,6 @@ class Quotation extends React.Component {
     getBrandType(item, id){
       post('/api/sales/quotation/brand',{filmtype_id: item.filmType})
       .then((response)=>{
-        // push if no have id does not exist
-        // replace if have
-        // let result = this.state.brandList
-        // let itemSet = this.state.brandList.find(i=> i.id==id)
-        // if(itemSet){
-        //   var index = indexOf(this.state.brandList, itemSet);
-        //   result.splice(index, 1, {id:id, content:response});
-        // }
-        // else{
-        //   result = result.concat([{id:id, content:response}])
-        // }
-        // this.setState({brandList:result})
         this.updateStateItemSet('brandList', response, id)
       })
       .catch(err=>console.log(err))
@@ -171,28 +166,23 @@ class Quotation extends React.Component {
       post('/api/sales/quotation/grade',{ "filmtype_id": item.filmType,  "brand_id": item.brandType })
       .then((response)=>{
           this.updateStateItemSet('gradeList', response, id)
-        // this.setState({gradeList:response})
       })
       .catch(err=>console.log(err))
     }
 
     getThickNess(item, id){
-      console.log(item);
       post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
-
           this.updateStateItemSet('thickList', response, id)
-        // this.setState({thickList:response})
       })
       .catch(err=>console.log(err))
     }
 
-    getLength(item){
+    getLength(item ,id){
       post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
       .then((response)=>{
-
+        console.log(response);
         this.updateStateItemSet('length', response, id)
-        this.setState({length:response})
       })
       .catch(err=>console.log(err))
     }
@@ -263,6 +253,7 @@ class Quotation extends React.Component {
 
     getFilmTypeOption(){
         let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
+        result.unshift(<option key='select'>Select Item</option>)
         return result
     }
 
@@ -270,9 +261,7 @@ class Quotation extends React.Component {
       let getBrand = this.state.brandList.find(i=>i.id==('brandType'+id))
       if(getBrand){
         let result =  getBrand.content.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
-        if(result.length==1 && !this.refs[('gradeType'+ id)].value){
-          this.getGradeType(this.refs[('filmType'+ id)].value, this.state.brandList[0].brand_id)
-        }
+        result.unshift(<option key='select'>Select Item</option>)
         return result
       }
     }
@@ -281,10 +270,7 @@ class Quotation extends React.Component {
       let getGrade = this.state.gradeList.find(i=>i.id==('gradeType'+id))
       if(getGrade){
         let result =  getGrade.content.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
-        if(result.length==1 && !this.refs[('thickNess'+ id)].value){
-          console.log(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value);
-          this.getThickNess(this.refs[('filmType'+id)].value, this.refs[('brandType'+id)].value, this.refs[('gradeType'+id)].value)
-        }
+        result.unshift(<option key='select'>Select Item</option>)
         return result
       }
     }
@@ -293,21 +279,19 @@ class Quotation extends React.Component {
       let getThick = this.state.thickList.find(i=>i.id==('thickNess'+id))
       if(getThick){
         let result =  getThick.content.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
-        if(result.length==1 && !this.refs[('length'+ id)].value){
-          this.refs[('filmType'+id)].value,
-          this.refs[('brandType'+id)].value,
-          this.refs[('gradeType'+id)].value,
-          this.refs[('thickNess'+id)].value
-
-        }
+        result.unshift(<option key='select'>Select Item</option>)
         return result
       }
 
     }
 
-    getLengthOption(){
-      let result =  this.state.length.map((i=>{return (<option key = {'length'+i.length} value = {i.length}>{i.length}</option>)}))
-      return result
+    getLengthOption(id){
+      let getLength = this.state.length.find(i=>i.id==('length'+id))
+      if(getLength){
+        let result =  getLength.content.map((i=>{return (<option key = {'length'+i.length} value = {i.length}>{i.length}</option>)}))
+        result.unshift(<option key='select'>Select Item</option>)
+        return result
+      }
     }
 
     updateSubTotal(id) {
@@ -337,7 +321,7 @@ class Quotation extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'brandType'+i.id} key={i.id}  onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('gradeType'+i.id))}>
+                <select ref = {'brandType'+i.id} key={i.id} onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('gradeType'+i.id))}>
                     {this.getBrandTypeOption(i.id)}
                 </select>
             </td>
@@ -347,14 +331,14 @@ class Quotation extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'],i.id), ('length'+i.id))
+                <select ref = {'thickNess'+i.id} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'], i.id), ('length'+i.id))
                 }>
                     {this.getThickNessOption(i.id)}
                 </select>
             </td>
             <td>
                 <select ref = {'length'+i.id} key={i.id}>
-                    {this.getLengthOption()}
+                    {this.getLengthOption(i.id)}
                 </select>
             </td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}} type='number' ref = {'weight'+i.id}/></td>
@@ -380,7 +364,6 @@ class Quotation extends React.Component {
       }
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
-      console.log(newArr)
       this.setState({childItem:newArr})
     }
 
@@ -392,10 +375,7 @@ class Quotation extends React.Component {
     }
 
     updateSelectedCustomer(newVal) {
-      console.log(newVal)
       this.getCustomerAsync(newVal.value).then((customer) => {
-        console.log(customer[0])
-        console.log(this.refs)
         // this.refs['contact'].value = 'bob'
         // this.refs['tel'].value = 'bob'
         // this.refs['fax'].value = 'bob'
@@ -421,16 +401,21 @@ class Quotation extends React.Component {
         })
     }
 
+    updateParam(item){
+      let obj ={}
+      obj['state_'+item] = this.refs[item].value
+      this.setState(obj)
+    }
+
     getGeneralContent(){
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Company :</label>
-                  <select ref = 'company'>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'company' value={this.state.state_company} onChange={()=>this.updateParam('company')}>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Customer :</label>
-                  {/* <select style={{'width': '173px'}} ref = 'filmType'>{this.getCustomerOption()}</select> */}
                   <Select
                       name="customer"
                       ref = 'customer'
@@ -443,33 +428,33 @@ class Quotation extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Date :</label>
-                  <input className='flex' type="date" ref='date'/>
+                  <input className='flex' type="date" ref='date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}/>
               </div>
 
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Payment Term :</label>
-                  <input className='flex' type="text" ref='payterm'/>
+                  <input className='flex' type="text" ref='payterm' value = {this.state.state_payterm} onChange={()=>this.updateParam('payterm')}/>
               </div>
               <div className='input-box flex'>
                   <label>Deliver Term :</label>
-                  <input className='flex' type="text" ref='deliver'/>
+                  <input className='flex' type="text" ref='deliver' value = {this.state.state_deliver} onChange={()=>this.updateParam('deliver')}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' >{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
-                  <select ref = 'salePerson' >{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'priceListId'>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
               </div>
           </div>
       </div>)
@@ -541,7 +526,7 @@ class Quotation extends React.Component {
                       <button><img src={deleteIcon}/></button>
                   </div>
               </div>
-              <div>
+              <div className = 'content-quo-table'>
                   <table>
                       <thead>
                           <tr>
@@ -563,22 +548,22 @@ class Quotation extends React.Component {
                       </tbody>
                   </table>
               </div>
-              <div className = 'flex'>
-                <div className = 'flex-1'>
-                  <p>Remarks</p>
-                  <input type = 'textarea' ref = 'remarks' />
-              </div>
-                <div className = 'flex-1'>
-                  <p>Revise Message</p>
-                  <input type = 'text' ref = 'revisemessage'/>
-                </div>
-                <div className = 'flex-1'>
-                  <div>Total before discount</div>
-                  <div>Discount  <input type = 'number' ref = 'discount'/></div>
-                  <div>Taxes <input type = 'number' ref = 'taxes'/></div>
-                  <div>Withholding Taxes <input type = 'number' ref = 'wotaxes '/></div>
-                  <div>Total</div>
-                </div>
+              <div className = 'flex create-quo-btm'>
+                  <div className = 'flex-1'>
+                      <p>Remarks</p>
+                      <input type = 'textarea' ref = 'remarks' />
+                  </div>
+                  <div className = 'flex-1'>
+                      <p>Revise Message</p>
+                      <input type = 'text' ref = 'revisemessage'/>
+                  </div>
+                  <div className = 'flex-1'>
+                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp; <span>val</span></div>
+                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount'/></div>
+                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Taxes<input type = 'number' ref = 'taxes'/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
+                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Withholding Taxes<input type = 'number' ref = 'wotaxes '/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
+                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>val</span></div>
+                  </div>
               </div>
           </div>)
         }
