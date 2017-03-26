@@ -125,6 +125,21 @@ class ContentForm extends React.Component {
 
     }
 
+    getSecondSection(type){
+      if(type ==='Quotation'){
+        return this.renderQuotationLine()
+      }
+      else if(type ==='Sales Order'){
+        return this.renderSalesOrderLine()
+      }
+      else if(type === 'Purchase Order'){
+        return this.renderPurchaseOrder()
+      }
+      else {
+        return ''
+      }
+    }
+
     render() {
 
       return (<div>
@@ -160,7 +175,127 @@ class ContentForm extends React.Component {
         </div>)
     }
 
+
+    renderSalesOrderLine() {
+      return (<div>
+          <div className='action-bar'>
+            <h2>Sales Order Line(s)</h2>
+          </div>
+          <table>
+              <thead>
+                  <tr>
+                      {this._headerSalesOrderGen(this.props.content)}
+                  </tr>
+              </thead>
+              <tbody>
+                  {this._salesOrderLineGen(this.props.content)}
+              </tbody>
+          </table>
+        </div>)
+    }
+
+    renderPurchaseOrder(){
+      return(
+        <div>
+          <div className='action-bar'>
+            <h2>Purchase Order Line(s)</h2>
+          </div>
+          <table>
+              <thead>
+                  <tr>
+                      {this.getHeaderPurchaseOrderLine(this.props.content)}
+                  </tr>
+              </thead>
+              <tbody>
+                  {this.getPurchaseOrderLineContent(this.props.content)}
+              </tbody>
+          </table>
+          {/* <div className="flex flex-space-between">
+            <div className="flex flex-col remark">
+              Remark :
+              <div>
+                <textarea ref="remarkText"></textarea>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="flex flex-col" style={{marginRight:'10px',textAlign:"end"}}>
+                <div>
+                  Total Before Discount :
+                </div>
+                <div>
+                  Discount :
+                </div>
+                <div>
+                  Taxes : <input type="text" ref="tax" /> %
+                </div>
+                <div>
+                  Withholding Taxes <input type="text" ref="holdingtax" /> %
+                </div>
+                <div>
+                  Total :
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <div>
+                  7500
+                </div>
+                <div>
+                  <input type="text" ref="discount" />
+                </div>
+                <div>
+                  490
+                </div>
+                <div>
+                  blank space
+                </div>
+                <div>
+                  7490
+                </div>
+              </div>
+            </div>
+          </div> */}
+        </div>
+      )
+    }
+
+    getHeaderPurchaseOrderLine(content){
+      // let genHead=[]
+      // if(content.length>0){
+      //   var head = Object.keys(content[0])
+      //   genHead = head.map(item=>{
+      //     if (item == 'id') {
+      //       return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+      //     } else {
+      //       return (<td key= {item}>{item}</td>)
+      //     }
+      //   })
+      // }
+      // return genHead
+    }
+
+    getPurchaseOrderLineContent(content){
+      return ''
+    }
+
     _headerQuotationGen(content){
+      // var result = []
+      // for(var i=0 ;i<content.length;i++){
+      //   let eachRow = this._getEachVal(content[i])
+      //   result.push((<tr key = {i}>{eachRow}</tr>))
+      // }
+      // return result
+    }
+
+    _headerSalesOrderGen(content){
+      // var result = []
+      // for(var i=0 ;i<content.length;i++){
+      //   let eachRow = this._getEachVal(content[i])
+      //   result.push((<tr key = {i}>{eachRow}</tr>))
+      // }
+      // return result
+    }
+
+    _salesOrderLineGen(content){
       // var result = []
       // for(var i=0 ;i<content.length;i++){
       //   let eachRow = this._getEachVal(content[i])
