@@ -43,7 +43,8 @@ class MainField extends React.Component {
     }
 
     getJson(url){
-      if(url === 'Purchase Order'|| url === 'Sales Order'|| url ==='Quatation'){
+      console.log(url)
+      if(url === 'Purchase Order'){
         this.setState({
           'mainContent': [
             {
@@ -67,6 +68,58 @@ class MainField extends React.Component {
               total : 100,
               status : 'waiting',
               recieve : '0%'
+            }
+          ]
+        })
+      }
+      else if (url === 'Sales Order') {
+        this.setState({
+          'mainContent': [
+            {
+              "Order No." : 'SQ0001',
+              "Order Date": new Date('2015-05-11').toString(),
+              "P/O No.": "SN59",
+              "Request Date": new Date('2015-05-11').toString(),
+              "Customer Name" : "TPBG Inc.",
+              Salesperson : 'Admin',
+              "Total Amount (THB)" : "150,000.50",
+              "Document Status" : "Released",
+              "Shipping Status" : "0%"
+            },
+            {
+              "Order No." : 'SQ0002',
+              "Order Date": new Date('2015-05-11').toString(),
+              "P/O No.": "SN59",
+              "Request Date": new Date('2015-05-11').toString(),
+              "Customer Name" : "TPBG Inc.",
+              Salesperson : 'Admin',
+              "Total Amount (THB)" : "150,000.50",
+              "Document Status" : "Released",
+              "Shipping Status" : "0%"
+            }
+          ]
+        })
+      }
+      else if (url ==='Quatation') {
+        this.setState({
+          'mainContent': [
+            {
+              "Quotation No." : 'SQ0001',
+              "Date": new Date('2015-05-11').toString(),
+              "Customer Name": "Thai Star",
+              "Salesperson": "Admin",
+              "Total Amount (THB)" : "150,000.50",
+              Status : 'Open',
+              "Last Update" : "11/10/2017 17:00"
+            },
+            {
+              "Quotation No." : 'SQ0002',
+              "Date": new Date('2015-05-11').toString(),
+              "Customer Name": "Thai Star",
+              "Salesperson": "Admin",
+              "Total Amount (THB)" : "150,000.50",
+              Status : 'Open',
+              "Last Update" : "11/10/2017 17:00"
             }
           ]
         })
@@ -118,7 +171,7 @@ class MainField extends React.Component {
           this.getJson('Quatation')
           break;
         case 'Sales Order':
-        this.getJson('Sales Order')
+          this.getJson('Sales Order')
           // this.getJson('/api/sales/quotation/all')
           break;
         case 'Purchase Order':

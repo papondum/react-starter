@@ -132,6 +132,9 @@ class ContentForm extends React.Component {
       if(type ==='Quotation'){
         return this.renderQuotationLine()
       }
+      else if(type ==='Sales Order'){
+        return this.renderSalesOrderLine()
+      }
       else if(type === 'Purchase Order'){
         return this.renderPurchaseOrder()
       }
@@ -174,6 +177,24 @@ class ContentForm extends React.Component {
               </thead>
               <tbody>
                   {this._quotationLineGen(this.props.content)}
+              </tbody>
+          </table>
+        </div>)
+    }
+
+    renderSalesOrderLine() {
+      return (<div>
+          <div className='action-bar'>
+            <h2>Sales Order Line(s)</h2>
+          </div>
+          <table>
+              <thead>
+                  <tr>
+                      {this._headerSalesOrderGen(this.props.content)}
+                  </tr>
+              </thead>
+              <tbody>
+                  {this._salesOrderLineGen(this.props.content)}
               </tbody>
           </table>
         </div>)
@@ -263,6 +284,24 @@ class ContentForm extends React.Component {
     }
 
     _headerQuotationGen(content){
+      // var result = []
+      // for(var i=0 ;i<content.length;i++){
+      //   let eachRow = this._getEachVal(content[i])
+      //   result.push((<tr key = {i}>{eachRow}</tr>))
+      // }
+      // return result
+    }
+
+    _headerSalesOrderGen(content){
+      // var result = []
+      // for(var i=0 ;i<content.length;i++){
+      //   let eachRow = this._getEachVal(content[i])
+      //   result.push((<tr key = {i}>{eachRow}</tr>))
+      // }
+      // return result
+    }
+
+    _salesOrderLineGen(content){
       // var result = []
       // for(var i=0 ;i<content.length;i++){
       //   let eachRow = this._getEachVal(content[i])
