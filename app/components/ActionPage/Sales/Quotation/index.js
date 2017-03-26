@@ -249,6 +249,11 @@ class Quotation extends React.Component {
       })
 
       console.log(obj)
+      post('/api/sales/quotation/create',obj)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err=>console.log(err))
     }
 
     getFilmTypeOption(){
@@ -376,10 +381,6 @@ class Quotation extends React.Component {
 
     updateSelectedCustomer(newVal) {
       this.getCustomerAsync(newVal.value).then((customer) => {
-        // this.refs['contact'].value = 'bob'
-        // this.refs['tel'].value = 'bob'
-        // this.refs['fax'].value = 'bob'
-        // this.refs['email'].value = 'bob'
         this.setState({contact: customer[0].contact_person})
         this.setState({tel: customer[0].telephone})
         this.setState({fax: customer[0].fax})
@@ -533,7 +534,6 @@ class Quotation extends React.Component {
                               <td><input type='checkbox'/>Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
-                              <td>Grade</td>
                               <td>Thickness</td>
                               <td>Length</td>
                               <td>Weight(Kg)</td>
