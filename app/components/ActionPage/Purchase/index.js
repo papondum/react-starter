@@ -236,12 +236,12 @@ class Purchase extends React.Component {
                   </div>
                   <hr style={{margin : 0}}/>
                   {
-                    this.getFormContent(this.state.selectedTab)
+                      this.getFormContent(this.state.selectedTab)
                   }
               </div>
               <hr/>
               <div className="flex flex-row space-bet" >
-                <div className='tab-quo active'>Contents</div>
+                  <div className='tab-quo active'>Contents</div>
                   <div className='action-group-btn-content'>
                     <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
                     <button><img src={deleteIcon}/></button>

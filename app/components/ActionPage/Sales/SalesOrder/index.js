@@ -577,7 +577,7 @@ class SalesOrder extends React.Component {
               <hr style={{margin : 0}}/>
               <div className="flex flex-row space-bet" >
                   <div className='tab-quo active'>Content</div>
-                  <div className='action-group-btn'>
+                  <div className='action-group-btn-content'>
                       <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
                       <button><img src={deleteIcon}/></button>
                   </div>

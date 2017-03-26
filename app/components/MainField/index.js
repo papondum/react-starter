@@ -56,7 +56,8 @@ class MainField extends React.Component {
               Buyer : 'Admin',
               "Total Amount (THB)" : "150,000.50",
               "Document Status" : "Released",
-              "Receiving Status" : "0%"
+              "Receiving Status" : "0%",
+              id:'0001'
             },
             {
               "P/O No." : "DEC5910/260",
@@ -67,7 +68,8 @@ class MainField extends React.Component {
               Buyer : 'Admin',
               "Total Amount (THB)" : "150,000.50",
               "Document Status" : "Released",
-              "Receiving Status" : "0%"
+              "Receiving Status" : "0%",
+              id:'0002'
             }
           ]
         })
@@ -84,7 +86,8 @@ class MainField extends React.Component {
               Salesperson : 'Admin',
               "Total Amount (THB)" : "150,000.50",
               "Document Status" : "Released",
-              "Shipping Status" : "0%"
+              "Shipping Status" : "0%",
+              id:'1'
             },
             {
               "Order No." : 'SQ0002',
@@ -95,7 +98,8 @@ class MainField extends React.Component {
               Salesperson : 'Admin',
               "Total Amount (THB)" : "150,000.50",
               "Document Status" : "Released",
-              "Shipping Status" : "0%"
+              "Shipping Status" : "0%",
+              id:'2'
             }
           ]
         })
@@ -110,7 +114,8 @@ class MainField extends React.Component {
               "Salesperson": "Admin",
               "Total Amount (THB)" : "150,000.50",
               Status : 'Open',
-              "Last Update" : "11/10/2017 17:00"
+              "Last Update" : "11/10/2017 17:00",
+              id:'1'
             },
             {
               "Quotation No." : 'SQ0002',
@@ -119,7 +124,8 @@ class MainField extends React.Component {
               "Salesperson": "Admin",
               "Total Amount (THB)" : "150,000.50",
               Status : 'Open',
-              "Last Update" : "11/10/2017 17:00"
+              "Last Update" : "11/10/2017 17:00",
+              id:'2'
             }
           ]
         })

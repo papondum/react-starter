@@ -516,14 +516,14 @@ class Quotation extends React.Component {
                       </div>
                   </div>
                   <hr style={{margin : 0}}/>
-                  <div className = 'top-content'> 
+                  <div className = 'top-content'>
                       {this.state.selectedTab=='General'? this.getGeneralContent():this.getContactContent()}
                   </div>
               </div>
               <hr style={{margin : 0}}/>
               <div className="flex flex-row space-bet" >
                   <div className='tab-quo active'>Content</div>
-                  <div className='action-group-btn'>
+                  <div className='action-group-btn-content'>
                       <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
                       <button><img src={deleteIcon}/></button>
                   </div>

@@ -2,12 +2,14 @@ import React from 'react';
 import './style.scss';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux'
+import { post } from '../../../utils'
 import * as DeleteActions from '../../actions/deleteCall'
 class ContentForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          checkedItem:[]
+          checkedItem: [],
+          thisLine: []
         }
     }
 
@@ -28,6 +30,7 @@ class ContentForm extends React.Component {
     }
 
     _contentGen(content){
+      console.log(content);
       var result = []
       for(var i=0 ;i<content.length;i++){
         let eachRow = this._getEachVal(content[i])
@@ -37,6 +40,7 @@ class ContentForm extends React.Component {
     }
 
     _getEachVal(obj){
+      console.log(obj);
       var result=[]
       for(var o in obj){
         if (o == 'id') {
@@ -47,6 +51,12 @@ class ContentForm extends React.Component {
       }
       result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
       return result
+    }
+
+    componentWillReceiveProps(nextProps){
+      if(this.props.type!==nextProps.type){
+        this.setState({checkedItem:[]})
+      }
     }
 
     ifChecked(id){
@@ -60,6 +70,23 @@ class ContentForm extends React.Component {
         if(this.state.checkedItem.length==0){
           //send existing state checked id state
 
+
+          //post('/api/sales/quotation/line', {'quotation_id': this.refs[id].value})
+          //.then(response=>this.setState({thisLine:response}))
+
+          let data =  [{
+                        "Order No." : 'SQ0001',
+                        "Order Date": new Date('2015-05-11').toString(),
+                        "P/O No.": "SN59",
+                        "Request Date": new Date('2015-05-11').toString(),
+                        "Customer Name" : "TPBG Inc.",
+                        Salesperson : 'Admin',
+                        "Total Amount (THB)" : "150,000.50",
+                        "Document Status" : "Released",
+                        "Shipping Status" : "0%",
+                        id:'1'
+                      }]
+          this.setState({thisLine:data})
           this.props.checkedSingleItem(this.refs[id].value)
         }
 
@@ -153,23 +180,37 @@ class ContentForm extends React.Component {
                   {this._contentGen(this.props.content)}
               </tbody>
           </table>
-          <div>{this.props.type=='Quotation'? this.renderQuotationLine(): ''}</div>
+          <div>{this.renderLine(this.props.type)}</div>
         </div>)
     }
 
+    renderLine(item){
+      console.log(item);
+      switch (item) {
+        case 'Quatation':
+        console.log('sss');
+          return this.renderQuotationLine()
+          break;
+        case 'Sales Order':
+          return this.renderSalesOrderLine()
+          break;
+        default:
+
+      }
+    }
     renderQuotationLine() {
       return (<div>
           <div className='action-bar'>
-            <h2>Quotation Line(s)</h2>
+              <h2>Quotation Line(s)</h2>
           </div>
           <table>
               <thead>
                   <tr>
-                      {this._headerQuotationGen(this.props.content)}
+                      {this._headerQuotationGen(this.state.thisLine)}
                   </tr>
               </thead>
               <tbody>
-                  {this._quotationLineGen(this.props.content)}
+                  {this._quotationLineGen(this.state.thisLine)}
               </tbody>
           </table>
         </div>)
@@ -179,16 +220,16 @@ class ContentForm extends React.Component {
     renderSalesOrderLine() {
       return (<div>
           <div className='action-bar'>
-            <h2>Sales Order Line(s)</h2>
+              <h2>Sales Order Line(s)</h2>
           </div>
           <table>
               <thead>
                   <tr>
-                      {this._headerSalesOrderGen(this.props.content)}
+                      {this._headerQuotationGen(this.state.thisLine)}
                   </tr>
               </thead>
               <tbody>
-                  {this._salesOrderLineGen(this.props.content)}
+                  {this._quotationLineGen(this.state.thisLine)}
               </tbody>
           </table>
         </div>)
@@ -197,36 +238,36 @@ class ContentForm extends React.Component {
     renderPurchaseOrder(){
       return(
         <div>
-          <div className='action-bar'>
-            <h2>Purchase Order Line(s)</h2>
-          </div>
-          <table>
-              <thead>
-                  <tr>
-                      {this.getHeaderPurchaseOrderLine(this.props.content)}
-                  </tr>
-              </thead>
-              <tbody>
-                  {this.getPurchaseOrderLineContent(this.props.content)}
-              </tbody>
-          </table>
-          {/* <div className="flex flex-space-between">
-            <div className="flex flex-col remark">
-              Remark :
-              <div>
-                <textarea ref="remarkText"></textarea>
-              </div>
+            <div className='action-bar'>
+                <h2>Purchase Order Line(s)</h2>
             </div>
-            <div className="flex">
-              <div className="flex flex-col" style={{marginRight:'10px',textAlign:"end"}}>
+            <table>
+                <thead>
+                    <tr>
+                        {this.getHeaderPurchaseOrderLine(this.props.content)}
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.getPurchaseOrderLineContent(this.props.content)}
+                </tbody>
+            </table>
+            {/* <div className="flex flex-space-between">
+                <div className="flex flex-col remark">
+                Remark :
                 <div>
-                  Total Before Discount :
+                <textarea ref="remarkText"></textarea>
+                </div>
+                </div>
+                <div className="flex">
+                <div className="flex flex-col" style={{marginRight:'10px',textAlign:"end"}}>
+                <div>
+                Total Before Discount :
                 </div>
                 <div>
-                  Discount :
+                Discount :
                 </div>
                 <div>
-                  Taxes : <input type="text" ref="tax" /> %
+                Taxes : <input type="text" ref="tax" /> %
                 </div>
                 <div>
                   Withholding Taxes <input type="text" ref="holdingtax" /> %
@@ -277,13 +318,29 @@ class ContentForm extends React.Component {
       return ''
     }
 
+    // _headerQuotationGen(content){
+    //   var result = []
+    //   for(var i=0 ;i<content.length;i++){
+    //     let eachRow = this._getEachVal(content[i])
+    //     result.push((<tr key = {i}>{eachRow}</tr>))
+    //   }
+    //   return result
+    // }
+
     _headerQuotationGen(content){
-      // var result = []
-      // for(var i=0 ;i<content.length;i++){
-      //   let eachRow = this._getEachVal(content[i])
-      //   result.push((<tr key = {i}>{eachRow}</tr>))
-      // }
-      // return result
+      let genHead=[]
+      if(content.length>0){
+        var head = Object.keys(content[0])
+        genHead = head.map(item=>{
+          if (item == 'id') {
+            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+          } else {
+            return (<td key= {item}>{item}</td>)
+          }
+        })
+        genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
+      }
+        return genHead
     }
 
     _headerSalesOrderGen(content){
@@ -305,12 +362,12 @@ class ContentForm extends React.Component {
     }
 
     _quotationLineGen(content){
-      // var result = []
-      // for(var i=0 ;i<content.length;i++){
-      //   let eachRow = this._getEachVal(content[i])
-      //   result.push((<tr key = {i}>{eachRow}</tr>))
-      // }
-      // return result
+      var result = []
+      for(var i=0 ;i<content.length;i++){
+        let eachRow = this._getEachVal(content[i])
+        result.push((<tr key = {i}>{eachRow}</tr>))
+      }
+      return result
     }
 }
 
