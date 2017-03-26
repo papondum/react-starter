@@ -10,7 +10,7 @@ import Select from 'react-select';
 import { indexOf, find } from 'lodash'
 import 'react-select/dist/react-select.css';
 import './style.scss'
-class Quotation extends React.Component {
+class SalesOrder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,7 +29,7 @@ class Quotation extends React.Component {
             ],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
-          selectedTab: 'Gen',
+          selectedTab: 'General',
           filmType: '',
           filmList:[],
           childItem: [{id:'0001'}],
@@ -415,21 +415,15 @@ class Quotation extends React.Component {
                   <label>Company :</label>
                   <select ref = 'company' value={this.state.state_company} onChange={()=>this.updateParam('company')}>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
               </div>
+
               <div className='input-box flex'>
-                  <label>Customer :</label>
-                  <Select
-                      name="customer"
-                      ref = 'customer'
-                      value={this.state.selectedCustomer}
-                      options={this.state.customerList}
-                      onChange={this.updateSelectedCustomer}
-                      className = 'selector-class'
-                      autosize = {true}
-                  />
-              </div>
-              <div className='input-box flex'>
-                  <label>Date :</label>
+                  <label>Order Date :</label>
                   <input className='flex' type="date" ref='date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}/>
+              </div>
+
+              <div className='input-box flex'>
+                  <label>P/O Number:</label>
+                  <input className='flex' type="text" ref='date' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
               </div>
 
           </div>
@@ -439,7 +433,7 @@ class Quotation extends React.Component {
                   <input className='flex' type="text" ref='payterm' value = {this.state.state_payterm} onChange={()=>this.updateParam('payterm')}/>
               </div>
               <div className='input-box flex'>
-                  <label>Deliver Term :</label>
+                  <label>Invoice To :</label>
                   <input className='flex' type="text" ref='deliver' value = {this.state.state_deliver} onChange={()=>this.updateParam('deliver')}/>
               </div>
           </div>
@@ -494,6 +488,25 @@ class Quotation extends React.Component {
       </div>)
     }
 
+    getContentFromTab(tab){
+      switch (tab) {
+        case 'General':
+          return this.getGeneralContent()
+          break;
+        case 'Contact':
+          return this.getContactContent()
+          break;
+        case 'Ship':
+
+          break;
+        case 'Attachment':
+
+          break;
+        default:
+
+      }
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -511,12 +524,20 @@ class Quotation extends React.Component {
                       <div className={this.state.selectedTab === 'General'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('General')}>
                           General
                       </div>
-                      <div className={this.state.selectedTab === 'Contant'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Contant')}>
+                      <div className={this.state.selectedTab === 'Contact'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Contact')}>
                           Customers Contact
+                      </div>
+                      <div className={this.state.selectedTab === 'Ship'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Ship')}>
+                          Shipment
+                      </div>
+                      <div className={this.state.selectedTab === 'Attach'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attach')}>
+                          Attachment
                       </div>
                   </div>
                   <hr/>
-                  {this.state.selectedTab=='General'? this.getGeneralContent():this.getContactContent()}
+
+                  {this.getContentFromTab(this.state.selectedTab)}
+                  {/* {this.state.selectedTab=='Gen'? this.getGeneralContent():this.getContactContent()} */}
 
               </div>
               <hr/>
@@ -570,4 +591,4 @@ class Quotation extends React.Component {
     }
 
 
-export default Quotation;
+export default SalesOrder;

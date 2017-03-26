@@ -43,7 +43,7 @@ class MainField extends React.Component {
     }
 
     getJson(url){
-      if(url === 'Purchase Order'){
+      if(url === 'Purchase Order'|| url === 'Sales Order'|| url ==='Quatation'){
         this.setState({
           'mainContent': [
             {
@@ -114,7 +114,12 @@ class MainField extends React.Component {
           this.getJson('/api/grade/all')
           break;
         case 'Quotation':
-          this.getJson('/api/sales/quotation/all')
+          // this.getJson('/api/sales/quotation/all')
+          this.getJson('Quatation')
+          break;
+        case 'Sales Order':
+        this.getJson('Sales Order')
+          // this.getJson('/api/sales/quotation/all')
           break;
         case 'Purchase Order':
           this.getJson('Purchase Order')

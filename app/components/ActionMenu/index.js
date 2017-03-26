@@ -23,6 +23,7 @@ import Brand from '../ActionPage/MasterFile/Brand'
 import FilmType from '../ActionPage/MasterFile/FilmType'
 import Grade from '../ActionPage/MasterFile/Grade'
 import Quotation from '../ActionPage/Sales/Quotation'
+import Salesorder from '../ActionPage/Sales/SalesOrder'
 import Purchase from '../ActionPage/Purchase'
 class ActionMenu extends React.Component {
     constructor(props) {
@@ -202,6 +203,18 @@ class ActionMenu extends React.Component {
             refreshAction:'',
           })
           break;
+          case 'Sales Order':
+            this.setState({
+              createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              editAction:()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+              copyAction:'',
+              deleteAction:()=>this.showDeleteModal(),
+              emailAction:'',
+              printAction:'',
+              exportAction:'',
+              refreshAction:'',
+            })
+            break;
         case 'Purchase Order':
           this.setState({
             createAction:()=>this.props.setContent((<Purchase type='create' getContent={(item)=>this.props.getContent(item)}/>)),
