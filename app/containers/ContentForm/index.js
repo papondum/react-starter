@@ -30,11 +30,10 @@ class ContentForm extends React.Component {
     }
 
     _contentGen(content){
-      console.log(content);
       var result = []
       for(var i=0 ;i<content.length;i++){
-        let eachRow = this._getEachVal(content[i])
-        result.push((<tr key = {i}>{eachRow}</tr>))
+          let eachRow = this._getEachVal(content[i])
+              result.push((<tr key = {i}>{eachRow}</tr>))
       }
       return result
     }
@@ -53,13 +52,10 @@ class ContentForm extends React.Component {
       return result
     }
 
-    componentWillReceiveProps(nextProps){
-      if(this.props.type!==nextProps.type){
-        this.setState({checkedItem:[]})
-      }
-    }
 
     ifChecked(id){
+      console.log(this.refs);
+      console.log(id);
       if(this.refs[id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
           this.setState({
@@ -110,7 +106,9 @@ class ContentForm extends React.Component {
 
 
     componentWillReceiveProps(nextProps){
-
+      if(this.props.type!==nextProps.type){
+        this.setState({checkedItem:[]})
+      }
       if(nextProps.deleteCall.userAcc=='active'){
         let obj = {user_id:this.state.checkedItem}
         this.props.deleteItem(obj,'User account')
@@ -168,7 +166,7 @@ class ContentForm extends React.Component {
     }
 
     render() {
-
+      console.log(this._contentGen(this.props.content));
       return (<div>
           <table>
               <thead>
@@ -180,15 +178,13 @@ class ContentForm extends React.Component {
                   {this._contentGen(this.props.content)}
               </tbody>
           </table>
-          <div>{this.renderLine(this.props.type)}</div>
+          <div>{this.state.checkedItem>0? this.renderLine(this.props.type):''}</div>
         </div>)
     }
 
     renderLine(item){
-      console.log(item);
       switch (item) {
-        case 'Quatation':
-        console.log('sss');
+        case 'Quotation':
           return this.renderQuotationLine()
           break;
         case 'Sales Order':
