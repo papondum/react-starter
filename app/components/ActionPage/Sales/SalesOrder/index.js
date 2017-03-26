@@ -46,10 +46,10 @@ class SalesOrder extends React.Component {
 
     _genHeader(type){
       if(type=='create'){
-        return 'Create - Quotaion'
+        return 'Create - Sales Order'
       }
       else if(type=='edit'){
-        return 'Edit - Quotation'
+        return 'Edit - Sales Order'
       }
     }
 
@@ -220,6 +220,8 @@ class SalesOrder extends React.Component {
         customer: this.state.selectedCustomer,
         date: this.refs['date'].value,
         payterm: this.refs['payterm'].value,
+        ponum: this.refs['ponum'].value,
+        invoice: this.refs['invoice'].value,
         deliver: this.refs['deliver'].value,
         status: this.refs['status'].value,
         sale_person: this.refs['salePerson'].value,
@@ -305,8 +307,6 @@ class SalesOrder extends React.Component {
       this.refs['subTotal'+id].value = price * weight
     }
 
-
-
     getChildItem(){
       let items = this.state.childItem
       let result = items.map(i=>{
@@ -358,7 +358,6 @@ class SalesOrder extends React.Component {
       return result
     }
 
-
     addChild(){
       let items = this.state.childItem
       let idNo = ''+(items.length+1)+''
@@ -409,7 +408,7 @@ class SalesOrder extends React.Component {
     }
 
     getGeneralContent(){
-      return (  <div className="flex flex-row">
+      return (  <div className="flex flex-row ">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Company :</label>
@@ -423,7 +422,7 @@ class SalesOrder extends React.Component {
 
               <div className='input-box flex'>
                   <label>P/O Number:</label>
-                  <input className='flex' type="text" ref='date' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
+                  <input className='flex' type="text" ref='ponum' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
               </div>
 
           </div>
@@ -434,7 +433,7 @@ class SalesOrder extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Invoice To :</label>
-                  <input className='flex' type="text" ref='deliver' value = {this.state.state_deliver} onChange={()=>this.updateParam('deliver')}/>
+                  <input className='flex' type="text" ref='invoice' value = {this.state.state_deliver} onChange={()=>this.updateParam('deliver')}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
@@ -452,6 +451,39 @@ class SalesOrder extends React.Component {
                   <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
               </div>
           </div>
+      </div>)
+    }
+
+    getShipment(){
+      return (  <div className="flex flex-row">
+          <div className='flex flex-1 flex-col'>
+              <div className='input-box flex'>
+                  <label>Deliver Terms:</label>
+                  <input className='flex' type="text" ref='date' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
+              </div>
+
+              <div className='input-box flex'>
+                  <label>Ship To:</label>
+                  <input className='flex' type="text" ref='date' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
+              </div>
+
+              <div className='input-box flex'>
+                  <label>Request Deliver Date :</label>
+                  <input className='flex' type="date" ref='date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}/>
+              </div>
+
+          </div>
+          <div className="flex flex-1 flex-col">
+              <div className='input-box flex'>
+                  <label>Actual Deliver Date :</label>
+                  <input className='flex' type="date" ref='payterm' value = {this.state.state_payterm} onChange={()=>this.updateParam('payterm')}/>
+              </div>
+              <div className='input-box flex'>
+                  <label>Actual Deliver Time :</label>
+                  <input className='flex' type="time" ref='deliver' value = {this.state.state_deliver} onChange={()=>this.updateParam('deliver')}/>
+              </div>
+          </div>
+
       </div>)
     }
 
@@ -497,7 +529,7 @@ class SalesOrder extends React.Component {
           return this.getContactContent()
           break;
         case 'Ship':
-
+          return this.getShipment()
           break;
         case 'Attachment':
 
@@ -534,13 +566,15 @@ class SalesOrder extends React.Component {
                           Attachment
                       </div>
                   </div>
-                  <hr/>
+                  <hr style={{margin : 0}}/>
+                  <div className = 'top-content'>
+                      {this.getContentFromTab(this.state.selectedTab)}
+                  </div>
 
-                  {this.getContentFromTab(this.state.selectedTab)}
                   {/* {this.state.selectedTab=='Gen'? this.getGeneralContent():this.getContactContent()} */}
 
               </div>
-              <hr/>
+              <hr style={{margin : 0}}/>
               <div className="flex flex-row space-bet" >
                   <div className='tab-quo active'>Content</div>
                   <div className='action-group-btn'>

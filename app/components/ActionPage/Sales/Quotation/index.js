@@ -29,11 +29,10 @@ class Quotation extends React.Component {
             ],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
-          selectedTab: 'Gen',
+          selectedTab: 'General',
           filmType: '',
           filmList:[],
           childItem: [{id:'0001'}],
-          currentChild: 1,
           state_company:'',
           state_date:'',
           state_payterm:'',
@@ -214,12 +213,11 @@ class Quotation extends React.Component {
     }
 
     save(){
-      console.log(this.refs['priceListId'])
       //send Quatations
       let obj = Object.assign({},
       {
         company: this.refs['company'].value,
-        customer: this.state.selectedCustomer.value,
+        customer: this.state.selectedCustomer,
         date: this.refs['date'].value,
         payterm: this.refs['payterm'].value,
         deliver: this.refs['deliver'].value,
@@ -304,7 +302,6 @@ class Quotation extends React.Component {
     updateSubTotal(id) {
       let price = this.refs['unitPrice'+id].value;
       let weight = this.refs['weight'+id].value;
-      console.log(id + " is called")
       this.refs['subTotal'+id].value = price * weight
     }
 
@@ -322,7 +319,7 @@ class Quotation extends React.Component {
           return result
         }
         return (<tr key={i.id}>
-            <td><input ref = {'key'+i.id} key={i.id} type='checkbox'/>{i.id}</td>
+            <td><input type='checkbox'/>{i.id}</td>
             <td>
                 <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
                     {this.getFilmTypeOption()}
@@ -355,7 +352,7 @@ class Quotation extends React.Component {
             {/* <td>{this.getBasedPrice(i.id)}</td> */}
             <td>0</td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' ref = {'subTotal'+i.id}/></td>
+            <td><input disabled type='number' ref = {'subTotal'+i.id} value="0"/></td>
         </tr>)
       })
       return result
@@ -363,13 +360,8 @@ class Quotation extends React.Component {
 
 
     addChild(){
-      let currentChild = this.state.currentChild
       let items = this.state.childItem
-      console.log(this.state.childItem)
-      console.log(items.length)
-      // let idNo = ''+(items.length+1)+''
-      let idNo = ''+(currentChild+1)+''
-      console.log(idNo)
+      let idNo = ''+(items.length+1)+''
       if(idNo.length<4){
         for (var i = 0; i < 6-idNo.length; i++) {;
           idNo = "0" + idNo
@@ -378,7 +370,6 @@ class Quotation extends React.Component {
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
       this.setState({childItem:newArr})
-      this.setState({currentChild:currentChild+1})
     }
 
     getCustomerOption(){
@@ -422,7 +413,7 @@ class Quotation extends React.Component {
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Company :</label>
-                  <select ref = 'company' value={this.state.state_company} onChange={()=>this.updateParam('company')}>{this.state.companyList.map(i=> <option value={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'company' value={this.state.state_company} onChange={()=>this.updateParam('company')}>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Customer :</label>
@@ -455,16 +446,16 @@ class Quotation extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option value={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option value={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
               </div>
           </div>
       </div>)
@@ -524,11 +515,12 @@ class Quotation extends React.Component {
                           Customers Contact
                       </div>
                   </div>
-                  <hr/>
-                  {this.state.selectedTab=='General'? this.getGeneralContent():this.getContactContent()}
-
+                  <hr style={{margin : 0}}/>
+                  <div className = 'top-content'> 
+                      {this.state.selectedTab=='General'? this.getGeneralContent():this.getContactContent()}
+                  </div>
               </div>
-              <hr/>
+              <hr style={{margin : 0}}/>
               <div className="flex flex-row space-bet" >
                   <div className='tab-quo active'>Content</div>
                   <div className='action-group-btn'>
@@ -543,7 +535,6 @@ class Quotation extends React.Component {
                               <td><input type='checkbox'/>Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
-                              <td>Grade</td>
                               <td>Thickness</td>
                               <td>Length</td>
                               <td>Weight(Kg)</td>
