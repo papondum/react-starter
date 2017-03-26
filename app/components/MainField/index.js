@@ -48,26 +48,26 @@ class MainField extends React.Component {
         this.setState({
           'mainContent': [
             {
-              no : 111111,
-              orderdate: new Date('2015-05-11').toString(),
-              etd:3333,
-              eta:44444,
-              supplyname : 'hello',
-              buyer : 'hello',
-              total : 100,
-              status : 'waiting',
-              recieve : '100%'
+              "P/O No." : "DEC5910/261",
+              "Order Date": "11/10/2017",
+              ETD: '',
+              ETA: '',
+              "Supplier Name" : 'TGCH Inc.',
+              Buyer : 'Admin',
+              "Total Amount (THB)" : "150,000.50",
+              "Document Status" : "Released",
+              "Receiving Status" : "0%"
             },
             {
-              no : 2222,
-              orderdate:new Date('2014-05-11').toString(),
-              etd:2222,
-              eta:222,
-              supplyname : 'hello',
-              buyer : 'hello',
-              total : 100,
-              status : 'waiting',
-              recieve : '0%'
+              "P/O No." : "DEC5910/260",
+              "Order Date": "11/10/2017",
+              ETD: '',
+              ETA: '',
+              "Supplier Name" : 'TGCH Inc.',
+              Buyer : 'Admin',
+              "Total Amount (THB)" : "150,000.50",
+              "Document Status" : "Released",
+              "Receiving Status" : "0%"
             }
           ]
         })
