@@ -23,12 +23,13 @@ class Purchase extends React.Component {
           length: [],
           basedPrice: '',
           companyList: [
-                { value: 'Siam Nomura Co.,Ltd.', label: 'Siam Nomura Co.,Ltd.' },
-                { value: 'Poly Mirae Co.,Ltd.', label: 'Poly Mirae Co.,Ltd.' },
-                { value : 'Gold Star Line Co.,Ltd.', label : 'Gold Star Line Co.,Ltd.'},
-                { value : 'Lumirror Pet Co.,Ltd.' , label : 'Lumirror Pet Co.,Ltd.'},
-                { value : 'WNP Group Co.,Ltd.', label : 'WNP Group Co.,Ltd.'}
+                { value: 'Siam Nomura Co.,Ltd.', label: 'Siam Nomura Co.,Ltd.', address:'บริษัท สยามโนมูระ จำกัด 169 หมู่ที่ 4 ซอยเทพกาญจนา ถนนเศรษฐกิจ ตำบลแคราย อำเภอกระทุ่มแบน จังหวัดสมุทรสาคร 74110' },
+                { value: 'Poly Mirae Co.,Ltd.', label: 'Poly Mirae Co.,Ltd.',address : 'Poly Mirae Company Limited  9/6 Soi Thamma, Krungkasem Road, Rong muang Pathumwan, Bangkok Thailand 10330' },
+                { value : 'Gold Star Line Co.,Ltd.', label : 'Gold Star Line Co.,Ltd.' ,address : 'Gold Star Line Co.,Ltd. 953 Soi Phetkasem 51, Phetkasem Road Bangkae, Bangkok Thailand'},
+                { value : 'Lumirror Pet Co.,Ltd.' , label : 'Lumirror Pet Co.,Ltd.',address: 'Lumirror Pet Co.,Ltd. 169 Moo 4 Soi Thepkarnchana Bangkae, Bangkok Thailand Sethakij Road, Kaerai, Kratumbaen Samutsakorn, Thailand'},
+                { value : 'WNP Group Co.,Ltd.', label : 'WNP Group Co.,Ltd.', address:'Lumirror Pet Co.,Ltd. WNP Group Co.,Ltd. 106/26 Phahon yothin Road Klong Thanon, Sai mai Bangkok, Thailand '}
             ],
+          supplierList : [],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Confirmed'},{value: 'Ready To Submit'},{value: 'Submitted'}, {value: 'Completed'},{value: 'Canceled'}],
           selectedCompany: '',
           selectedSupplier : '',
@@ -49,7 +50,21 @@ class Purchase extends React.Component {
     }
 
     componentDidMount(){
+      get('/api/supplier/raw')
+      .then((response)=> {
+       if (response.status >= 400) {
+         throw new Error("Bad response from server");
+       }
 
+        let temp = response.map((list) => {
+          return {...list,label : list.name}
+        })
+        this.setState({
+          supplierList : temp
+        })
+        console.log(this.state.supplierList);
+       })
+       .catch(err=>console.log(err))
     }
 
     save(){
@@ -62,10 +77,25 @@ class Purchase extends React.Component {
         this.setState({
           selectedCompany : newVal.label
         })
+        this.refs.invoice.value = newVal.address
       }
       else{
         this.setState({
           selectedCompany : ''
+        })
+        this.refs.invoice.value = ""
+      }
+    }
+
+    updateSelectedSupplier(newVal){
+      if(newVal){
+        this.setState({
+          selectedSupplier : newVal.label
+        })
+      }
+      else{
+        this.setState({
+          selectedSupplier : ''
         })
       }
     }
@@ -91,7 +121,7 @@ class Purchase extends React.Component {
                     name="supplier"
                     ref = 'supplierSelect'
                     value={this.state.selectedSupplier}
-                    options={this.state.companyList}
+                    options={this.state.supplierList}
                     onChange={(selected) => this.updateSelectedSupplier(selected)}
                     className = 'selector-class'
                     autosize = {true}
