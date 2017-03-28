@@ -33,6 +33,7 @@ class Quotation extends React.Component {
           filmType: '',
           filmList:[],
           childItem: [{id:'0001'}],
+          currentChild: 1,
           state_company:'',
           state_date:'',
           state_payterm:'',
@@ -40,6 +41,10 @@ class Quotation extends React.Component {
           state_status:'',
           state_salePerson:'',
           state_priceListId:'',
+          total_before_discount: 0,
+          taxes: 0,
+          wotaxes: 0,
+          total: 0
         }
         this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
@@ -217,7 +222,7 @@ class Quotation extends React.Component {
       let obj = Object.assign({},
       {
         company: this.refs['company'].value,
-        customer: this.state.selectedCustomer,
+        customer: this.state.selectedCustomer.value,
         date: this.refs['date'].value,
         payterm: this.refs['payterm'].value,
         deliver: this.refs['deliver'].value,
@@ -248,10 +253,13 @@ class Quotation extends React.Component {
         })
       })
 
+      console.log("Booooooooo")
       console.log(obj)
       post('/api/sales/quotation/create',obj)
       .then(response => {
         console.log(response);
+
+        this.props.getContent('Quotation')
       })
       .catch(err=>console.log(err))
     }
@@ -302,7 +310,105 @@ class Quotation extends React.Component {
     updateSubTotal(id) {
       let price = this.refs['unitPrice'+id].value;
       let weight = this.refs['weight'+id].value;
-      this.refs['subTotal'+id].value = price * weight
+      if (price && weight) {
+        console.log("Set")
+        this.refs['subTotal'+id].value = price * weight
+      } else {
+        this.refs['subTotal'+id].value = 0
+      }
+
+      var total_before_discount = 0.0
+      this.state.childItem.map(i=> {
+        let total = this.refs['subTotal'+i.id].value;
+        if (total > 0) {
+          total_before_discount += parseFloat(total)
+        }
+      })
+      this.setState({total_before_discount: total_before_discount})
+      console.log(total_before_discount)
+      this.updateAll()
+    }
+
+    updateAll() {
+      var total = parseFloat(this.state.total_before_discount)
+      console.log("total_before_discount: " + total)
+      let discount = this.refs['discount'].value;
+      if ( discount > 0 ) {
+        total = total - parseFloat(discount)
+      }
+      console.log("discount: " + discount)
+      console.log("total after discount: " + total)
+      let total_after_discount = total
+      let wotaxes = this.refs['wotaxes'].value;
+      if ( wotaxes > 0 ) {
+        let w = (total_after_discount * wotaxes / 100)
+        this.setState({wotaxes: w})
+        total = total - parseFloat(w)
+      }
+      console.log("wotaxes: " + wotaxes)
+      console.log("total after wotaxes: " + total)
+      let taxes = this.refs['taxes'].value;
+      if ( taxes > 0 ) {
+        let t = (total_after_discount * taxes / 100)
+        this.setState({taxes: t})
+        total = total + parseFloat(t)
+      }
+      console.log("taxes: " + taxes)
+      console.log("total after taxes: " + total)
+
+      this.setState({total: total})
+    }
+
+    updateDiscount() {
+      console.log("updateDiscount")
+      let total_before_discount = parseFloat(this.state.total_before_discount)
+      this.setState({discount: total_before_discount - this.refs['discount'].value})
+      this.updateWithholdingTax()
+    }
+
+    updateWithholdingTax() {
+      console.log("updateWithholdingTax")
+      let total_before_discount = this.state.discount
+      let taxP = this.refs['wotaxes'].value;
+
+      let tax = (total_before_discount * taxP / 100)
+      console.log(tax)
+      this.setState({wotaxes: tax})
+      this.updateTax()
+    }
+
+    updateTax() {
+      console.log("updateTax")
+      let total_before_discount = this.state.discount
+      let taxP = this.refs['taxes'].value;
+
+      let tax = (total_before_discount * taxP / 100)
+      this.setState({taxes: tax})
+      this.updateTotal()
+
+    }
+
+    updateTotal() {
+      var total = parseFloat(this.state.total_before_discount)
+      console.log("total value: " + total)
+      let discount = this.refs['discount'].value;
+      console.log("discount value: " + discount)
+      if (discount > 0) {
+        total = total - parseInt(discount)
+      }
+      console.log("discount: " + total)
+      var wotaxes = parseFloat(this.state.wotaxes)
+      console.log("wotaxes value: " + wotaxes)
+      if (wotaxes > 0) {
+        total = total - wotaxes
+      }
+      console.log("wotaxes: " + total)
+      var taxes = this.state.taxes
+      if (taxes > 0) {
+        total = total + taxes
+      }
+      console.log("taxes: " + total)
+      this.setState({total: total})
     }
 
 
@@ -352,7 +458,7 @@ class Quotation extends React.Component {
             {/* <td>{this.getBasedPrice(i.id)}</td> */}
             <td>0</td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' ref = {'subTotal'+i.id} value="0"/></td>
+            <td><input disabled type='number' ref = {'subTotal'+i.id}/></td>
         </tr>)
       })
       return result
@@ -360,8 +466,12 @@ class Quotation extends React.Component {
 
 
     addChild(){
+      let currentChild = this.state.currentChild
       let items = this.state.childItem
-      let idNo = ''+(items.length+1)+''
+      // let idNo = ''+(items.length+1)+''
+      let idNo = ''+(currentChild+1)+''
+
+      console.log(idNo)
       if(idNo.length<4){
         for (var i = 0; i < 6-idNo.length; i++) {;
           idNo = "0" + idNo
@@ -370,6 +480,7 @@ class Quotation extends React.Component {
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
       this.setState({childItem:newArr})
+      this.setState({currentChild:currentChild+1})
     }
 
     getCustomerOption(){
@@ -446,16 +557,16 @@ class Quotation extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option value={i.value}>{i.label}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option value={i.value}>{i.label}</option>)}</select>
               </div>
           </div>
       </div>)
@@ -535,6 +646,7 @@ class Quotation extends React.Component {
                               <td><input type='checkbox'/>Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
+                              <td>Grade</td>
                               <td>Thickness</td>
                               <td>Length</td>
                               <td>Weight(Kg)</td>
@@ -552,18 +664,29 @@ class Quotation extends React.Component {
               <div className = 'flex create-quo-btm'>
                   <div className = 'flex-1'>
                       <p>Remarks</p>
-                      <input type = 'textarea' ref = 'remarks' />
+                      <textarea rows="5" cols="40" ref = 'remarks' />
                   </div>
                   <div className = 'flex-1'>
                       <p>Revise Message</p>
-                      <input type = 'text' ref = 'revisemessage'/>
+                      <input type = 'text' ref = 'revisemessage' size="50"/>
                   </div>
                   <div className = 'flex-1'>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp; <span>val</span></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount'/></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Taxes<input type = 'number' ref = 'taxes'/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Withholding Taxes<input type = 'number' ref = 'wotaxes '/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>val</span></div>
+                      <div className = 'flex-row flex'>
+                      <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
+                      <span>{this.state.total_before_discount}</span></div>
+updateWithholdingTax
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount' onChange={()=>this.updateAll()}/></div>
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Taxes
+                        <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll()}/>%</span>&nbsp;&nbsp;&nbsp;
+                        <span>{this.state.taxes}</span></div>
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
+                        <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll()}/>%</span>&nbsp;&nbsp;&nbsp;
+                        <span>{this.state.wotaxes}</span></div>
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
                   </div>
               </div>
           </div>)
