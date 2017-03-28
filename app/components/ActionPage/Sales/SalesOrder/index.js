@@ -589,6 +589,7 @@ class SalesOrder extends React.Component {
                               <td><input type='checkbox'/>Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
+                              <td>Grade</td>
                               <td>Thickness</td>
                               <td>Length</td>
                               <td>Weight(Kg)</td>
