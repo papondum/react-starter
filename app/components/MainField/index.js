@@ -136,6 +136,7 @@ class MainField extends React.Component {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
           }
+          console.log(response)
           this.setState({'mainContent': response})
         })
         .catch(err=>console.log(err))
@@ -173,8 +174,8 @@ class MainField extends React.Component {
           this.getJson('/api/grade/all')
           break;
         case 'Quotation':
-          // this.getJson('/api/sales/quotation/all')
-          this.getJson('Quatation')
+          this.getJson('/api/sales/quotation/all')
+          // this.getJson('Quatation')
           break;
         case 'Sales Order':
           this.getJson('Sales Order')

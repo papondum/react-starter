@@ -33,7 +33,11 @@ class ContentForm extends React.Component {
       var result = []
       for(var i=0 ;i<content.length;i++){
           let eachRow = this._getEachVal(content[i])
-              result.push((<tr key = {i}>{eachRow}</tr>))
+          // working on here -> detect click in each row and send id to rowClicked function
+          console.log("Phakin")
+          console.log(eachRow)
+          console.log(content[i])
+          result.push((<tr onClick={()=>this.rowClicked(content[i])} key = {i}>{eachRow}</tr>))
       }
       return result
     }
@@ -50,6 +54,11 @@ class ContentForm extends React.Component {
       }
       result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
       return result
+    }
+
+    rowClicked(i) {
+      console.log(this.props.content)
+      console.log(i)
     }
 
 
