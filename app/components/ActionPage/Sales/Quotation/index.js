@@ -233,6 +233,12 @@ class Quotation extends React.Component {
         customer_tel: this.state.tel,
         customer_fax: this.state.fax,
         customer_email: this.state.email,
+        discount: this.refs['discount'].value ? this.refs['discount'].value : 0,
+        tax: this.refs['taxes'].value ? this.refs['taxes'].value : 0,
+        wotax: this.refs['wotaxes'].value ? this.refs['wotaxes'].value : 0,
+        total: this.state.total ? this.state.total : 0,
+        revise_message: this.refs['revise_message'].value,
+        remark: this.refs['remark'].value,
         content:// list of content
         this.state.childItem.map(i=>
         {return Object.assign({},{
@@ -245,7 +251,7 @@ class Quotation extends React.Component {
             length: this.refs['length'+i.id].value,
             weight: this.refs['weight'+i.id].value,
             remark: this.refs['remark'+i.id].value,
-            based_price: this.state.basedPrice,//   need select id
+            based_price: this.state.basedPrice ? this.state.basedPrice : 0,//   need select id
             unitprice: this.refs['unitPrice'+i.id].value,
             subtotal: this.refs['subTotal'+i.id].value,
           }
@@ -657,7 +663,7 @@ class Quotation extends React.Component {
                               <td>Thickness</td>
                               <td>Length</td>
                               <td>Weight(Kg)</td>
-                              <td>Remarks</td>
+                              <td>Remark</td>
                               <td>Based Price</td>
                               <td>Unit Price(THB/Kg)</td>
                               <td>Subtotal(THB)</td>
@@ -671,17 +677,16 @@ class Quotation extends React.Component {
               <div className = 'flex create-quo-btm'>
                   <div className = 'flex-1'>
                       <p>Remarks</p>
-                      <textarea rows="5" cols="40" ref = 'remarks' />
+                      <textarea rows="5" cols="40" ref = 'remark' />
                   </div>
                   <div className = 'flex-1'>
                       <p>Revise Message</p>
-                      <input type = 'text' ref = 'revisemessage' size="50"/>
+                      <input type = 'text' ref = 'revise_message' size="50"/>
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
                       <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
                       <span>{this.state.total_before_discount}</span></div>
-updateWithholdingTax
                       <div className = 'flex-row flex'>
                         <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
                       <div className = 'flex-row flex'>
