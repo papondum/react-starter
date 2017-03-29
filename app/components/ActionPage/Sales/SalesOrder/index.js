@@ -34,12 +34,18 @@ class SalesOrder extends React.Component {
           filmList:[],
           childItem: [{id:'0001'}],
           state_company:'',
-          state_date:'',
+          state_orderdate:'',
+          state_ponumber:'',
           state_payterm:'',
-          state_deliver:'',
+          state_invoice:'',
           state_status:'',
           state_salePerson:'',
-          state_priceListId:'',
+          state_pricelist:'',
+          state_deliverterm: '',
+          state_shipto: '',
+          state_requestdeliverdate: '',
+          state_actualdeliverdate: '',
+          state_actualdelivertime: '',
         }
         this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
@@ -216,21 +222,22 @@ class SalesOrder extends React.Component {
       //send Quatations
       let obj = Object.assign({},
       {
-        company: this.refs['company'].value,
         customer: this.state.selectedCustomer,
-        date: this.refs['date'].value,
+        order_date: this.refs['orderdate'].value,
+        po_num: this.refs['ponumber'].value,
         payterm: this.refs['payterm'].value,
-        ponum: this.refs['ponum'].value,
         invoice: this.refs['invoice'].value,
-        deliver: this.refs['deliver'].value,
         status: this.refs['status'].value,
         sale_person: this.refs['salePerson'].value,
-        price_listId: this.refs['priceListId'].value,
-        customer_contact: this.state.contact,
-        customer_tel: this.state.tel,
-        customer_fax: this.state.fax,
-        customer_email: this.state.email,
-        content:// list of content
+        price_listId: this.refs['pricelist'].value,
+        customer:{
+          customer_contact: this.state.contact,
+          customer_tel: this.state.tel,
+          customer_fax: this.state.fax,
+          customer_email: this.state.email,
+        },
+
+        content:
         this.state.childItem.map(i=>
         {return Object.assign({},{
           id:i.id,
@@ -238,18 +245,36 @@ class SalesOrder extends React.Component {
             film_type:  this.refs['filmType'+i.id].value,
             brand_type: this.refs['brandType'+i.id].value,
             grade_type: this.refs['gradeType'+i.id].value,
+            width:  this.refs['width'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
+            order_qty: this.refs['order_qty'+i.id].value ,
+            total_weight: this.refs['total_weight'+i.id].value, //need some val>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             weight: this.refs['weight'+i.id].value,
-            remark: this.refs['remark'+i.id].value,
             based_price: this.state.basedPrice,//   need select id
-            unitprice: this.refs['unitPrice'+i.id].value,
             subtotal: this.refs['subTotal'+i.id].value,
+            unitprice: this.refs['unitPrice'+i.id].value,
+            remark: this.refs['remark'+i.id].value,
           }
           })
-        })
-      })
+        }),
+        remarks: this.refs['remarks'].value,
+        revisemessage: this.refs['remarks'].value,
+        totalbefore:  this.refs['tatalbefore'].value ,
+        discount: this.refs['discount'].value ,
+        taxes:  this.refs['taxes'].value ,
+        withhold: this.refs['withhold'].value ,
+        total:  this.refs['total'].value ,
 
+        shipment:{
+          deliverterm:  this.refs['deliverterm'].value,
+          shipto: this.refs['shipto'].value ,
+          requestdeliverdate: this.refs['requestdeliverdate'].value ,
+          actualdeliverdate:  this.refs['actualdeliverdate'].value ,
+          actualdelivertime:  this.refs['actualdelivertime'].value
+        },
+        attachment:[]
+      })
       console.log(obj)
       post('/api/sales/quotation/create',obj)
       .then(response => {
@@ -331,6 +356,9 @@ class SalesOrder extends React.Component {
                 </select>
             </td>
             <td>
+                <input type='number' ref = {'width'+i.id}/>
+            </td>
+            <td>
                 <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('thickNess'+i.id))}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
@@ -346,7 +374,9 @@ class SalesOrder extends React.Component {
                     {this.getLengthOption(i.id)}
                 </select>
             </td>
+            <td><input type='number' ref = {'order_qty'+i.id}/></td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}} type='number' ref = {'weight'+i.id}/></td>
+            {/* <td><input type='number' ref = {'weight'+i.id}/></td> */}
             <td><input type='text' ref = {'remark'+i.id}/></td>
 
             {/* <td>{this.getBasedPrice(i.id)}</td> */}
@@ -411,18 +441,26 @@ class SalesOrder extends React.Component {
       return (  <div className="flex flex-row ">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
-                  <label>Company :</label>
-                  <select ref = 'company' value={this.state.state_company} onChange={()=>this.updateParam('company')}>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                  <label>Customer :</label>
+                  <Select
+                      name="customer"
+                      ref = 'customer'
+                      value={this.state.selectedCustomer}
+                      options={this.state.customerList}
+                      onChange={this.updateSelectedCustomer}
+                      className = 'selector-class'
+                      autosize = {true}
+                  />
               </div>
 
               <div className='input-box flex'>
                   <label>Order Date :</label>
-                  <input className='flex' type="date" ref='date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}/>
+                  <input className='flex' type="date" ref='orderdate' value = {this.state.state_orderdate} onChange={()=>this.updateParam('orderdate')}/>
               </div>
 
               <div className='input-box flex'>
                   <label>P/O Number:</label>
-                  <input className='flex' type="text" ref='ponum' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
+                  <input className='flex' type="text" ref='ponumber' value = {this.state.state_ponumber} onChange={()=>this.updateParam('ponumber')}/>
               </div>
 
           </div>
@@ -433,7 +471,7 @@ class SalesOrder extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Invoice To :</label>
-                  <input className='flex' type="text" ref='invoice' value = {this.state.state_deliver} onChange={()=>this.updateParam('deliver')}/>
+                  <input className='flex' type="text" ref='invoice' value = {this.state.state_deliver} onChange={()=>this.updateParam('invoice')}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
@@ -448,7 +486,7 @@ class SalesOrder extends React.Component {
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
               </div>
           </div>
       </div>)
@@ -459,28 +497,28 @@ class SalesOrder extends React.Component {
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Deliver Terms:</label>
-                  <input className='flex' type="text" ref='date' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
+                  <input className='flex' type="text" ref='deliverterm' value = {this.state.state_deliverterm} onChange={()=>this.updateParam('deliverterm')}/>
               </div>
 
               <div className='input-box flex'>
                   <label>Ship To:</label>
-                  <input className='flex' type="text" ref='date' value = {this.state.state_ponum} onChange={()=>this.updateParam('date')}/>
+                  <input className='flex' type="text" ref='shipto' value = {this.state.state_shipto} onChange={()=>this.updateParam('shipto')}/>
               </div>
 
               <div className='input-box flex'>
                   <label>Request Deliver Date :</label>
-                  <input className='flex' type="date" ref='date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}/>
+                  <input className='flex' type="date" ref='requestdeliverdate' value = {this.state.state_requestdeliverdate} onChange={()=>this.updateParam('requestdeliverdate')}/>
               </div>
 
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Actual Deliver Date :</label>
-                  <input className='flex' type="date" ref='payterm' value = {this.state.state_payterm} onChange={()=>this.updateParam('payterm')}/>
+                  <input className='flex' type="date" ref='actualdeliverdate' value = {this.state.state_actualdeliverdate} onChange={()=>this.updateParam('actualdeliverdate')}/>
               </div>
               <div className='input-box flex'>
                   <label>Actual Deliver Time :</label>
-                  <input className='flex' type="time" ref='deliver' value = {this.state.state_deliver} onChange={()=>this.updateParam('deliver')}/>
+                  <input className='flex' type="time" ref='actualdelivertime' value = {this.state.state_actualdelivertime} onChange={()=>this.updateParam('actualdelivertime')}/>
               </div>
           </div>
 
@@ -589,14 +627,16 @@ class SalesOrder extends React.Component {
                               <td><input type='checkbox'/>Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
+                              <td>Width</td>
                               <td>Grade</td>
                               <td>Thickness</td>
                               <td>Length</td>
-                              <td>Weight(Kg)</td>
-                              <td>Remarks</td>
+                              <td>Order Qty. (Roll)</td>
+                              <td>Total Weight(Kg)</td>
                               <td>Based Price</td>
                               <td>Unit Price(THB/Kg)</td>
                               <td>Subtotal(THB)</td>
+                              <td>Remarks</td>
                           </tr>
                       </thead>
                       <tbody>
@@ -614,11 +654,11 @@ class SalesOrder extends React.Component {
                       <input type = 'text' ref = 'revisemessage'/>
                   </div>
                   <div className = 'flex-1'>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp; <span>val</span></div>
+                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp; <span ref = 'tatalbefore'>val</span></div>
                       <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount'/></div>
                       <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Taxes<input type = 'number' ref = 'taxes'/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
                       <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Withholding Taxes<input type = 'number' ref = 'wotaxes '/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>val</span></div>
+                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span ref = 'total'>val</span></div>
                   </div>
               </div>
           </div>)
