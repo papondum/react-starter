@@ -34,6 +34,10 @@ class Quotation extends React.Component {
           filmList:[],
           childItem: [{id:'0001'}],
           currentChild: 1,
+          state_contact:'',
+          state_tel:'',
+          state_fax:'',
+          state_email:'',
           state_company:'',
           state_date:'',
           state_payterm:'',
@@ -92,7 +96,6 @@ class Quotation extends React.Component {
           throw new Error("Bad response from server");
         }
         this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
-
       })
       .catch(err=>console.log(err))
     }
@@ -211,28 +214,71 @@ class Quotation extends React.Component {
     }
 
     componentDidMount(){
+      this.props.type=='edit'? this._getEditItem():''
       this.getCustomerList()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
     }
 
+    _getEditItem(){
+      post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
+      .then((response)=>{
+        this._setInitialVal(response)
+        console.log(response);
+      })
+    }
+
+    _setInitialVal(res){
+      console.log('res::',res);
+      let item = res[0]
+      let customer = this.state.customerList.find((i) => i.value==item.customer_id)
+      let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
+      let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
+      //console.log('customer',customer,this.state.customerList);      // customer state disppear
+      this.setState({
+        state_contact:item.contact,
+        selectedCustomer:customer,
+        state_tel: item.customer ? item.customer.tel:item.tel ,
+        state_fax: item.customer ? item.customer.fax:item.fax,
+        state_email: item.customer? item.customer.email:item.email,
+        state_company: item.company,
+        state_date: item.quotation_date,
+        state_payterm: item.payment_term,
+        state_deliver: item.delivery_term,
+        state_status: item.status,
+        state_salePerson: saleperson,
+        state_priceListId: pricelist,
+        total: item.total,
+        childItem: item.contents
+
+      })
+
+      this.refs['discount'].value = item.discount ||0
+      this.refs['taxes'].value = item.tax ||0
+      this.refs['wotaxes'].value = item.wotax ||0
+      this.refs['revise_message'].value= item.revise_message
+      this.refs['remark'].value= item.remark
+    }
+
     save(){
       //send Quatations
       let obj = Object.assign({},
       {
-        company: this.refs['company'].value,
+        company: this.state.state_company,
         customer: this.state.selectedCustomer.value,
-        date: this.refs['date'].value,
-        payterm: this.refs['payterm'].value,
-        deliver: this.refs['deliver'].value,
-        status: this.refs['status'].value,
-        sale_person: this.refs['salePerson'].value,
-        price_listId: this.refs['priceListId'].value,
-        customer_contact: this.state.contact,
-        customer_tel: this.state.tel,
-        customer_fax: this.state.fax,
-        customer_email: this.state.email,
+        date: this.state.state_date,
+        payterm: this.state.state_payterm,
+        deliver: this.state.state_deliver,
+        status:   this.state.states_staus,
+        sale_person: this.state.state_salePerson,
+        price_listId: this.state.state_priceListId,
+
+        customer_contact: this.state.state_contact,
+        customer_tel: this.state.state_tel,
+        customer_fax: this.state.state_fax,
+        customer_email: this.state.state_email,
+
         discount: this.refs['discount'].value ? this.refs['discount'].value : 0,
         tax: this.refs['taxes'].value ? this.refs['taxes'].value : 0,
         wotax: this.refs['wotaxes'].value ? this.refs['wotaxes'].value : 0,
@@ -240,28 +286,29 @@ class Quotation extends React.Component {
         revise_message: this.refs['revise_message'].value,
         remark: this.refs['remark'].value,
         content:// list of content
-        this.state.childItem.map(i=>
-        {return Object.assign({},{
-          id:i.id,
-          content:{
-            film_type:  this.refs['filmType'+i.id].value,
-            brand_type: this.refs['brandType'+i.id].value,
-            grade_type: this.refs['gradeType'+i.id].value,
-            thickness: this.refs['thickNess'+i.id].value,
-            length: this.refs['length'+i.id].value,
-            weight: this.refs['weight'+i.id].value,
-            remark: this.refs['remark'+i.id].value,
-            based_price: this.state.basedPrice ? this.state.basedPrice : 0,//   need select id
-            unitprice: this.refs['unitPrice'+i.id].value,
-            subtotal: this.refs['subTotal'+i.id].value,
-          }
+          this.state.childItem.map(i=>{
+            return Object.assign({},{
+              id:i.id,
+              content:{
+                film_type:  this.refs['filmType'+i.id].value,
+                brand_type: this.refs['brandType'+i.id].value,
+                grade_type: this.refs['gradeType'+i.id].value,
+                thickness: this.refs['thickNess'+i.id].value,
+                length: this.refs['length'+i.id].value,
+                weight: this.refs['weight'+i.id].value,
+                remark: this.refs['remark'+i.id].value,
+                based_price: this.state.basedPrice ? this.state.basedPrice : 0,//   need select id
+                unitprice: this.refs['unitPrice'+i.id].value,
+                subtotal: this.refs['subTotal'+i.id].value,
+              }
           })
         })
       })
 
       console.log("Booooooooo")
       console.log(obj)
-      post('/api/sales/quotation/create',obj)
+      let url = this.props.type=='create'? '/api/sales/quotation/create':'/api/sales/quotation/update'
+      post(url, obj)
       .then(response => {
         console.log(response);
 
@@ -437,41 +484,60 @@ class Quotation extends React.Component {
           }
           return result
         }
+        let genValFromEdit = (id, type) =>{
+          switch (type) {
+            case 'film':
+              let item = this.state.filmList.find((i)=>i.id==id)
+              console.log(item);
+              return item? item.label:''
+              break;
+            case 'brand':
+              let item2 = this.state.brandList.find((i)=>i.id==id)
+              return item2
+              break;
+            case 'grade':
+              let item3 = this.state.gradeList.find((i)=>i.id==id)
+              return item3
+              break;
+            default:
+
+          }
+        }
         return (<tr key={i.id}>
             <td><input type='checkbox'/>{i.id}</td>
             <td>
-                <select ref = {'filmType'+i.id} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
+                <select ref = {'filmType'+i.id} value = {'CPP'} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
                     {this.getFilmTypeOption()}
                 </select>
             </td>
             <td>
-                <select ref = {'brandType'+i.id} key={i.id} onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('gradeType'+i.id))}>
+                <select ref = {'brandType'+i.id} value = {genValFromEdit(i.id, 'brand')} key={i.id} onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('gradeType'+i.id))}>
                     {this.getBrandTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('thickNess'+i.id))}>
+                <select ref = {'gradeType'+i.id} value = {genValFromEdit(i.id, 'grade')} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('thickNess'+i.id))}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'], i.id), ('length'+i.id))
+                <select ref = {'thickNess'+i.id} value = {i.thickNess? i.thickNess:''} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'], i.id), ('length'+i.id))
                 }>
                     {this.getThickNessOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id} key={i.id}>
+                <select ref = {'length'+i.id} value = {i.product_length? i.product_length:''} key={i.id}>
                     {this.getLengthOption(i.id)}
                 </select>
             </td>
-            <td><input onChange={() => {this.updateSubTotal(i.id)}} type='number' ref = {'weight'+i.id}/></td>
-            <td><input type='text' ref = {'remark'+i.id}/></td>
+            <td><input onChange={() => {this.updateSubTotal(i.id)}} value = {i.weight? i.weight:''} type='number' ref = {'weight'+i.id}/></td>
+            <td><input type='text' ref = {'remark'+i.id}value = {i.remark? i.remark:''} /></td>
 
             {/* <td>{this.getBasedPrice(i.id)}</td> */}
             <td>0</td>
-            <td><input onChange={() => {this.updateSubTotal(i.id)}}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' ref = {'subTotal'+i.id}/></td>
+            <td><input onChange={() => {this.updateSubTotal(i.id)}} value = {i.sub_total? i.sub_total:''}  type='number' ref = {'unitPrice'+i.id}/></td>
+            <td><input disabled type='number' value = {i.sub_total? i.sub_total:''} ref = {'subTotal'+i.id}/></td>
         </tr>)
       })
       return result
@@ -494,13 +560,6 @@ class Quotation extends React.Component {
       let newArr = items.concat(newObj)
       this.setState({childItem:newArr})
       this.setState({currentChild:currentChild+1})
-    }
-
-    getCustomerOption(){
-      let result = this.state.customerList.map(i=>{re
-        return (<option key = {i.id} value = {i.id}>{i.name}</option>)
-      })
-      return result
     }
 
     updateSelectedCustomer(newVal) {
@@ -594,22 +653,22 @@ class Quotation extends React.Component {
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Contact Person :</label>
-                  <input className='flex' type="text" ref='contact' value={this.state.contact}/>
+                  <input className='flex' type="text" ref='contact' value={this.state.state_contact} onChange={()=>this.updateParam('contact')}/>
               </div>
               <div className='input-box flex'>
                   <label>Tel :</label>
-                  <input className='flex' type="text" ref='tel'  value={this.state.tel}/>
+                  <input className='flex' type="text" ref='tel'  value={this.state.state_tel} onChange={()=>this.updateParam('tel')}/>
               </div>
               <div className='input-box flex'>
                   <label>Fax :</label>
-                  <input className='flex' type="text" ref='fax' value={this.state.fax}/>
+                  <input className='flex' type="text" ref='fax' value={this.state.state_fax} onChange={()=>this.updateParam('fax')}/>
               </div>
 
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Email :</label>
-                  <input className='flex' type="text" ref='email' value={this.state.email}/>
+                  <input className='flex' type="text" ref='email' value={this.state.state_email}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
@@ -619,7 +678,6 @@ class Quotation extends React.Component {
     }
 
     render() {
-      console.log('editItem = ',this.props.editItem);
         return(
           <div className='page-style'>
               <div className='page-head'>
@@ -689,7 +747,7 @@ class Quotation extends React.Component {
                       <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
                       <span>{this.state.total_before_discount}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
+                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
                       <div className = 'flex-row flex'>
                         <span className = 'create-quo-btm-input-label-left'>Taxes
                         <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;

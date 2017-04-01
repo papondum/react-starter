@@ -29,6 +29,12 @@ table {
 
 
 }
+.clickable-item {
+  cursor:pointer;
+  &:hover{
+    background-color: #e0e0e0;
+  }
+}
 .flex-1{
   flex:1;
 }

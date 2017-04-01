@@ -31,11 +31,12 @@ class ContentForm extends React.Component {
 
     _contentGen(content){
       var result = []
+
       for(var i=0 ;i<content.length;i++){
           let eachRow = this._getEachVal(content[i],'content')
           // working on here -> detect click in each row and send id to rowClicked function
           let itemId = content[i].id
-          result.push((<tr onClick={()=>this.rowClicked(itemId)} key = {i}>{eachRow}</tr>))
+          result.push((<tr className = {this.props.type =="Quotation"||this.props.type == "Sales Order" ? 'clickable-item':''} onClick={()=>this.rowClicked(itemId)} key = {i}>{eachRow}</tr>))
       }
       return result
     }
@@ -49,13 +50,21 @@ class ContentForm extends React.Component {
           result.push((<td key={o}>{obj[o]}</td>))
         }
       }
-      result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id, type)} type = 'checkbox' value = {obj.id} ref = {type+'_'+obj.id} /></td>))
+      if(type !== 'line'){
+        result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id, type)} type = 'checkbox' value = {obj.id} ref = {type+'_'+obj.id} /></td>))
+      }
       return result
     }
 
     rowClicked(i) {
-      post('/api/sales/quotation/line', {'quotation_id':i})
-      .then(response=>this.setState({thisLine:response}))
+      if(this.props.type == 'Quotation'){
+        post('/api/sales/quotation/line', {'quotation_id':i})
+          .then(response=>this.setState({thisLine:response}))
+      }
+      else if(this.props.type == "Sales Order"){
+        post('/api/sales/order/line', {'order_id':i})
+          .then(response=>this.setState({thisLine:response}))
+      }
 
       //this.setState({thisLine:i})
     }
@@ -324,7 +333,7 @@ class ContentForm extends React.Component {
             return (<td key= {item}>{item}</td>)
           }
         })
-        genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
+        // genHead.unshift((<td key='checkbox'><input type='checkbox'/></td>))
       }
         return genHead
     }

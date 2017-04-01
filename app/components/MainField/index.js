@@ -43,7 +43,6 @@ class MainField extends React.Component {
     }
 
     getJson(url){
-      console.log(url)
       if(url === 'Purchase Order'){
         this.setState({
           'mainContent': [
@@ -104,39 +103,12 @@ class MainField extends React.Component {
           ]
         })
       }
-      else if (url ==='Quatation') {
-        this.setState({
-          'mainContent': [
-            {
-              "Quotation No." : 'SQ0001',
-              "Date": new Date('2015-05-11').toString(),
-              "Customer Name": "Thai Star",
-              "Salesperson": "Admin",
-              "Total Amount (THB)" : "150,000.50",
-              Status : 'Open',
-              "Last Update" : "11/10/2017 17:00",
-              id:'1'
-            },
-            {
-              "Quotation No." : 'SQ0002',
-              "Date": new Date('2015-05-11').toString(),
-              "Customer Name": "Thai Star",
-              "Salesperson": "Admin",
-              "Total Amount (THB)" : "150,000.50",
-              Status : 'Open',
-              "Last Update" : "11/10/2017 17:00",
-              id:'2'
-            }
-          ]
-        })
-      }
       else{
         get(url)
         .then((response)=> {
           if (response.status >= 400) {
             throw new Error("Bad response from server");
           }
-          console.log(response)
           this.setState({'mainContent': response})
         })
         .catch(err=>console.log(err))
@@ -178,8 +150,7 @@ class MainField extends React.Component {
           // this.getJson('Quatation')
           break;
         case 'Sales Order':
-          this.getJson('Sales Order')
-          // this.getJson('/api/sales/quotation/all')
+          this.getJson('/api/sales/order/all')
           break;
         case 'Purchase Order':
           this.getJson('Purchase Order')
