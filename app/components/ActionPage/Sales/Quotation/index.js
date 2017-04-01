@@ -475,7 +475,7 @@ class Quotation extends React.Component {
 
     getChildItem(){
       let items = this.state.childItem
-      let result = items.map(i=>{
+      let result = items.map((i, index)=>{
         let genArg = (arr,id)=>{
           //return as object filmType:val brandType:val
           let result = {}
@@ -489,7 +489,7 @@ class Quotation extends React.Component {
             case 'film':
               let item = this.state.filmList.find((i)=>i.id==id)
               console.log(item);
-              return item? item.label:''
+              return (item? item.id:'')
               break;
             case 'brand':
               let item2 = this.state.brandList.find((i)=>i.id==id)
@@ -503,10 +503,16 @@ class Quotation extends React.Component {
 
           }
         }
+        let indexNo = (i) => {
+          let str = '0000'
+          var index = 4-((i+'').length);
+          str = str.substr(0, index) + (i+1)
+          return str
+        }
         return (<tr key={i.id}>
-            <td><input type='checkbox'/>{i.id}</td>
+            <td><input type='checkbox'/>{indexNo(index)}</td>
             <td>
-                <select ref = {'filmType'+i.id} value = {'CPP'} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
+                <select ref = {'filmType'+i.id} value = {genValFromEdit(i.id, 'film')} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
                     {this.getFilmTypeOption()}
                 </select>
             </td>
@@ -527,7 +533,7 @@ class Quotation extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id} value = {i.product_length? i.product_length:''} key={i.id}>
+                <select ref = {'length'+i.id}  key={i.id}>// value = {i.product_length? i.product_length:''}
                     {this.getLengthOption(i.id)}
                 </select>
             </td>
@@ -552,7 +558,7 @@ class Quotation extends React.Component {
 
       console.log(idNo)
       if(idNo.length<4){
-        for (var i = 0; i < 6-idNo.length; i++) {;
+        for (var i = 0; i < 6-idNo.length; i++) {
           idNo = "0" + idNo
         }
       }
