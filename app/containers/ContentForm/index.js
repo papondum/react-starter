@@ -32,18 +32,15 @@ class ContentForm extends React.Component {
     _contentGen(content){
       var result = []
       for(var i=0 ;i<content.length;i++){
-          let eachRow = this._getEachVal(content[i])
+          let eachRow = this._getEachVal(content[i],'content')
           // working on here -> detect click in each row and send id to rowClicked function
-          console.log("Phakin")
-          console.log(eachRow)
-          console.log(content[i])
-          result.push((<tr onClick={()=>this.rowClicked(content[i])} key = {i}>{eachRow}</tr>))
+          let itemId = content[i].id
+          result.push((<tr onClick={()=>this.rowClicked(itemId)} key = {i}>{eachRow}</tr>))
       }
       return result
     }
 
-    _getEachVal(obj){
-      console.log(obj);
+    _getEachVal(obj,type){
       var result=[]
       for(var o in obj){
         if (o == 'id') {
@@ -52,46 +49,31 @@ class ContentForm extends React.Component {
           result.push((<td key={o}>{obj[o]}</td>))
         }
       }
-      result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id)} type = 'checkbox' value = {obj.id} ref = {obj.id} /></td>))
+      result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id, type)} type = 'checkbox' value = {obj.id} ref = {type+'_'+obj.id} /></td>))
       return result
     }
 
     rowClicked(i) {
-      console.log(this.props.content)
-      console.log(i)
+      post('/api/sales/quotation/line', {'quotation_id':i})
+      .then(response=>this.setState({thisLine:response}))
+
+      //this.setState({thisLine:i})
     }
 
 
-    ifChecked(id){
-      console.log(this.refs);
-      console.log(id);
+    ifChecked(ids, type){
+      let id = type + '_' + ids
       if(this.refs[id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs[id].value)==undefined){
+          let mergeItem = this.state.checkedItem.concat([this.refs[id].value])
           this.setState({
-            checkedItem:this.state.checkedItem.concat([this.refs[id].value])
+            checkedItem:mergeItem
           })
         }
 
         if(this.state.checkedItem.length==0){
           //send existing state checked id state
 
-
-          //post('/api/sales/quotation/line', {'quotation_id': this.refs[id].value})
-          //.then(response=>this.setState({thisLine:response}))
-
-          let data =  [{
-                        "Order No." : 'SQ0001',
-                        "Order Date": new Date('2015-05-11').toString(),
-                        "P/O No.": "SN59",
-                        "Request Date": new Date('2015-05-11').toString(),
-                        "Customer Name" : "TPBG Inc.",
-                        Salesperson : 'Admin',
-                        "Total Amount (THB)" : "150,000.50",
-                        "Document Status" : "Released",
-                        "Shipping Status" : "0%",
-                        id:'1'
-                      }]
-          this.setState({thisLine:data})
           this.props.checkedSingleItem(this.refs[id].value)
         }
 
@@ -175,7 +157,6 @@ class ContentForm extends React.Component {
     }
 
     render() {
-      console.log(this._contentGen(this.props.content));
       return (<div>
           <table>
               <thead>
@@ -187,7 +168,7 @@ class ContentForm extends React.Component {
                   {this._contentGen(this.props.content)}
               </tbody>
           </table>
-          <div>{this.state.checkedItem>0? this.renderLine(this.props.type):''}</div>
+          <div>{this.renderLine(this.props.type)}</div>
         </div>)
     }
 
@@ -369,7 +350,7 @@ class ContentForm extends React.Component {
     _quotationLineGen(content){
       var result = []
       for(var i=0 ;i<content.length;i++){
-        let eachRow = this._getEachVal(content[i])
+        let eachRow = this._getEachVal(content[i],'line')
         result.push((<tr key = {i}>{eachRow}</tr>))
       }
       return result
