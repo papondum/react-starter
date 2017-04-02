@@ -375,18 +375,18 @@ class SalesOrder extends React.Component {
         }),
         remarks: this.refs['remarks'].value,
         revisemessage: this.refs['remarks'].value,
-        totalbefore:  this.refs['tatalbefore'].value ,
+        totalbefore:  this.state.total_before_discount,
         discount: this.refs['discount'].value ,
-        taxes:  this.refs['taxes'].value ,
-        withhold: this.refs['withhold'].value ,
-        total:  this.refs['total'].value ,
+        taxes:  this.state.taxes,
+        withhold: this.state.wotaxes,
+        total:  this.state.total,
 
         shipment:{
-          deliverterm:  this.refs['deliverterm'].value,
-          shipto: this.refs['shipto'].value ,
-          requestdeliverdate: this.refs['requestdeliverdate'].value ,
-          actualdeliverdate:  this.refs['actualdeliverdate'].value ,
-          actualdelivertime:  this.refs['actualdelivertime'].value
+          deliverterm:  this.state.state_deliverterm,
+          shipto: this.state.state_shipto,
+          requestdeliverdate: this.state.state_requestdeliverdate,
+          actualdeliverdate:  this.state.state_actualdeliverdate,
+          actualdelivertime:  this.state.state_actualdelivertime,
         },
         attachment:[]
       })
