@@ -329,6 +329,8 @@ class Quotation extends React.Component {
       post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
+        console.log(response);
+        console.log(this.props.editItem);
       })
 
     }
@@ -442,8 +444,11 @@ class Quotation extends React.Component {
         })
       })
 
-      console.log("Booooooooo")
-      console.log(obj)
+      if(this.props.type=='edit'){
+        console.log();
+        obj.quotation_id = parseInt(this.props.editItem)
+      }
+      console.log('obj',obj);
       let url = this.props.type=='create'? '/api/sales/quotation/create':'/api/sales/quotation/update'
       post(url, obj)
       .then(response => {
