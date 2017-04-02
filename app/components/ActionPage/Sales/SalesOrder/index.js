@@ -373,13 +373,12 @@ class SalesOrder extends React.Component {
           }
           })
         }),
-        remarks: this.refs['remarks'].value,
-        revisemessage: this.refs['remarks'].value,
+        remarks: this.refs['remark'].value,
         totalbefore:  this.state.total_before_discount,
-        discount: this.refs['discount'].value ,
-        taxes:  this.state.taxes,
-        withhold: this.state.wotaxes,
-        total:  this.state.total,
+        discount: this.refs['discount'].value ? this.refs['discount'].value : 0,
+        tax: this.refs['taxes'].value ? this.refs['taxes'].value : 0,
+        wotax: this.refs['wotaxes'].value ? this.refs['wotaxes'].value : 0,
+        total: this.state.total ? this.state.total : 0,
 
         shipment:{
           deliverterm:  this.state.state_deliverterm,
@@ -391,7 +390,7 @@ class SalesOrder extends React.Component {
         attachment:[]
       })
       console.log(obj)
-      post('/api/sales/quotation/create',obj)
+      post('/api/sales/order/create',obj)
       .then(response => {
         console.log(response);
       })
@@ -587,12 +586,12 @@ class SalesOrder extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>{this.state.priceList.map(i=> <option key={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>{this.state.priceList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
               </div>
           </div>
       </div>)
@@ -753,7 +752,7 @@ class SalesOrder extends React.Component {
               <div className = 'flex create-quo-btm'>
                   <div className = 'flex-1'>
                       <p>Remarks</p>
-                      <input type = 'textarea' ref = 'remarks' />
+                      <textarea rows="5" cols="40" ref = 'remark' />
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
