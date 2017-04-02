@@ -375,7 +375,7 @@ class SalesOrder extends React.Component {
         }),
         remarks: this.refs['remarks'].value,
         revisemessage: this.refs['remarks'].value,
-        totalbefore:  this.refs['tatalbefore'].value ,
+        totalbefore:  this.refs['totalbefore'].value ,
         discount: this.refs['discount'].value ,
         taxes:  this.refs['taxes'].value ,
         withhold: this.refs['withhold'].value ,

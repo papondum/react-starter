@@ -62,6 +62,7 @@ class ContentForm extends React.Component {
           .then(response=>this.setState({thisLine:response}))
       }
       else if(this.props.type == "Sales Order"){
+        console.log('triggered');
         post('/api/sales/order/line', {'order_id':i})
           .then(response=>this.setState({thisLine:response}))
       }
@@ -107,7 +108,7 @@ class ContentForm extends React.Component {
 
     componentWillReceiveProps(nextProps){
       if(this.props.type!==nextProps.type){
-        this.setState({checkedItem:[]})
+        this.setState({checkedItem:[],thisLine:[]})
       }
       if(nextProps.deleteCall.userAcc=='active'){
         let obj = {user_id:this.state.checkedItem}
@@ -211,7 +212,7 @@ class ContentForm extends React.Component {
                   </tr>
               </thead>
               <tbody>
-                  {this._quotationLineGen(this.state.thisLine)}
+                   {this._salesOrderLineGen(this.state.thisLine)}
               </tbody>
           </table>
         </div>)
@@ -335,12 +336,12 @@ class ContentForm extends React.Component {
     }
 
     _salesOrderLineGen(content){
-      // var result = []
-      // for(var i=0 ;i<content.length;i++){
-      //   let eachRow = this._getEachVal(content[i])
-      //   result.push((<tr key = {i}>{eachRow}</tr>))
-      // }
-      // return result
+      var result = []
+      for(var i=0 ;i<content.length;i++){
+        let eachRow = this._getEachVal(content[i],'line')
+        result.push((<tr key = {i}>{eachRow}</tr>))
+      }
+      return result
     }
 
     _quotationLineGen(content){
