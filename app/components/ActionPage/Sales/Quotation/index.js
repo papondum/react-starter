@@ -372,8 +372,6 @@ class Quotation extends React.Component {
       let item = res[0]
       let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
       let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
-      //console.log('customer',customer,this.state.customerList);      // customer state disppear
-      console.log(saleperson);
       this.setState({
         state_contact:item.contact,
         state_tel: item.customer ? item.customer.tel:item.tel ,
