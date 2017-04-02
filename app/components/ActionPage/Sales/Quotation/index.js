@@ -30,11 +30,14 @@ class Quotation extends React.Component {
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
           selectedTab: 'General',
-          eFilmType: '',
-          eBrandType: '',
-          eGradeType: '',
-          eThick: '',
-          eLength: '',
+          eFilmType: {},
+          eBrandType: {},
+          eGradeType: {},
+          eThick: {},
+          eLength: {},
+          eWeight: {},
+          eRemark: {},
+          eUnitprice: {},
           filmList:[],
           childItem: [{id:'0001'}],
           currentChild: 1,
@@ -52,7 +55,8 @@ class Quotation extends React.Component {
           total_before_discount: 0,
           taxes: 0,
           wotaxes: 0,
-          total: 0
+          total: 0,
+          checkedItem: [],
         }
         this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
@@ -99,11 +103,14 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        let result = response.find((i)=>i.id==this.state.customerList.init)
+
         this.setState({
-          customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})}),
-          selectedCustomer:result.id
+          customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})
         })
+        if(this.props.type=='edit'){
+          let result = response.find((i)=>i.id==this.state.customerList.init)
+          this.setState({selectedCustomer:result.id})
+        }
       })
       .catch(err=>console.log(err))
     }
@@ -173,9 +180,14 @@ class Quotation extends React.Component {
 
     _updateStateSelector(id, state){
       //initial selector work but set of id is null of id
+
+      //update state that store unique id of content with ref
+
       switch (state) {
         case 'eFilmType':
+          console.log(this.refs['filmType'+id].value, id);
           var stateF = this.state[state];
+          console.log(this.state.eFilmType);
           stateF[id] = parseInt(this.refs['filmType'+id].value)
           this.setState({eFilmType:stateF})
           break;
@@ -198,6 +210,21 @@ class Quotation extends React.Component {
           var stateL = this.state[state];
           stateL[id] =  this.refs['length'+id].value
           this.setState({eLength:stateL})
+          break;
+        case  'eRemark':
+          var stateR = this.state[state];
+          stateR[id] =  this.refs['remark'+id].value
+          this.setState({eRemark:stateR})
+          break;
+        case  'eWeight':
+          var stateW = this.state[state];
+          stateW[id] =  this.refs['weight'+id].value
+          this.setState({eWeight:stateW})
+          break;
+        case  'eUnitprice':
+          var stateU = this.state[state];
+          stateU[id] =  this.refs['unitPrice'+id].value
+          this.setState({eUnitprice:stateU})
           break;
         default:
 
@@ -225,6 +252,14 @@ class Quotation extends React.Component {
           break;
         case 'last':
           this._updateStateSelector(id, 'eLength')
+        case 'weight':
+          this._updateStateSelector(id, 'eWeight')
+          this.updateSubTotal(id)
+        case 'remark':
+          this._updateStateSelector(id, 'eRemark')
+        case 'unitprice':
+          this._updateStateSelector(id, 'eUnitprice')
+          this.updateSubTotal(id)
         default:
 
       }
@@ -595,8 +630,8 @@ class Quotation extends React.Component {
           str = str.substr(0, index) + (i+1)
           return str
         }
-        return (<tr key={i.id}>
-            <td><input type='checkbox'/>{indexNo(index)}</td>
+        return (<tr key={i.id} id = {i.id}>
+            <td><input type='checkbox' ref = {'checkbox'+i.id} onChange= {()=>this.ifChecked(i.id)}/>{indexNo(index)}</td>
             <td>
                 <select ref = {'filmType'+i.id} value = {this.state.eFilmType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType'], i.id), 'brandType', i.id)} >
                     {this.getFilmTypeOption()}
@@ -622,13 +657,13 @@ class Quotation extends React.Component {
                     {this.getLengthOption(i.id)}
                 </select>
             </td>
-            <td><input onChange={() => {this.updateSubTotal(i.id)}} value = {i.weight? i.weight:''} type='number' ref = {'weight'+i.id}/></td>
-            <td><input type='text' ref = {'remark'+i.id}value = {i.remark? i.remark:''} /></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'weight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
 
             {/* <td>{this.getBasedPrice(i.id)}</td> */}
             <td>0</td>
-            <td><input onChange={() => {this.updateSubTotal(i.id)}} value = {i.sub_total? i.sub_total:''}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' value = {i.sub_total? i.sub_total:''} ref = {'subTotal'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
+            <td><input disabled type='number' value = {(this.state.eWeight[i.id])*(this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/></td>
         </tr>)
       })
       return result
@@ -765,6 +800,28 @@ class Quotation extends React.Component {
       </div>)
     }
 
+    ifChecked(id){
+      if(this.refs["checkbox"+id].checked){
+        if(this.state.checkedItem.find((i) => i==this.refs["checkbox"+id].value)==undefined){
+          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])})
+        }
+      }
+      else{
+          var array = this.state.checkedItem;
+          var index = array.indexOf(this.refs["checkbox"+id].value)
+          for (var i = 0; i < array.length; i++) {
+            if(array[i].id==this.refs["checkbox"+id].value){
+              array.splice(i, 1);
+            }
+          }
+
+          this.setState({checkedItem: array });
+        }
+    }
+    deleteSelectedContent(){
+      console.log('childList::', this.state.childItem)
+      console.log('checkedLL::', this.state.checkedItem);
+    }
     render() {
         return(
           <div className='page-style'>
@@ -795,15 +852,15 @@ class Quotation extends React.Component {
               <div className="flex flex-row space-bet" >
                   <div className='tab-quo active'>Content</div>
                   <div className='action-group-btn-content'>
-                      <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
-                      <button><img src={deleteIcon}/></button>
+                      <button onClick = {()=> this.addChild()}><img src={createIcon}/></button>
+                      <button onClick = {()=> this.deleteSelectedContent()}><img src={deleteIcon}/></button>
                   </div>
               </div>
               <div className = 'content-quo-table'>
                   <table>
                       <thead>
                           <tr>
-                              <td><input type='checkbox'/>Line No.</td>
+                              <td><input type='checkbox' />Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
                               <td>Grade</td>
