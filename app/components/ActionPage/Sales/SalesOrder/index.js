@@ -577,7 +577,7 @@ class SalesOrder extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Invoice To :</label>
-                  <input className='flex' type="text" ref='invoice' value = {this.state.state_deliver} onChange={()=>this.updateParam('invoice')}/>
+                  <input className='flex' type="text" ref='invoice' value = {this.state.state_invoice} onChange={()=>this.updateParam('invoice')}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
