@@ -30,7 +30,11 @@ class Quotation extends React.Component {
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
           selectedTab: 'General',
-          filmType: '',
+          eFilmType: '',
+          eBrandType: '',
+          eGradeType: '',
+          eThick: '',
+          eLength: '',
           filmList:[],
           childItem: [{id:'0001'}],
           currentChild: 1,
@@ -95,7 +99,11 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
+        let result = response.find((i)=>i.id==this.state.customerList.init)
+        this.setState({
+          customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})}),
+          selectedCustomer:result.id
+        })
       })
       .catch(err=>console.log(err))
     }
@@ -162,35 +170,95 @@ class Quotation extends React.Component {
       this.setState(obj)
 
     }
-    getBrandType(item, id){
+
+    _updateStateSelector(id, state){
+      //initial selector work but set of id is null of id
+      switch (state) {
+        case 'eFilmType':
+          var stateF = this.state[state];
+          stateF[id] = parseInt(this.refs['filmType'+id].value)
+          this.setState({eFilmType:stateF})
+          break;
+        case 'eBrandType':
+          var stateB = this.state[state];
+          stateB[id] = parseInt(this.refs['brandType'+id].value)
+          this.setState({eBrandType:stateB})
+          break;
+        case  'eGradeType':
+          var stateG = this.state[state];
+          stateG[id] = parseInt( this.refs['gradeType'+id].value)
+          this.setState({eGradeType:stateG})
+          break;
+        case  'eThick':
+          var stateT = this.state[state];
+          stateT[id] =  this.refs['thickNess'+id].value
+          this.setState({eThick:stateT})
+          break;
+        case  'eLength':
+          var stateL = this.state[state];
+          stateL[id] =  this.refs['length'+id].value
+          this.setState({eLength:stateL})
+          break;
+        default:
+
+      }
+
+    }
+
+    onChangeUpdate(item, type, id){
+      switch (type) {
+        case 'brandType':
+          this.getBrandType(item, type, id)
+          this._updateStateSelector(id, 'eFilmType')
+          break;
+        case 'gradeType':
+          this.getGradeType(item, type, id)
+          this._updateStateSelector(id, 'eBrandType')
+          break;
+        case 'thickNess':
+          this.getThickNess(item, type, id)
+          this._updateStateSelector(id, 'eGradeType')
+          break;
+        case 'length':
+          this.getLength(item , type, id)
+          this._updateStateSelector(id, 'eThick')
+          break;
+        case 'last':
+          this._updateStateSelector(id, 'eLength')
+        default:
+
+      }
+    }
+
+    getBrandType(item, type, id){
       post('/api/sales/quotation/brand',{filmtype_id: item.filmType})
       .then((response)=>{
-        this.updateStateItemSet('brandList', response, id)
+        this.updateStateItemSet('brandList', response, type+id)
       })
       .catch(err=>console.log(err))
+
     }
 
-    getGradeType(item, id){
+    getGradeType(item, type, id){
       post('/api/sales/quotation/grade',{ "filmtype_id": item.filmType,  "brand_id": item.brandType })
       .then((response)=>{
-          this.updateStateItemSet('gradeList', response, id)
+          this.updateStateItemSet('gradeList', response, type+id)
       })
       .catch(err=>console.log(err))
     }
 
-    getThickNess(item, id){
+    getThickNess(item, type, id){
       post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
-          this.updateStateItemSet('thickList', response, id)
+          this.updateStateItemSet('thickList', response, type+id)
       })
       .catch(err=>console.log(err))
     }
 
-    getLength(item ,id){
+    getLength(item , type, id){
       post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
       .then((response)=>{
-        console.log(response);
-        this.updateStateItemSet('length', response, id)
+        this.updateStateItemSet('length', response, type+id)
       })
       .catch(err=>console.log(err))
     }
@@ -214,8 +282,8 @@ class Quotation extends React.Component {
     }
 
     componentDidMount(){
-      this.props.type=='edit'? this._getEditItem():''
       this.getCustomerList()
+      this.props.type=='edit'? this._getEditItem():''
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
@@ -225,20 +293,55 @@ class Quotation extends React.Component {
       post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
-        console.log(response);
       })
+
+    }
+
+    _setInitialEditContent(){
+      let childList = this.state.childItem
+      let objFilm = {}
+      let objBrand = {}
+      let objGrade = {}
+      let objThick = {}
+      let objLength = {}
+      for(let i in childList){
+        console.log('eachChildVal::',childList[i]);
+        objFilm[childList[i]['id']] = childList[i].filmtype_id
+        objBrand[childList[i]['id']] = childList[i].brand_id
+        objGrade[childList[i]['id']] = childList[i].grade_id
+        objThick[childList[i]['id']] = childList[i].thickness
+        objLength[childList[i]['id']] = childList[i].product_length
+      }
+      this.setState({
+        eFilmType: objFilm,
+        eBrandType: objBrand,
+        eGradeType: objGrade,
+        eThick: objThick,
+        eLength: objLength,
+      })
+
+      //initiate generate selector from edit val list
+      for(let k in childList){
+          let item = childList[k]
+          this.getBrandType({filmType: item.filmtype_id}, 'brandType', item.id)
+          this.getGradeType({filmType: item.filmtype_id, brandType: item.brand_id}, 'gradeType', item.id)
+          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'thickNess', item.id)
+          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, thickNess: item.thickness}, 'length', item.id)
+      }
+
     }
 
     _setInitialVal(res){
-      console.log('res::',res);
       let item = res[0]
       let customer = this.state.customerList.find((i) => i.value==item.customer_id)
       let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
       let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
       //console.log('customer',customer,this.state.customerList);      // customer state disppear
+      console.log(customer);
+      let cL = this.state.customerList
+      cL['init'] = item.customer_id
       this.setState({
         state_contact:item.contact,
-        selectedCustomer:customer,
         state_tel: item.customer ? item.customer.tel:item.tel ,
         state_fax: item.customer ? item.customer.fax:item.fax,
         state_email: item.customer? item.customer.email:item.email,
@@ -250,8 +353,8 @@ class Quotation extends React.Component {
         state_salePerson: saleperson,
         state_priceListId: pricelist,
         total: item.total,
-        childItem: item.contents
-
+        childItem: item.contents,
+        customerList:cL
       })
 
       this.refs['discount'].value = item.discount ||0
@@ -259,6 +362,7 @@ class Quotation extends React.Component {
       this.refs['wotaxes'].value = item.wotax ||0
       this.refs['revise_message'].value= item.revise_message
       this.refs['remark'].value= item.remark
+      this._setInitialEditContent()
     }
 
     save(){
@@ -476,33 +580,15 @@ class Quotation extends React.Component {
     getChildItem(){
       let items = this.state.childItem
       let result = items.map((i, index)=>{
-        let genArg = (arr,id)=>{
+        let genArg = (arr,id) => {
           //return as object filmType:val brandType:val
           let result = {}
-          for (var i=0; i<arr.length; i++) {
+          for (var i=0; i<arr.length; i++) {``
             result[arr[i]] = this.refs[arr[i]+id].value;
           }
           return result
         }
-        let genValFromEdit = (id, type) =>{
-          switch (type) {
-            case 'film':
-              let item = this.state.filmList.find((i)=>i.id==id)
-              console.log(item);
-              return (item? item.id:'')
-              break;
-            case 'brand':
-              let item2 = this.state.brandList.find((i)=>i.id==id)
-              return item2
-              break;
-            case 'grade':
-              let item3 = this.state.gradeList.find((i)=>i.id==id)
-              return item3
-              break;
-            default:
 
-          }
-        }
         let indexNo = (i) => {
           let str = '0000'
           var index = 4-((i+'').length);
@@ -512,28 +598,27 @@ class Quotation extends React.Component {
         return (<tr key={i.id}>
             <td><input type='checkbox'/>{indexNo(index)}</td>
             <td>
-                <select ref = {'filmType'+i.id} value = {genValFromEdit(i.id, 'film')} key={i.id} onChange = {() => this.getBrandType(genArg(['filmType'], i.id), ('brandType'+i.id))} >
+                <select ref = {'filmType'+i.id} value = {this.state.eFilmType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType'], i.id), 'brandType', i.id)} >
                     {this.getFilmTypeOption()}
                 </select>
             </td>
             <td>
-                <select ref = {'brandType'+i.id} value = {genValFromEdit(i.id, 'brand')} key={i.id} onChange = {() => this.getGradeType(genArg(['filmType', 'brandType'], i.id), ('gradeType'+i.id))}>
+                <select ref = {'brandType'+i.id} value = {this.state.eBrandType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType', 'brandType'], i.id), 'gradeType', i.id)}>
                     {this.getBrandTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} value = {genValFromEdit(i.id, 'grade')} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('thickNess'+i.id))}>
+                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'thickNess', i.id)}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} value = {i.thickNess? i.thickNess:''} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'], i.id), ('length'+i.id))
-                }>
+                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','thickNess'], i.id), 'length', i.id)}>
                     {this.getThickNessOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id}  key={i.id}>// value = {i.product_length? i.product_length:''}
+                <select ref = {'length'+i.id}  key={i.id} value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate({},'last', i.id)}>// value = {i.product_length? i.product_length:''}
                     {this.getLengthOption(i.id)}
                 </select>
             </td>
@@ -553,10 +638,7 @@ class Quotation extends React.Component {
     addChild(){
       let currentChild = this.state.currentChild
       let items = this.state.childItem
-      // let idNo = ''+(items.length+1)+''
       let idNo = ''+(currentChild+1)+''
-
-      console.log(idNo)
       if(idNo.length<4){
         for (var i = 0; i < 6-idNo.length; i++) {
           idNo = "0" + idNo
