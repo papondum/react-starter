@@ -197,6 +197,118 @@ class SalesOrder extends React.Component {
       .catch(err=>console.log(err))
     }
 
+    updateSubTotal(id) {
+      let price = this.refs['unitPrice'+id].value;
+      let weight = this.refs['weight'+id].value;
+      if (price && weight) {
+        console.log("Set")
+        this.refs['subTotal'+id].value = price * weight
+      } else {
+        this.refs['subTotal'+id].value = 0
+      }
+
+      console.log("updateSubTotal" + id)
+      var total_before_discount = 0.0
+      this.state.childItem.map(i=> {
+        let total = this.refs['subTotal'+i.id].value;
+        if (total > 0) {
+          total_before_discount += parseFloat(total)
+        }
+      })
+      this.setState({total_before_discount: total_before_discount})
+      console.log(total_before_discount)
+      this.updateAll(total_before_discount)
+    }
+
+    updateAll(total_before_discount) {
+      console.log("updateAll")
+      var total
+      if (total_before_discount > 0) {
+        total = total_before_discount
+      } else {
+        total = parseFloat(this.state.total_before_discount)
+      }
+      // total = parseFloat(this.state.total_before_discount)
+      console.log("total_before_discount: " + total)
+      let discount = this.refs['discount'].value;
+      if ( discount > 0 ) {
+        total = total - parseFloat(discount)
+      }
+      console.log("discount: " + discount)
+      console.log("total after discount: " + total)
+      let total_after_discount = total
+      let wotaxes = this.refs['wotaxes'].value;
+      if ( wotaxes > 0 ) {
+        let w = (total_after_discount * wotaxes / 100)
+        this.setState({wotaxes: w})
+        total = total - parseFloat(w)
+      }
+      console.log("wotaxes: " + wotaxes)
+      console.log("total after wotaxes: " + total)
+      let taxes = this.refs['taxes'].value;
+      if ( taxes > 0 ) {
+        let t = (total_after_discount * taxes / 100)
+        this.setState({taxes: t})
+        total = total + parseFloat(t)
+      }
+      console.log("taxes: " + taxes)
+      console.log("total after taxes: " + total)
+
+      this.setState({total: total})
+    }
+
+    updateDiscount() {
+      console.log("updateDiscount")
+      let total_before_discount = parseFloat(this.state.total_before_discount)
+      this.setState({discount: total_before_discount - this.refs['discount'].value})
+      this.updateWithholdingTax()
+    }
+
+    updateWithholdingTax() {
+      console.log("updateWithholdingTax")
+      let total_before_discount = this.state.discount
+      let taxP = this.refs['wotaxes'].value;
+
+      let tax = (total_before_discount * taxP / 100)
+      console.log(tax)
+      this.setState({wotaxes: tax})
+      this.updateTax()
+    }
+
+    updateTax() {
+      console.log("updateTax")
+      let total_before_discount = this.state.discount
+      let taxP = this.refs['taxes'].value;
+
+      let tax = (total_before_discount * taxP / 100)
+      this.setState({taxes: tax})
+      this.updateTotal()
+
+    }
+
+    updateTotal() {
+      var total = parseFloat(this.state.total_before_discount)
+      // console.log("total value: " + total)
+      let discount = this.refs['discount'].value;
+      // console.log("discount value: " + discount)
+      if (discount > 0) {
+        total = total - parseInt(discount)
+      }
+      // console.log("discount: " + total)
+      var wotaxes = parseFloat(this.state.wotaxes)
+      // console.log("wotaxes value: " + wotaxes)
+      if (wotaxes > 0) {
+        total = total - wotaxes
+      }
+      // console.log("wotaxes: " + total)
+      var taxes = this.state.taxes
+      if (taxes > 0) {
+        total = total + taxes
+      }
+      // console.log("taxes: " + total)
+      this.setState({total: total})
+    }
+
     getBasedPrice(id){
       if(this.state.basedPrice){
         console.log(this.state.basedPrice);
@@ -253,7 +365,6 @@ class SalesOrder extends React.Component {
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
             order_qty: this.refs['order_qty'+i.id].value ,
-            total_weight: this.refs['total_weight'+i.id].value, //need some val>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             weight: this.refs['weight'+i.id].value,
             based_price: this.state.basedPrice,//   need select id
             subtotal: this.refs['subTotal'+i.id].value,
@@ -330,12 +441,6 @@ class SalesOrder extends React.Component {
       }
     }
 
-    updateSubTotal(id) {
-      let price = this.refs['unitPrice'+id].value;
-      let weight = this.refs['weight'+id].value;
-      this.refs['subTotal'+id].value = price * weight
-    }
-
     getChildItem(){
       let items = this.state.childItem
       let result = items.map(i=>{
@@ -360,12 +465,12 @@ class SalesOrder extends React.Component {
                 </select>
             </td>
             <td>
-                <input type='number' ref = {'width'+i.id}/>
-            </td>
-            <td>
                 <select ref = {'gradeType'+i.id} key={i.id} onChange = {() => this.getThickNess(genArg(['filmType','brandType', 'gradeType'], i.id), ('thickNess'+i.id))}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
+            </td>
+            <td>
+                <input type='number' ref = {'width'+i.id}/>
             </td>
             <td>
                 <select ref = {'thickNess'+i.id} key={i.id} onChange = {() => this.getLength(genArg(['filmType','brandType','gradeType','thickNess'], i.id), ('length'+i.id))
@@ -380,13 +485,10 @@ class SalesOrder extends React.Component {
             </td>
             <td><input type='number' ref = {'order_qty'+i.id}/></td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}} type='number' ref = {'weight'+i.id}/></td>
-            {/* <td><input type='number' ref = {'weight'+i.id}/></td> */}
-            <td><input type='text' ref = {'remark'+i.id}/></td>
-
-            {/* <td>{this.getBasedPrice(i.id)}</td> */}
             <td>0</td>
             <td><input onChange={() => {this.updateSubTotal(i.id)}}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' ref = {'subTotal'+i.id} value="0"/></td>
+            <td><input disabled type='number' ref = {'subTotal'+i.id}/></td>
+            <td><input type='text' ref = {'remark'+i.id}/></td>
         </tr>)
       })
       return result
@@ -631,8 +733,8 @@ class SalesOrder extends React.Component {
                               <td><input type='checkbox'/>Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
-                              <td>Width</td>
                               <td>Grade</td>
+                              <td>Width</td>
                               <td>Thickness</td>
                               <td>Length</td>
                               <td>Order Qty. (Roll)</td>
@@ -658,7 +760,7 @@ class SalesOrder extends React.Component {
                       <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
                       <span>{this.state.total_before_discount}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
+                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
                       <div className = 'flex-row flex'>
                         <span className = 'create-quo-btm-input-label-left'>Taxes
                         <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
