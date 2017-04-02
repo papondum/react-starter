@@ -46,6 +46,10 @@ class SalesOrder extends React.Component {
           state_requestdeliverdate: '',
           state_actualdeliverdate: '',
           state_actualdelivertime: '',
+          total_before_discount: 0,
+          taxes: 0,
+          wotaxes: 0,
+          total: 0
         }
         this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
@@ -650,15 +654,21 @@ class SalesOrder extends React.Component {
                       <input type = 'textarea' ref = 'remarks' />
                   </div>
                   <div className = 'flex-1'>
-                      <p>Revise Message</p>
-                      <input type = 'text' ref = 'revisemessage'/>
-                  </div>
-                  <div className = 'flex-1'>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp; <span ref = 'tatalbefore'>val</span></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount'/></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Taxes<input type = 'number' ref = 'taxes'/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Withholding Taxes<input type = 'number' ref = 'wotaxes '/>%</span>&nbsp;&nbsp;&nbsp;<span>val</span></div>
-                      <div className = 'flex-row flex'><span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span ref = 'total'>val</span></div>
+                      <div className = 'flex-row flex'>
+                      <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
+                      <span>{this.state.total_before_discount}</span></div>
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp;              <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Taxes
+                        <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                        <span>{this.state.taxes}</span></div>
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
+                        <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                        <span>{this.state.wotaxes}</span></div>
+                      <div className = 'flex-row flex'>
+                        <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
                   </div>
               </div>
           </div>)

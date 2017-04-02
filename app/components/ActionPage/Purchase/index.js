@@ -34,9 +34,22 @@ class Purchase extends React.Component {
           selectedCompany: '',
           selectedSupplier : '',
           selectedTab: 'Gen',
-          filmType: '',
-          filmList:[],
-          childItem: [{id:'0001'}]
+          userFillGenDate : '',
+          userFillGenPayment : '',
+          userFillGenDeliver : '',
+          userFillGenInvoice : '',
+          userFillGenStatus : '',
+          userFillGenBuyer : '',
+          userFillSupContactPerson : '',
+          userFillSupTel : '',
+          userFillSupFax : '',
+          userFillSupEmail : '',
+          userFillShipShipto : '',
+          userFillShipShipvia : '',
+          userFillShipCIF : '',
+          userFillShipDeliverDate : '',
+          userFillShipDeparture : '',
+          userFillShipArrival : ''
         }
     }
 
@@ -99,6 +112,12 @@ class Purchase extends React.Component {
         })
       }
     }
+    genSetDate(){
+      this.setState({
+        userFillGenDate : this.refs.date.value
+      })
+
+    }
 
     getFormGeneral(){
       return (  <div className="flex flex-row">
@@ -129,7 +148,7 @@ class Purchase extends React.Component {
             </div>
             <div className='input-box flex'>
                 <label>Date :</label>
-                <input className='flex' type="date" ref='date'/>
+                <input className='flex' type="date" ref='date' onChange={()=> this.genSetDate()} value={this.state.userFillGenDate}/>
             </div>
 
         </div>
@@ -181,7 +200,7 @@ class Purchase extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Email :</label>
-                  <input className='flex' type="text" ref='payterm'/>
+                  <input className='flex' type="text" ref='email'/>
               </div>
           </div>
       </div>
@@ -217,7 +236,7 @@ class Purchase extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Estimate Time of Arrival (ATD):</label>
-                  <input className='flex' type="date" ref='estimateTimeDeparture'/>
+                  <input className='flex' type="date" ref='estimateTimeArrival'/>
               </div>
           </div>
       </div>

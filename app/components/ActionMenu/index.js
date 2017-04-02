@@ -72,7 +72,7 @@ class ActionMenu extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){
-      this._setActionCategory()
+      this._setActionCategory(nextProps.activePage)
       if(nextProps.userAcc=='idle'){
         this.setState({
           showModal:{
@@ -81,8 +81,8 @@ class ActionMenu extends React.Component {
         })
       }
     }
-    _setActionCategory(){
-      switch (this.props.activePage) {
+    _setActionCategory(activePage){
+      switch (activePage) {
         case 'User account':
           this.setState({
             createAction:()=>this.props.setContent((<UserAccount type='create' getContent={(item)=>this.props.getContent(item)}/>)),
@@ -243,14 +243,14 @@ class ActionMenu extends React.Component {
           <div className='flex action-bar' >
               <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
               <div className='action-group-btn'>
-                  <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
-                  <button onClick={() =>this.state.editAction() }><img src={editIcon}/> <p>Edit</p></button>
-                  <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
-                  <button onClick={() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
-                  <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
-                  <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
-                  <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
-                  <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' : () =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' :() =>this.state.editAction() }><img src={editIcon}/> <p>Edit</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' :() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' :() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' :() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' :() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' :() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
+                  <button onClick={Object.keys(this.props.activePage).length === 0 && this.props.activePage.constructor === Object ? '' :() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
               </div>
 
               <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
