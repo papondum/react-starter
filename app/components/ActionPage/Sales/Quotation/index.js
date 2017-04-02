@@ -103,14 +103,15 @@ class Quotation extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-
         this.setState({
           customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})
         })
-        if(this.props.type=='edit'){
-          let result = response.find((i)=>i.id==this.state.customerList.init)
-          this.setState({selectedCustomer:result.id})
-        }
+        // if(this.props.type=='edit'){
+        //   let result = response.find((i)=>{
+        //     return i.id==this.state.customerList.init})
+        //     console.log('result>>>>>>>>>>>>>>>',result,response,this.state.cus);
+        //   this.setState({selectedCustomer:result.id})
+        // }
       })
       .catch(err=>console.log(err))
     }
@@ -367,14 +368,12 @@ class Quotation extends React.Component {
     }
 
     _setInitialVal(res){
+
       let item = res[0]
-      let customer = this.state.customerList.find((i) => i.value==item.customer_id)
       let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
       let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
       //console.log('customer',customer,this.state.customerList);      // customer state disppear
-      console.log(customer);
-      let cL = this.state.customerList
-      cL['init'] = item.customer_id
+      console.log(saleperson);
       this.setState({
         state_contact:item.contact,
         state_tel: item.customer ? item.customer.tel:item.tel ,
@@ -389,9 +388,10 @@ class Quotation extends React.Component {
         state_priceListId: pricelist,
         total: item.total,
         childItem: item.contents,
-        customerList:cL
+        selectedCustomer: item.customer_id
       })
-
+      console.log('Test', this.state.customerList);
+      console.log('Test', this.state.customerList);
       this.refs['discount'].value = item.discount ||0
       this.refs['taxes'].value = item.tax ||0
       this.refs['wotaxes'].value = item.wotax ||0
@@ -829,6 +829,7 @@ class Quotation extends React.Component {
       console.log('checkedLL::', this.state.checkedItem);
     }
     render() {
+      console.log('selected::', this.state.selectedCustomer);
         return(
           <div className='page-style'>
               <div className='page-head'>
