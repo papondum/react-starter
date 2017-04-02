@@ -72,7 +72,7 @@ class ActionMenu extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){
-      this._setActionCategory()
+      this._setActionCategory(nextProps.activePage)
       if(nextProps.userAcc=='idle'){
         this.setState({
           showModal:{
@@ -81,8 +81,8 @@ class ActionMenu extends React.Component {
         })
       }
     }
-    _setActionCategory(){
-      switch (this.props.activePage) {
+    _setActionCategory(activePage){
+      switch (activePage) {
         case 'User account':
           this.setState({
             createAction:()=>this.props.setContent((<UserAccount type='create' getContent={(item)=>this.props.getContent(item)}/>)),

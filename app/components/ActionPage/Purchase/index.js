@@ -69,6 +69,11 @@ class Purchase extends React.Component {
 
     save(){
       //send Purchase
+      let {companySelect, supplierSelect, date, payterm, deliver, invoice,status,
+        buyerSelected, contactPerson, tel, fax,email,shipto, shipvia, cif,requestDeliveryDate,
+        estimateTimeDeparture, estimateTimeArrival
+      } = this.refs;
+      console.log(this.state.selectedCompany,this.state.supplierSelect,date.value,payterm.value,deliver.value,invoice.value,status.value,buyerSelected.value);
       alert('save')
     }
 
@@ -181,7 +186,7 @@ class Purchase extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Email :</label>
-                  <input className='flex' type="text" ref='payterm'/>
+                  <input className='flex' type="text" ref='email'/>
               </div>
           </div>
       </div>
@@ -217,7 +222,7 @@ class Purchase extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Estimate Time of Arrival (ATD):</label>
-                  <input className='flex' type="date" ref='estimateTimeDeparture'/>
+                  <input className='flex' type="date" ref='estimateTimeArrival'/>
               </div>
           </div>
       </div>
