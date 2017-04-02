@@ -146,7 +146,14 @@ class ContentForm extends React.Component {
         let obj = {grade_id:this.state.checkedItem}
         this.props.deleteItem(obj,'Grade')
       }
-
+      if(nextProps.deleteCall.quotation=='active'){
+        let obj = {quotation_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Quotation')
+      }
+      if(nextProps.deleteCall.sales=='active'){
+        let obj = {order_id:this.state.checkedItem}
+        this.props.deleteItem(obj,'Sales Order')
+      }
 
 
     }

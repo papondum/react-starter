@@ -7,19 +7,23 @@ import { DELETE_USERACC_TRIGGER, DELETE_USERACC_IDLE ,
   DELETE_BRAND_TRIGGER ,DELETE_BRAND_IDLE,
   DELETE_FILM_TRIGGER ,DELETE_FILM_IDLE,
   DELETE_GRADE_TRIGGER ,DELETE_GRADE_IDLE,
-  DELETE_USERROLE_TRIGGER ,DELETE_USERROLE_IDLE
+  DELETE_USERROLE_TRIGGER ,DELETE_USERROLE_IDLE,
+  DELETE_QUOTATION_TRIGGER,DELETE_QUOTATION_IDLE,
+  DELETE_SALES_TRIGGER, DELETE_SALES_IDLE,
 } from '../actions/deleteCall';
 
 const initialState = {
-  userAcc:'idle',
-  userRole:'idle',
-  customer:'idle',
-  supplier:'idle',
-  price:'idle',
-  product:'idle',
-  brand:'idle',
-  film:'idle',
-  grade:'idle',
+  userAcc: 'idle',
+  userRole: 'idle',
+  customer: 'idle',
+  supplier: 'idle',
+  price: 'idle',
+  product: 'idle',
+  brand: 'idle',
+  film: 'idle',
+  grade: 'idle',
+  quotation:'idle',
+  sales: 'idle',
 };
 
 const actions = {
@@ -76,6 +80,18 @@ const actions = {
     },
     [DELETE_GRADE_IDLE]: (state, payload) => {
         return Object.assign({}, state, {grade: 'idle'});
-    }
+    },
+    [DELETE_QUOTATION_TRIGGER]: (state, payload) => {
+      return Object.assign({},state,{quotation: 'active'})
+    },
+    [DELETE_QUOTATION_IDLE]: (state, payload) =>{
+      return Object.assign({},state, {quotation: 'idle'})
+    },
+    [DELETE_SALES_TRIGGER]: (state, payload) => {
+      return Object.assign({},state,{sales: 'active'})
+    },
+    [DELETE_SALES_IDLE]: (state, payload) =>{
+      return Object.assign({},state, {sales: 'idle'})
+    },
 };
 export default createReducer(initialState, actions);

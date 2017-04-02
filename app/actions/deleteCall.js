@@ -18,7 +18,10 @@ export const DELETE_PRODUCT_IDLE = 'DELETE_PRODUCT_IDLE'
 export const DELETE_BRAND_IDLE = 'DELETE_BRAND_IDLE'
 export const DELETE_FILM_IDLE = 'DELETE_FILM_IDLE'
 export const DELETE_GRADE_IDLE = 'DELETE_GRADE_IDLE'
-
+export const DELETE_QUOTATION_TRIGGER = 'DELETE_QUOTATION_TRIGGER'
+export const DELETE_SALES_TRIGGER = 'DELETE_SALES_TRIGGER'
+export const DELETE_QUOTATION_IDLE = 'DELETE_QUOTATION_IDLE'
+export const DELETE_SALES_IDLE = 'DELETE_SALES_IDLE'
 export function deleteAcc(){
   return {type:DELETE_USERACC_TRIGGER}
 }
@@ -74,6 +77,18 @@ export function deleteGradeToIdle(){
 export function deleteFilmToIdle(){
   return {type:DELETE_FILM_IDLE}
 }
+export function deleteQuotation(){
+  return {type: DELETE_QUOTATION_TRIGGER}
+}
+export function deleteQuoToIdle(){
+  return {type:DELETE_QUOTATION_IDLE}
+}
+export function deleteSales(){
+  return {type: DELETE_SALES_TRIGGER}
+}
+export function deleteSalesToIdle(){
+  return {type:DELETE_SALES_IDLE}
+}
 
 export function deleteTrig(item){           //Trigger state   do noti
   console.log(item)
@@ -121,6 +136,14 @@ export function deleteTrig(item){           //Trigger state   do noti
     case 'Grade':
       return dispatch => {
         dispatch(deleteGrade())
+      }
+    case 'Quotation':
+      return dispatch => {
+        dispatch(deleteQuotation())
+      }
+    case 'Sales Order':
+      return dispatch => {
+        dispatch(deleteSales())
       }
     default:
       console.log(item);
@@ -224,6 +247,18 @@ export function deleteItem(item,type){
       return dispatch=>{
         dispatch(apiSelector(url8,item))
         dispatch(deleteGradeToIdle())
+      }
+    case 'Quotation':
+      let url9 = '/api/sales/quotation/delete'
+      return dispatch=>{
+        dispatch(apiSelector(url9,item))
+        dispatch(deleteQuoToIdle())
+      }
+    case 'Sales Order':
+      let url10 = '/api/sales/order/delete'
+      return dispatch=>{
+        dispatch(apiSelector(url10,item))
+        dispatch(deleteSalesToIdle())
       }
     default:
       break;
