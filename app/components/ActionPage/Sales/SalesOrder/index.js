@@ -334,19 +334,18 @@ class SalesOrder extends React.Component {
     }
 
     save(){
-      console.log(this.refs['salePerson'].value);
-      console.log('sssss',this.refs.pricelist.val);
+      console.log('selected',this.refs['salePerson'].value);
       //send Quatations
       let obj = Object.assign({},
       {
-        customer_id: this.state.selectedCustomer.value,
+        customer_id: this.state.selectedCustomer ,
         order_date: this.refs['orderdate'].value,
         po_num: this.refs['ponumber'].value,
         payterm: this.refs['payterm'].value,
         invoice: this.refs['invoice'].value,
         status: this.refs['status'].value,
-        sale_person: this.state['state_salePerson'],
-        price_listId: this.state['state_pricelist'],
+        sale_person: this.state['state_salePerson'] ||this.refs['salePerson'].value,
+        price_listId: this.state['state_pricelist'] ||this.refs['pricelist'].value,
         customer:{
           customer_contact: this.state.contact,
           customer_tel: this.state.tel,
@@ -520,7 +519,7 @@ class SalesOrder extends React.Component {
         this.setState({tel: customer[0].telephone})
         this.setState({fax: customer[0].fax})
         this.setState({email: customer[0].email})
-        this.setState({selectedCustomer:newVal})
+        this.setState({selectedCustomer:newVal.value})
       })
     }
 
@@ -583,16 +582,21 @@ class SalesOrder extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>
+                    {this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}
+                  </select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option value={i.id}>{i.label}</option>)}</select>
+                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>
+                    {this.state.saleList.map(i=> {
+                      return <option value={i.value}>{i.label}</option>})}
+                  </select>
               </div>
               <div className='input-box flex'>
                   <label>Price list :</label>
                   <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>
-                    {this.state.priceList.map(i=> <option value={i.id}>{i.label}</option>)}
+                    {this.state.priceList.map(i=> <option value={i.value}>{i.label}</option>)}
                   </select>
               </div>
           </div>

@@ -106,12 +106,6 @@ class Quotation extends React.Component {
         this.setState({
           customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})
         })
-        // if(this.props.type=='edit'){
-        //   let result = response.find((i)=>{
-        //     return i.id==this.state.customerList.init})
-        //     console.log('result>>>>>>>>>>>>>>>',result,response,this.state.cus);
-        //   this.setState({selectedCustomer:result.id})
-        // }
       })
       .catch(err=>console.log(err))
     }
