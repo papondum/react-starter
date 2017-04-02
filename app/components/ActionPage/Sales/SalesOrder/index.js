@@ -582,16 +582,16 @@ class SalesOrder extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
+                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option value={i.id}>{i.label}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>{this.state.priceList.map(i=> <option key={i.id}>{i.label}</option>)}</select>
+                  <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>{this.state.priceList.map(i=> <option value={i.id}>{i.label}</option>)}</select>
               </div>
           </div>
       </div>)
