@@ -404,14 +404,14 @@ class Quotation extends React.Component {
       //send Quatations
       let obj = Object.assign({},
       {
-        company: this.state.state_company,
-        customer: this.state.selectedCustomer.value,
-        date: this.state.state_date,
-        payterm: this.state.state_payterm,
-        deliver: this.state.state_deliver,
-        status:   this.state.states_staus,
-        sale_person: this.state.state_salePerson,
-        price_listId: this.state.state_priceListId,
+        company: this.state.state_company|| this.refs['company'].value,
+        customer: this.state.selectedCustomer.value || this.refs['customer'].value,
+        date: this.state.state_date || this.refs['date'].value,
+        payterm: this.state.state_payterm || this.refs['payterm'].value,
+        deliver: this.state.state_deliver|| this.refs['deliver'].value,
+        status:   this.state.states_staus|| this.refs['status'].value,
+        sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
+        price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
 
         customer_contact: this.state.state_contact,
         customer_tel: this.state.state_tel,
@@ -630,6 +630,11 @@ class Quotation extends React.Component {
           str = str.substr(0, index) + (i+1)
           return str
         }
+        let getSubtotal = (w,u) => {
+          if(w&&u){
+            return w*u
+          }
+        }
         return (<tr key={i.id} id = {i.id}>
             <td><input type='checkbox' ref = {'checkbox'+i.id} onChange= {()=>this.ifChecked(i.id)}/>{indexNo(index)}</td>
             <td>
@@ -663,7 +668,7 @@ class Quotation extends React.Component {
             {/* <td>{this.getBasedPrice(i.id)}</td> */}
             <td>0</td>
             <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' value = {(this.state.eWeight[i.id])*(this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/></td>
+            <td><input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/></td>
         </tr>)
       })
       return result
@@ -687,10 +692,10 @@ class Quotation extends React.Component {
 
     updateSelectedCustomer(newVal) {
       this.getCustomerAsync(newVal.value).then((customer) => {
-        this.setState({contact: customer[0].contact_person})
-        this.setState({tel: customer[0].telephone})
-        this.setState({fax: customer[0].fax})
-        this.setState({email: customer[0].email})
+        this.setState({state_contact: customer[0].contact_person})
+        this.setState({state_tel: customer[0].telephone})
+        this.setState({state_fax: customer[0].fax})
+        this.setState({state_email: customer[0].email})
         this.setState({selectedCustomer:newVal})
       })
     }
@@ -712,6 +717,7 @@ class Quotation extends React.Component {
       let obj ={}
       obj['state_'+item] = this.refs[item].value
       this.setState(obj)
+
     }
 
     getGeneralContent(){
