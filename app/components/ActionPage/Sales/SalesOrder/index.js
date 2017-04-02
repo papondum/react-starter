@@ -366,7 +366,7 @@ class SalesOrder extends React.Component {
             length: this.refs['length'+i.id].value,
             order_qty: this.refs['order_qty'+i.id].value ,
             weight: this.refs['weight'+i.id].value,
-            based_price: this.state.basedPrice,//   need select id
+            based_price: 0,
             subtotal: this.refs['subTotal'+i.id].value,
             unitprice: this.refs['unitPrice'+i.id].value,
             remark: this.refs['remark'+i.id].value,
@@ -393,6 +393,8 @@ class SalesOrder extends React.Component {
       post('/api/sales/order/create',obj)
       .then(response => {
         console.log(response);
+
+        this.props.getContent('Sales Order')
       })
       .catch(err=>console.log(err))
     }
