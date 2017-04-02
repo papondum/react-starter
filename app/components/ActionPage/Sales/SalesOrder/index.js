@@ -365,7 +365,6 @@ class SalesOrder extends React.Component {
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
             order_qty: this.refs['order_qty'+i.id].value ,
-            total_weight: this.refs['total_weight'+i.id].value, //need some val>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             weight: this.refs['weight'+i.id].value,
             based_price: this.state.basedPrice,//   need select id
             subtotal: this.refs['subTotal'+i.id].value,
