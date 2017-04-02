@@ -713,9 +713,11 @@ class SalesOrder extends React.Component {
                       <div className={this.state.selectedTab === 'Ship'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Ship')}>
                           Shipment
                       </div>
+                      {/*
                       <div className={this.state.selectedTab === 'Attach'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attach')}>
                           Attachment
                       </div>
+                      */}
                   </div>
                   <hr style={{margin : 0}}/>
                   <div className = 'top-content'>
