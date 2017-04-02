@@ -342,6 +342,9 @@ class Quotation extends React.Component {
       let objGrade = {}
       let objThick = {}
       let objLength = {}
+      let objWeight = {}
+      let objUnit = {}
+      let objRemark = {}
       for(let i in childList){
         console.log('eachChildVal::',childList[i]);
         objFilm[childList[i]['id']] = childList[i].filmtype_id
@@ -349,6 +352,9 @@ class Quotation extends React.Component {
         objGrade[childList[i]['id']] = childList[i].grade_id
         objThick[childList[i]['id']] = childList[i].thickness
         objLength[childList[i]['id']] = childList[i].product_length
+        objWeight[childList[i]['id']] = childList[i].weight
+        objUnit[childList[i]['id']] = childList[i].unit_price
+        objRemark[childList[i]['id']] = childList[i].remark
       }
       this.setState({
         eFilmType: objFilm,
@@ -356,6 +362,9 @@ class Quotation extends React.Component {
         eGradeType: objGrade,
         eThick: objThick,
         eLength: objLength,
+        eWeight: objWeight,
+        eUnitprice: objUnit,
+        eRemark: objRemark,
       })
 
       //initiate generate selector from edit val list
@@ -638,6 +647,7 @@ class Quotation extends React.Component {
             return w*u
           }
         }
+
         return (<tr key={i.id} id = {i.id}>
             <td><input type='checkbox' ref = {'checkbox'+i.id} onChange= {()=>this.ifChecked(i.id)}/>{indexNo(index)}</td>
             <td>

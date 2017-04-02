@@ -335,17 +335,18 @@ class SalesOrder extends React.Component {
     }
 
     save(){
+      console.log(this.refs['salePerson'].value);
       //send Quatations
       let obj = Object.assign({},
       {
-        customer: this.state.selectedCustomer,
+        customer_id: this.state.selectedCustomer.value,
         order_date: this.refs['orderdate'].value,
         po_num: this.refs['ponumber'].value,
         payterm: this.refs['payterm'].value,
         invoice: this.refs['invoice'].value,
         status: this.refs['status'].value,
-        sale_person: this.refs['salePerson'].value,
-        price_listId: this.refs['pricelist'].value,
+        sale_person: this.state['state_salePerson'],
+        price_listId: this.state['state_pricelist'],
         customer:{
           customer_contact: this.state.contact,
           customer_tel: this.state.tel,
