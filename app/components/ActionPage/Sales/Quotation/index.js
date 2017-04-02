@@ -383,6 +383,7 @@ class Quotation extends React.Component {
       let item = res[0]
       let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
       let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
+      console.log(item);
       this.setState({
         state_contact:item.contact,
         state_tel: item.customer ? item.customer.tel:item.tel ,
@@ -414,14 +415,13 @@ class Quotation extends React.Component {
       let obj = Object.assign({},
       {
         company: this.state.state_company|| this.refs['company'].value,
-        customer: this.state.selectedCustomer.value || this.refs['customer'].value,
+        customer: this.state.selectedCustomer || this.refs['customer'].value,
         date: this.state.state_date || this.refs['date'].value,
         payterm: this.state.state_payterm || this.refs['payterm'].value,
         deliver: this.state.state_deliver|| this.refs['deliver'].value,
         status:   this.state.states_staus|| this.refs['status'].value,
         sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
         price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
-
         customer_contact: this.state.state_contact,
         customer_tel: this.state.state_tel,
         customer_fax: this.state.state_fax,
@@ -709,7 +709,7 @@ class Quotation extends React.Component {
         this.setState({state_tel: customer[0].telephone})
         this.setState({state_fax: customer[0].fax})
         this.setState({state_email: customer[0].email})
-        this.setState({selectedCustomer:newVal})
+        this.setState({selectedCustomer:newVal.value})
       })
     }
 

@@ -311,7 +311,6 @@ class SalesOrder extends React.Component {
 
     getBasedPrice(id){
       if(this.state.basedPrice){
-        console.log(this.state.basedPrice);
       post('/api/sales/quotation/based_price',{
         "filmtype_id": this.refs['filmType'+id].value||'',
         "brand_id": this.refs['brandType'+id].value,
@@ -336,6 +335,7 @@ class SalesOrder extends React.Component {
 
     save(){
       console.log(this.refs['salePerson'].value);
+      console.log('sssss',this.refs.pricelist.val);
       //send Quatations
       let obj = Object.assign({},
       {
@@ -508,7 +508,7 @@ class SalesOrder extends React.Component {
     }
 
     getCustomerOption(){
-      let result = this.state.customerList.map(i=>{re
+      let result = this.state.customerList.map(i=>{
         return (<option key = {i.id} value = {i.id}>{i.name}</option>)
       })
       return result
@@ -591,8 +591,9 @@ class SalesOrder extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Price list :</label>
-
-                  <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>{this.state.priceList.map(i=> <option value={i.id}>{i.label}</option>)}</select>
+                  <select ref = 'pricelist' value = {this.state.state_pricelist} onChange={()=>this.updateParam('pricelist')}>
+                    {this.state.priceList.map(i=> <option value={i.id}>{i.label}</option>)}
+                  </select>
               </div>
           </div>
       </div>)
