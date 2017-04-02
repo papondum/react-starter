@@ -47,7 +47,8 @@ const actions = {
       if (index > -1) {
           result.splice(index, 1);
       }
-      return Object.assign({},state,{tabs:result, activeTabs:result[newActive]})
+
+      return Object.assign({},state,{tabs:result, activeTabs: result.length == 0 ? {} : result[newActive]})
     }
 };
 export default createReducer(initialState, actions);

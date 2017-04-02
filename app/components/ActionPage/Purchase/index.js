@@ -34,9 +34,22 @@ class Purchase extends React.Component {
           selectedCompany: '',
           selectedSupplier : '',
           selectedTab: 'Gen',
-          filmType: '',
-          filmList:[],
-          childItem: [{id:'0001'}]
+          userFillGenDate : '',
+          userFillGenPayment : '',
+          userFillGenDeliver : '',
+          userFillGenInvoice : '',
+          userFillGenStatus : '',
+          userFillGenBuyer : '',
+          userFillSupContactPerson : '',
+          userFillSupTel : '',
+          userFillSupFax : '',
+          userFillSupEmail : '',
+          userFillShipShipto : '',
+          userFillShipShipvia : '',
+          userFillShipCIF : '',
+          userFillShipDeliverDate : '',
+          userFillShipDeparture : '',
+          userFillShipArrival : ''
         }
     }
 
@@ -69,11 +82,6 @@ class Purchase extends React.Component {
 
     save(){
       //send Purchase
-      let {companySelect, supplierSelect, date, payterm, deliver, invoice,status,
-        buyerSelected, contactPerson, tel, fax,email,shipto, shipvia, cif,requestDeliveryDate,
-        estimateTimeDeparture, estimateTimeArrival
-      } = this.refs;
-      console.log(this.state.selectedCompany,this.state.supplierSelect,date.value,payterm.value,deliver.value,invoice.value,status.value,buyerSelected.value);
       alert('save')
     }
 
@@ -103,6 +111,12 @@ class Purchase extends React.Component {
           selectedSupplier : ''
         })
       }
+    }
+    genSetDate(){
+      this.setState({
+        userFillGenDate : this.refs.date.value
+      })
+
     }
 
     getFormGeneral(){
@@ -134,7 +148,7 @@ class Purchase extends React.Component {
             </div>
             <div className='input-box flex'>
                 <label>Date :</label>
-                <input className='flex' type="date" ref='date'/>
+                <input className='flex' type="date" ref='date' onChange={()=> this.genSetDate()} value={this.state.userFillGenDate}/>
             </div>
 
         </div>

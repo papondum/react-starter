@@ -150,21 +150,6 @@ class ContentForm extends React.Component {
 
     }
 
-    getSecondSection(type){
-      if(type ==='Quotation'){
-        return this.renderQuotationLine()
-      }
-      else if(type ==='Sales Order'){
-        return this.renderSalesOrderLine()
-      }
-      else if(type === 'Purchase Order'){
-        return this.renderPurchaseOrder()
-      }
-      else {
-        return ''
-      }
-    }
-
     render() {
       return (<div>
           <table>
@@ -189,6 +174,8 @@ class ContentForm extends React.Component {
         case 'Sales Order':
           return this.renderSalesOrderLine()
           break;
+        case 'Purchase Order':
+          return this.renderPurchaseOrder()
         default:
 
       }
@@ -246,7 +233,7 @@ class ContentForm extends React.Component {
                     {this.getPurchaseOrderLineContent(this.props.content)}
                 </tbody>
             </table>
-            {/* <div className="flex flex-space-between">
+            <div className="flex flex-space-between">
                 <div className="flex flex-col remark">
                 Remark :
                 <div>
@@ -289,7 +276,7 @@ class ContentForm extends React.Component {
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       )
     }
