@@ -57,6 +57,7 @@ class ContentForm extends React.Component {
     }
 
     rowClicked(i) {
+      console.log("row click " + i)
       if(this.props.type == 'Quotation'){
         post('/api/sales/quotation/line', {'quotation_id':i})
           .then(response=>this.setState({thisLine:response}))
@@ -64,7 +65,9 @@ class ContentForm extends React.Component {
       else if(this.props.type == "Sales Order"){
         console.log('triggered');
         post('/api/sales/order/line', {'order_id':i})
-          .then(response=>this.setState({thisLine:response}))
+          .then(response=>
+            this.setState({thisLine:response})
+          )
       }
 
       //this.setState({thisLine:i})
@@ -343,6 +346,8 @@ class ContentForm extends React.Component {
     }
 
     _salesOrderLineGen(content){
+      console.log("Boob COntent Line Order")
+      console.log(content)
       var result = []
       for(var i=0 ;i<content.length;i++){
         let eachRow = this._getEachVal(content[i],'line')
