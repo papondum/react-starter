@@ -57,6 +57,7 @@ class ContentForm extends React.Component {
     }
 
     rowClicked(i) {
+      console.log("row click " + i)
       if(this.props.type == 'Quotation'){
         post('/api/sales/quotation/line', {'quotation_id':i})
           .then(response=>this.setState({thisLine:response}))
@@ -64,7 +65,9 @@ class ContentForm extends React.Component {
       else if(this.props.type == "Sales Order"){
         console.log('triggered');
         post('/api/sales/order/line', {'order_id':i})
-          .then(response=>this.setState({thisLine:response}))
+          .then(response=>
+            this.setState({thisLine:response})
+          )
       }
 
       //this.setState({thisLine:i})
@@ -228,63 +231,19 @@ class ContentForm extends React.Component {
     renderPurchaseOrder(){
       return(
         <div>
-            <div className='action-bar'>
-                <h2>Purchase Order Line(s)</h2>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        {this.getHeaderPurchaseOrderLine(this.props.content)}
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.getPurchaseOrderLineContent(this.props.content)}
-                </tbody>
-            </table>
-            <div className="flex flex-space-between">
-                <div className="flex flex-col remark">
-                Remark :
-                <div>
-                <textarea ref="remarkText"></textarea>
-                </div>
-                </div>
-                <div className="flex">
-                <div className="flex flex-col" style={{marginRight:'10px',textAlign:"end"}}>
-                <div>
-                Total Before Discount :
-                </div>
-                <div>
-                Discount :
-                </div>
-                <div>
-                Taxes : <input type="text" ref="tax" /> %
-                </div>
-                <div>
-                  Withholding Taxes <input type="text" ref="holdingtax" /> %
-                </div>
-                <div>
-                  Total :
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div>
-                  7500
-                </div>
-                <div>
-                  <input type="text" ref="discount" />
-                </div>
-                <div>
-                  490
-                </div>
-                <div>
-                  blank space
-                </div>
-                <div>
-                  7490
-                </div>
-              </div>
-            </div>
+          <div className='action-bar'>
+              <h2>Purchase Order Line(s)</h2>
           </div>
+          <table>
+              <thead>
+                  <tr>
+                      {this.getHeaderPurchaseOrderLine(this.props.content)}
+                  </tr>
+              </thead>
+              <tbody>
+                  {this.getPurchaseOrderLineContent(this.props.content)}
+              </tbody>
+          </table>
         </div>
       )
     }
@@ -343,6 +302,8 @@ class ContentForm extends React.Component {
     }
 
     _salesOrderLineGen(content){
+      console.log("Boob COntent Line Order")
+      console.log(content)
       var result = []
       for(var i=0 ;i<content.length;i++){
         let eachRow = this._getEachVal(content[i],'line')
