@@ -33,6 +33,10 @@ class SalesOrder extends React.Component {
           filmType: '',
           filmList:[],
           childItem: [{id:'0001'}],
+          state_contact: '',
+          state_tel: '',
+          state_fax: '',
+          state_email: '',
           state_company:'',
           state_orderdate:'',
           state_ponumber:'',
@@ -343,34 +347,44 @@ class SalesOrder extends React.Component {
     }
 
     _setInitialVal(res){
-      // let item = res[0]
-      // let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
-      // let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
+      let item = res[0]
+      let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
+      let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
       //
       //
-      // this.setState({
-      //   state_contact:item.contact,
-      //   state_tel: item.customer ? item.customer.tel:item.tel ,
-      //   state_fax: item.customer ? item.customer.fax:item.fax,
-      //   state_email: item.customer? item.customer.email:item.email,
+       this.setState({
+
       //   state_company: item.company,
       //   state_date: item.quotation_date,
-      //   state_payterm: item.payment_term,
-      //   state_deliver: item.delivery_term,
-      //   state_status: item.status,
+
       //   state_salePerson: saleperson,
       //   state_priceListId: pricelist,
       //   total: item.total,
       //   childItem: item.contents,
-      //   selectedCustomer: item.customer_id
-      // })
+         selectedCustomer: item.customer_id,
+         state_orderdate: item.order_date,
+         state_ponumber: item.po_number,
+         state_payterm: item.payment_term,
+         state_invoice: item.invoice_to,
+         state_status: item.status,
+         state_salePerson: saleperson,
+         state_pricelist: pricelist,
+         state_deliverterm: item.deliverterm,
+         state_shipto:  item.ship_to,
+         state_requestdeliverdate: item.request_deliver_date,
+         state_actualdeliverdate: item.state_actualdeliverdate,
+         state_actualdelivertime: item.actual_deliver_time,
+         state_contact: item.customer.contact,
+         state_tel: item.customer.tel,
+         state_fax: item.customer.fax,
+         state_email:  item.customer.email,
+      })
       // console.log('Test', this.state.customerList);
       // console.log('Test', this.state.customerList);
-      // this.refs['discount'].value = item.discount ||0
-      // this.refs['taxes'].value = item.tax ||0
-      // this.refs['wotaxes'].value = item.wotax ||0
-      // this.refs['revise_message'].value= item.revise_message
-      // this.refs['remark'].value= item.remark
+      this.refs['discount'].value = item.discount ||0
+      this.refs['taxes'].value = item.tax ||0
+      this.refs['wotaxes'].value = item.wotax ||0
+      this.refs['remark'].value= item.remark
       // this._setInitialEditContent()
     }
 
@@ -625,7 +639,7 @@ class SalesOrder extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>
+                  <select ref = 'status' value = {this.state.states_status} onC   hange={()=>this.updateParam('status')}>
                     {this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}
                   </select>
               </div>
@@ -688,22 +702,22 @@ class SalesOrder extends React.Component {
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Contact Person :</label>
-                  <input className='flex' type="text" ref='contact' value={this.state.contact}/>
+                  <input className='flex' type="text" ref='contact' value={this.state.state_contact}/>
               </div>
               <div className='input-box flex'>
                   <label>Tel :</label>
-                  <input className='flex' type="text" ref='tel'  value={this.state.tel}/>
+                  <input className='flex' type="text" ref='tel'  value={this.state.state_tel}/>
               </div>
               <div className='input-box flex'>
                   <label>Fax :</label>
-                  <input className='flex' type="text" ref='fax' value={this.state.fax}/>
+                  <input className='flex' type="text" ref='fax' value={this.state.state_fax}/>
               </div>
 
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Email :</label>
-                  <input className='flex' type="text" ref='email' value={this.state.email}/>
+                  <input className='flex' type="text" ref='email' value={this.state.state_email}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
@@ -755,9 +769,9 @@ class SalesOrder extends React.Component {
                           Shipment
                       </div>
                       {/*
-                      <div className={this.state.selectedTab === 'Attach'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attach')}>
+                          <div className={this.state.selectedTab === 'Attach'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attach')}>
                           Attachment
-                      </div>
+                          </div>
                       */}
                   </div>
                   <hr style={{margin : 0}}/>
