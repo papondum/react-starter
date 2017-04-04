@@ -438,6 +438,55 @@ class Purchase extends React.Component {
       }
     }
 
+    getBottomPurchaseForm(){
+      return (
+        <div className="flex flex-space-between">
+            <div className="flex flex-col remark">
+            Remark :
+            <div>
+            <textarea ref="remarkText"></textarea>
+            </div>
+            </div>
+            <div className="flex">
+            <div className="flex flex-col" style={{marginRight:'10px',textAlign:"end"}}>
+            <div>
+            Total Before Discount :
+            </div>
+            <div>
+            Discount :
+            </div>
+            <div>
+            Taxes : <input type="text" ref="tax" /> %
+            </div>
+            <div>
+              Withholding Taxes <input type="text" ref="holdingtax" /> %
+            </div>
+            <div>
+              Total :
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <div>
+              7500
+            </div>
+            <div>
+              <input type="text" ref="discount" />
+            </div>
+            <div>
+              490
+            </div>
+            <div>
+              blank space
+            </div>
+            <div>
+              7490
+            </div>
+          </div>
+        </div>
+      </div>
+      )
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -476,7 +525,9 @@ class Purchase extends React.Component {
                   </div>
               </div>
               <hr style={{margin : 0}} />
-
+              {
+                this.getBottomPurchaseForm()
+              }
           </div>)
         }
     }
