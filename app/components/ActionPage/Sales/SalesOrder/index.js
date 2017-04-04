@@ -328,9 +328,50 @@ class SalesOrder extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
+      this.props.type=='edit'? this._getEditItem():''
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
+    }
+
+    _getEditItem(){
+      post('/api/sales/order/id', {order_id: +this.props.editItem})
+      .then((response)=>{
+        this._setInitialVal(response)
+        console.log("response::::", response);
+      })
+    }
+
+    _setInitialVal(res){
+      // let item = res[0]
+      // let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
+      // let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
+      //
+      //
+      // this.setState({
+      //   state_contact:item.contact,
+      //   state_tel: item.customer ? item.customer.tel:item.tel ,
+      //   state_fax: item.customer ? item.customer.fax:item.fax,
+      //   state_email: item.customer? item.customer.email:item.email,
+      //   state_company: item.company,
+      //   state_date: item.quotation_date,
+      //   state_payterm: item.payment_term,
+      //   state_deliver: item.delivery_term,
+      //   state_status: item.status,
+      //   state_salePerson: saleperson,
+      //   state_priceListId: pricelist,
+      //   total: item.total,
+      //   childItem: item.contents,
+      //   selectedCustomer: item.customer_id
+      // })
+      // console.log('Test', this.state.customerList);
+      // console.log('Test', this.state.customerList);
+      // this.refs['discount'].value = item.discount ||0
+      // this.refs['taxes'].value = item.tax ||0
+      // this.refs['wotaxes'].value = item.wotax ||0
+      // this.refs['revise_message'].value= item.revise_message
+      // this.refs['remark'].value= item.remark
+      // this._setInitialEditContent()
     }
 
     save(){

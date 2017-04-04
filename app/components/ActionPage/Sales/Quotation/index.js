@@ -174,10 +174,6 @@ class Quotation extends React.Component {
     }
 
     _updateStateSelector(id, state){
-      //initial selector work but set of id is null of id
-
-      //update state that store unique id of content with ref
-
       switch (state) {
         case 'eFilmType':
           console.log(this.refs['filmType'+id].value, id);
