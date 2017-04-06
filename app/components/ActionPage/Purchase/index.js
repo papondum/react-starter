@@ -194,7 +194,7 @@ class Purchase extends React.Component {
       //   obj.quotation_id = parseInt(this.props.editItem)
       // }
       // console.log('obj',obj);
-      let url = this.props.type=='create'? '/api/sales/purchase/create':'/api/sales/purchase/update'
+      let url = this.props.type=='create'? '/api/purchase/create':'/api/purchase/update'
       post(url, obj)
       .then(response => {
         console.log(response);
