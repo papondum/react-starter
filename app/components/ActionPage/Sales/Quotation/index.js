@@ -409,7 +409,7 @@ class Quotation extends React.Component {
         date: this.state.state_date || this.refs['date'].value,
         payterm: this.state.state_payterm || this.refs['payterm'].value,
         deliver: this.state.state_deliver|| this.refs['deliver'].value,
-        status:   this.state.states_staus|| this.refs['status'].value,
+        status:   this.state.state_staus|| this.refs['status'].value,
         sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
         price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
         customer_contact: this.state.state_contact,
@@ -444,7 +444,6 @@ class Quotation extends React.Component {
       })
 
       if(this.props.type=='edit'){
-        console.log();
         obj.quotation_id = parseInt(this.props.editItem)
       }
       console.log('obj',obj);
@@ -770,7 +769,9 @@ class Quotation extends React.Component {
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>
+                      {this.state.priceList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
+                  </select>
               </div>
           </div>
       </div>)
