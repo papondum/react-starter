@@ -9,6 +9,37 @@ import deleteIcon from '../../../resource/Icon/button_delete.png'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import './style.scss'
+
+const mockContent = [
+  {
+    "id" : "1",
+    "Line.No" : "001",
+    "Film Type" : "M-Pet",
+    "Brand" : "SRF",
+    "Grade" : "good",
+    "Width" : "1600",
+    "Thinkness" : "12",
+    "Length" : "1200",
+    "Order QTY" : "150000",
+    "Total Weight" : "190000",
+    "Unit Price" : "500",
+    "SubTotal" : "10000"
+  },
+  {
+    "id" : "2",
+    "Line.No" : "002",
+    "Film Type" : "M-Pet",
+    "Brand" : "SRF",
+    "Grade" : "good",
+    "Width" : "1600",
+    "Thinkness" : "12",
+    "Length" : "1200",
+    "Order QTY" : "150000",
+    "Total Weight" : "190000",
+    "Unit Price" : "500",
+    "SubTotal" : "10000"
+  }
+]
 class Purchase extends React.Component {
     constructor(props) {
         super(props);
@@ -31,7 +62,7 @@ class Purchase extends React.Component {
             ],
           supplierList : [],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Confirmed'},{value: 'Ready To Submit'},{value: 'Submitted'}, {value: 'Completed'},{value: 'Canceled'}],
-          buyerList : [{value : 'taey'},{value:'papon'},{value:'team'}],
+          buyerList : [],
           selectedCompany: '',
           selectedSupplier : '',
           selectedTab: 'Gen',
@@ -77,6 +108,18 @@ class Purchase extends React.Component {
           supplierList : temp
         })
         console.log(this.state.supplierList);
+       })
+       .catch(err=>console.log(err))
+
+       get('/api/user/all')
+       .then((response)=> {
+         if (response.status >= 400) {
+           throw new Error("Bad response from server");
+         }
+         this.setState({buyerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
+
+         console.log(this.state.buyerList)
+
        })
        .catch(err=>console.log(err))
     }
@@ -163,7 +206,7 @@ class Purchase extends React.Component {
       //   obj.quotation_id = parseInt(this.props.editItem)
       // }
       // console.log('obj',obj);
-      let url = this.props.type=='create'? '/api/sales/purchase/create':'/api/sales/purchase/update'
+      let url = this.props.type=='create'? '/api/purchase/create':'/api/purchase/update'
       post(url, obj)
       .then(response => {
         console.log(response);
@@ -171,7 +214,6 @@ class Purchase extends React.Component {
         this.props.getContent('Purchase Order')
       })
       .catch(err=>console.log(err))
-      alert('save')
     }
 
     updateSelectedCompany(newVal) {
@@ -192,7 +234,7 @@ class Purchase extends React.Component {
     updateSelectedSupplier(newVal){
       if(newVal){
         this.setState({
-          selectedSupplier : newVal.label
+          selectedSupplier : newVal.id
         })
       }
       else{
@@ -227,6 +269,7 @@ class Purchase extends React.Component {
     }
 
     setUserFillGenBuyer(){
+      console.log(this.refs.buyerSelected)
       this.setState({
         userFillGenBuyer : this.refs.buyerSelected.value
       })
@@ -258,7 +301,7 @@ class Purchase extends React.Component {
                 <Select
                     name="supplier"
                     ref = 'supplierSelect'
-                    value={this.state.selectedSupplier}
+                    value={this.state.selectedSupplier.id}
                     options={this.state.supplierList}
                     onChange={(selected) => this.updateSelectedSupplier(selected)}
                     className = 'selector-class'
@@ -266,7 +309,7 @@ class Purchase extends React.Component {
                 />
             </div>
             <div className='input-box flex'>
-                <label>Date :</label>
+                <label>Order Date :</label>
                 <input className='flex' type="date" ref='date' onChange={()=> this.genSetDate()} value={this.state.userFillGenDate}/>
             </div>
 
@@ -292,7 +335,7 @@ class Purchase extends React.Component {
             </div>
             <div className='input-box flex'>
                 <label>Buyer : </label>
-                <select ref = 'buyerSelected' onChange={()=> this.setUserFillGenBuyer()}>{this.state.buyerList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                <select ref = 'buyerSelected' onChange={()=> this.setUserFillGenBuyer()}>{this.state.buyerList.map(i=> <option value={i.value}>{i.label}</option>)}</select>
             </div>
         </div>
     </div>)
@@ -438,6 +481,133 @@ class Purchase extends React.Component {
       }
     }
 
+    getRemarkAndCalculation(){
+      return (
+        <div className="flex flex-space-between">
+            <div className="flex flex-col remark">
+            Remark :
+            <div>
+            <textarea ref="remarkText"></textarea>
+            </div>
+            </div>
+            <div className="flex">
+            <div className="flex flex-col" style={{marginRight:'10px',textAlign:"end"}}>
+            <div>
+            Total Before Discount :
+            </div>
+            <div>
+            Discount :
+            </div>
+            <div>
+            Taxes : <input type="text" ref="tax" /> %
+            </div>
+            <div>
+              Withholding Taxes <input type="text" ref="holdingtax" /> %
+            </div>
+            <div>
+              Total :
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <div>
+              7500
+            </div>
+            <div>
+              <input type="text" ref="discount" />
+            </div>
+            <div>
+              490
+            </div>
+            <div>
+              blank space
+            </div>
+            <div>
+              7490
+            </div>
+          </div>
+        </div>
+      </div>
+      )
+    }
+
+    getMiddlePurchaseForm(){
+      return (
+        <table>
+            <thead>
+                <tr>
+                    {this.getHeaderPurchaseOrderLine(mockContent)}
+                </tr>
+            </thead>
+            <tbody>
+                {this.getPurchaseOrderLineContent(mockContent)}
+            </tbody>
+        </table>
+      )
+    }
+    getHeaderPurchaseOrderLine(content){
+      let genHead=[]
+      if(content.length>0){
+        var head = Object.keys(content[0])
+        genHead = head.map(item=>{
+          if (item == 'id') {
+            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+          } else {
+            return (<td key= {item}>{item}</td>)
+          }
+        })
+      }
+      genHead.unshift(<td key='checkbox'><input type='checkbox'/></td>)
+      return genHead
+    }
+
+    getPurchaseOrderLineContent(content){
+      return this._contentGen(content)
+    }
+
+    _contentGen(content){
+      var result = []
+
+      for(var i=0 ;i<content.length;i++){
+          let eachRow = this._getEachVal(content[i],'content')
+          // working on here -> detect click in each row and send id to rowClicked function
+          let itemId = content[i].id
+          result.push((<tr className ="clickable-item" onClick={()=>this.rowClicked(itemId)} key = {i}>{eachRow}</tr>))
+      }
+      return result
+    }
+
+    _getEachVal(obj,type){
+      var result=[]
+      for(var o in obj){
+        if (o == 'id') {
+          result.push((<td key={o} style={{display: 'none'}}>{obj[o]}</td>))
+        } else {
+          result.push((<td key={o}>{obj[o]}</td>))
+        }
+      }
+      if(type !== 'line'){
+        result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id, type)} type = 'checkbox' value = {obj.id} ref = {type+'_'+obj.id} /></td>))
+      }
+      return result
+    }
+
+    rowClicked(i) {
+      console.log("row click " + i)
+      // if(this.props.type == 'Quotation'){
+      //   post('/api/sales/quotation/line', {'quotation_id':i})
+      //     .then(response=>this.setState({thisLine:response}))
+      // }
+      // else if(this.props.type == "Sales Order"){
+      //   console.log('triggered');
+      //   post('/api/sales/order/line', {'order_id':i})
+      //     .then(response=>
+      //       this.setState({thisLine:response})
+      //     )
+      // }
+
+      //this.setState({thisLine:i})
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -469,14 +639,20 @@ class Purchase extends React.Component {
               </div>
               <hr/>
               <div className="flex flex-row space-bet" >
-                  <div className='tab-quo active'>Contents</div>
-                  <div className='action-group-btn-content'>
-                    <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
-                    <button><img src={deleteIcon}/></button>
-                  </div>
+                <div className='tab-quo active'>Contents</div>
+                <div className='action-group-btn-content'>
+                  <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
+                  <button><img src={deleteIcon}/></button>
+                </div>
               </div>
               <hr style={{margin : 0}} />
-
+              {
+                this.getMiddlePurchaseForm()
+              }
+              <hr style={{margin : 0}} />
+              {
+                this.getRemarkAndCalculation()
+              }
           </div>)
         }
     }

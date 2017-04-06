@@ -800,7 +800,8 @@ class Quotation extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Email :</label>
-                  <input className='flex' type="text" ref='email' value={this.state.state_email}/>
+                  <input className='flex' type="text" ref='email' value={this.state.state_email}
+                  onChange={()=>this.updateParam('email')}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
