@@ -360,7 +360,7 @@ class SalesOrder extends React.Component {
       //   state_salePerson: saleperson,
       //   state_priceListId: pricelist,
       //   total: item.total,
-      //   childItem: item.contents,
+         childItem: item.contents,
          selectedCustomer: item.customer_id,
          state_orderdate: item.order_date,
          state_ponumber: item.po_number,
@@ -389,18 +389,17 @@ class SalesOrder extends React.Component {
     }
 
     save(){
-      console.log('selected',this.refs['salePerson'].value);
       //send Quatations
       let obj = Object.assign({},
       {
         customer_id: this.state.selectedCustomer ,
-        order_date: this.refs['orderdate'].value,
-        po_num: this.refs['ponumber'].value,
-        payterm: this.refs['payterm'].value,
-        invoice: this.refs['invoice'].value,
-        status: this.refs['status'].value,
-        sale_person: this.state['state_salePerson'] ||this.refs['salePerson'].value,
-        price_listId: this.state['state_pricelist'] ||this.refs['pricelist'].value,
+        order_date: this.state['state_orderdate'],
+        po_num: this.state['state_ponumber'],
+        payterm: this.state['state_payterm'],
+        invoice: this.state['state_invoice'],
+        status: this.state['state_status'],
+        sale_person: this.state['state_salePerson'],
+        price_listId: this.state['state_pricelist'],
         customer:{
           customer_contact: this.state.contact,
           customer_tel: this.state.tel,
@@ -572,15 +571,17 @@ class SalesOrder extends React.Component {
 
     updateSelectedCustomer(newVal) {
       this.getCustomerAsync(newVal.value).then((customer) => {
-        this.setState({contact: customer[0].contact_person})
-        this.setState({tel: customer[0].telephone})
-        this.setState({fax: customer[0].fax})
-        this.setState({email: customer[0].email})
+        console.log(customer);
+        this.setState({state_contact: customer[0].contact_person})
+        this.setState({state_tel: customer[0].telephone})
+        this.setState({state_fax: customer[0].fax})
+        this.setState({state_email: customer[0].email})
         this.setState({selectedCustomer:newVal.value})
       })
     }
 
     getCustomerAsync(customer_id) {
+      console.log(customer_id);
       return new Promise((resolve,reject)=>{
         post('/api/customer/id', {customer_id: customer_id})
           .then((response)=>{
@@ -640,7 +641,7 @@ class SalesOrder extends React.Component {
               <div className='input-box flex'>
                   <label>Status :</label>
                   <select ref = 'status' value = {this.state.states_status} onC   hange={()=>this.updateParam('status')}>
-                    {this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}
+                      {this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}
                   </select>
               </div>
               <div className='input-box flex'>
@@ -821,20 +822,20 @@ class SalesOrder extends React.Component {
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
-                      <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
-                      <span>{this.state.total_before_discount}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
+                          <span>{this.state.total_before_discount}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
+                          <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Taxes
-                        <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                        <span>{this.state.taxes}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Taxes
+                              <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                          <span>{this.state.taxes}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
-                        <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                        <span>{this.state.wotaxes}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
+                              <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                          <span>{this.state.wotaxes}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
                   </div>
               </div>
           </div>)
