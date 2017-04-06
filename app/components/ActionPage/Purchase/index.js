@@ -9,6 +9,37 @@ import deleteIcon from '../../../resource/Icon/button_delete.png'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import './style.scss'
+
+const mockContent = [
+  {
+    "id" : "1",
+    "Line.No" : "001",
+    "Film Type" : "M-Pet",
+    "Brand" : "SRF",
+    "Grade" : "good",
+    "Width" : "1600",
+    "Thinkness" : "12",
+    "Length" : "1200",
+    "Order QTY" : "150000",
+    "Total Weight" : "190000",
+    "Unit Price" : "500",
+    "SubTotal" : "10000"
+  },
+  {
+    "id" : "2",
+    "Line.No" : "002",
+    "Film Type" : "M-Pet",
+    "Brand" : "SRF",
+    "Grade" : "good",
+    "Width" : "1600",
+    "Thinkness" : "12",
+    "Length" : "1200",
+    "Order QTY" : "150000",
+    "Total Weight" : "190000",
+    "Unit Price" : "500",
+    "SubTotal" : "10000"
+  }
+]
 class Purchase extends React.Component {
     constructor(props) {
         super(props);
@@ -438,7 +469,7 @@ class Purchase extends React.Component {
       }
     }
 
-    getBottomPurchaseForm(){
+    getRemarkAndCalculation(){
       return (
         <div className="flex flex-space-between">
             <div className="flex flex-col remark">
@@ -487,6 +518,84 @@ class Purchase extends React.Component {
       )
     }
 
+    getMiddlePurchaseForm(){
+      return (
+        <table>
+            <thead>
+                <tr>
+                    {this.getHeaderPurchaseOrderLine(mockContent)}
+                </tr>
+            </thead>
+            <tbody>
+                {this.getPurchaseOrderLineContent(mockContent)}
+            </tbody>
+        </table>
+      )
+    }
+    getHeaderPurchaseOrderLine(content){
+      let genHead=[]
+      if(content.length>0){
+        var head = Object.keys(content[0])
+        genHead = head.map(item=>{
+          if (item == 'id') {
+            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+          } else {
+            return (<td key= {item}>{item}</td>)
+          }
+        })
+      }
+      genHead.unshift(<td key='checkbox'><input type='checkbox'/></td>)
+      return genHead
+    }
+
+    getPurchaseOrderLineContent(content){
+      return this._contentGen(content)
+    }
+
+    _contentGen(content){
+      var result = []
+
+      for(var i=0 ;i<content.length;i++){
+          let eachRow = this._getEachVal(content[i],'content')
+          // working on here -> detect click in each row and send id to rowClicked function
+          let itemId = content[i].id
+          result.push((<tr className ="clickable-item" onClick={()=>this.rowClicked(itemId)} key = {i}>{eachRow}</tr>))
+      }
+      return result
+    }
+
+    _getEachVal(obj,type){
+      var result=[]
+      for(var o in obj){
+        if (o == 'id') {
+          result.push((<td key={o} style={{display: 'none'}}>{obj[o]}</td>))
+        } else {
+          result.push((<td key={o}>{obj[o]}</td>))
+        }
+      }
+      if(type !== 'line'){
+        result.unshift((<td key='checkbox'><input onChange = {()=>this.ifChecked(obj.id, type)} type = 'checkbox' value = {obj.id} ref = {type+'_'+obj.id} /></td>))
+      }
+      return result
+    }
+
+    rowClicked(i) {
+      console.log("row click " + i)
+      // if(this.props.type == 'Quotation'){
+      //   post('/api/sales/quotation/line', {'quotation_id':i})
+      //     .then(response=>this.setState({thisLine:response}))
+      // }
+      // else if(this.props.type == "Sales Order"){
+      //   console.log('triggered');
+      //   post('/api/sales/order/line', {'order_id':i})
+      //     .then(response=>
+      //       this.setState({thisLine:response})
+      //     )
+      // }
+
+      //this.setState({thisLine:i})
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -518,15 +627,19 @@ class Purchase extends React.Component {
               </div>
               <hr/>
               <div className="flex flex-row space-bet" >
-                  <div className='tab-quo active'>Contents</div>
-                  <div className='action-group-btn-content'>
-                    <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
-                    <button><img src={deleteIcon}/></button>
-                  </div>
+                <div className='tab-quo active'>Contents</div>
+                <div className='action-group-btn-content'>
+                  <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
+                  <button><img src={deleteIcon}/></button>
+                </div>
               </div>
               <hr style={{margin : 0}} />
               {
-                this.getBottomPurchaseForm()
+                this.getMiddlePurchaseForm()
+              }
+              <hr style={{margin : 0}} />
+              {
+                this.getRemarkAndCalculation()
               }
           </div>)
         }

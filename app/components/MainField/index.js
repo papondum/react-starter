@@ -43,6 +43,7 @@ class MainField extends React.Component {
     }
 
     getJson(url){
+      console.log('getcontent');
       if(url === 'Purchase Order'){
         this.setState({
           'mainContent': [

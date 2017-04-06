@@ -36,7 +36,7 @@ class ContentForm extends React.Component {
           let eachRow = this._getEachVal(content[i],'content')
           // working on here -> detect click in each row and send id to rowClicked function
           let itemId = content[i].id
-          result.push((<tr className = {this.props.type =="Quotation"||this.props.type == "Sales Order" ? 'clickable-item':''} onClick={()=>this.rowClicked(itemId)} key = {i}>{eachRow}</tr>))
+          result.push((<tr className = {this.props.type =="Quotation"||this.props.type == "Sales Order"||this.props.type == "Purchase Order" ? 'clickable-item':''} onClick={()=>this.rowClicked(itemId)} key = {i}>{eachRow}</tr>))
       }
       return result
     }
@@ -249,22 +249,22 @@ class ContentForm extends React.Component {
     }
 
     getHeaderPurchaseOrderLine(content){
-      // let genHead=[]
-      // if(content.length>0){
-      //   var head = Object.keys(content[0])
-      //   genHead = head.map(item=>{
-      //     if (item == 'id') {
-      //       return (<td key= {item} style={{display: 'none'}}>{item}</td>)
-      //     } else {
-      //       return (<td key= {item}>{item}</td>)
-      //     }
-      //   })
-      // }
-      // return genHead
+      let genHead=[]
+      if(content.length>0){
+        var head = Object.keys(content[0])
+        genHead = head.map(item=>{
+          if (item == 'id') {
+            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
+          } else {
+            return (<td key= {item}>{item}</td>)
+          }
+        })
+      }
+      return genHead
     }
 
     getPurchaseOrderLineContent(content){
-      return ''
+      return this._contentGen(content)
     }
 
     // _headerQuotationGen(content){
