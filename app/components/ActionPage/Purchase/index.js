@@ -214,7 +214,6 @@ class Purchase extends React.Component {
         this.props.getContent('Purchase Order')
       })
       .catch(err=>console.log(err))
-      alert('save')
     }
 
     updateSelectedCompany(newVal) {
