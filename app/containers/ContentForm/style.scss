@@ -41,3 +41,10 @@ table {
 .flex-space-between{
   justify-content: space-between;
 }
+.filter-input {
+  height: 25px;
+  width: 100%;
+}
+.filter-input:focus {
+  outline: none;
+}

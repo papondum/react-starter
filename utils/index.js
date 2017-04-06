@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 export function call(url, method, data) {
   const {
     hostname, protocol
