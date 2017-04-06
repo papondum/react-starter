@@ -62,7 +62,7 @@ class Purchase extends React.Component {
             ],
           supplierList : [],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Confirmed'},{value: 'Ready To Submit'},{value: 'Submitted'}, {value: 'Completed'},{value: 'Canceled'}],
-          buyerList : [{value : 'taey'},{value:'papon'},{value:'team'}],
+          buyerList : [],
           selectedCompany: '',
           selectedSupplier : '',
           selectedTab: 'Gen',
@@ -108,6 +108,18 @@ class Purchase extends React.Component {
           supplierList : temp
         })
         console.log(this.state.supplierList);
+       })
+       .catch(err=>console.log(err))
+
+       get('/api/user/all')
+       .then((response)=> {
+         if (response.status >= 400) {
+           throw new Error("Bad response from server");
+         }
+         this.setState({buyerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
+
+         console.log(this.state.buyerList)
+
        })
        .catch(err=>console.log(err))
     }
@@ -223,7 +235,7 @@ class Purchase extends React.Component {
     updateSelectedSupplier(newVal){
       if(newVal){
         this.setState({
-          selectedSupplier : newVal.label
+          selectedSupplier : newVal.id
         })
       }
       else{
@@ -258,6 +270,7 @@ class Purchase extends React.Component {
     }
 
     setUserFillGenBuyer(){
+      console.log(this.refs.buyerSelected)
       this.setState({
         userFillGenBuyer : this.refs.buyerSelected.value
       })
@@ -289,7 +302,7 @@ class Purchase extends React.Component {
                 <Select
                     name="supplier"
                     ref = 'supplierSelect'
-                    value={this.state.selectedSupplier}
+                    value={this.state.selectedSupplier.id}
                     options={this.state.supplierList}
                     onChange={(selected) => this.updateSelectedSupplier(selected)}
                     className = 'selector-class'
@@ -323,7 +336,7 @@ class Purchase extends React.Component {
             </div>
             <div className='input-box flex'>
                 <label>Buyer : </label>
-                <select ref = 'buyerSelected' onChange={()=> this.setUserFillGenBuyer()}>{this.state.buyerList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
+                <select ref = 'buyerSelected' onChange={()=> this.setUserFillGenBuyer()}>{this.state.buyerList.map(i=> <option value={i.value}>{i.label}</option>)}</select>
             </div>
         </div>
     </div>)
