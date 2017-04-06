@@ -297,7 +297,7 @@ class Purchase extends React.Component {
                 />
             </div>
             <div className='input-box flex'>
-                <label>Date :</label>
+                <label>Order Date :</label>
                 <input className='flex' type="date" ref='date' onChange={()=> this.genSetDate()} value={this.state.userFillGenDate}/>
             </div>
 
