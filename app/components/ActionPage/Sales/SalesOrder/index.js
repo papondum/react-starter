@@ -472,12 +472,12 @@ class SalesOrder extends React.Component {
          state_payterm: item.payment_term,
          state_invoice: item.invoice_to,
          state_status: item.status,
-         state_salePerson: saleperson,
-         state_priceListId: pricelist,
-         state_deliverterm: item.deliverterm,
+         state_salePerson: saleperson.value,
+         state_priceListId: pricelist.value,
+         state_deliverterm: item.delivery_term,
          state_shipto:  item.ship_to,
          state_requestdeliverdate: item.request_deliver_date,
-         state_actualdeliverdate: item.state_actualdeliverdate,
+         state_actualdeliverdate: item.actual_deliver_date,
          state_actualdelivertime: item.actual_deliver_time,
          state_contact: item.customer.contact,
          state_tel: item.customer.tel,
@@ -543,6 +543,7 @@ class SalesOrder extends React.Component {
 
     save(){
       //send Quatations
+      console.log(this.state.state_salePerson);
       let obj = Object.assign({},
       {
         customer_id: this.state.selectedCustomer ,
@@ -550,9 +551,9 @@ class SalesOrder extends React.Component {
         po_num: this.state['state_ponumber'],
         payterm: this.state['state_payterm'],
         invoice: this.state['state_invoice'],
-        status: this.state.state_status.value|| this.refs['status'].value,
-        sale_person: this.state.state_salePerson.value|| this.refs['salePerson'].value,
-        price_listId: this.state.state_priceListId.value|| this.refs['priceListId'].value,
+        status: this.state.state_status|| this.refs['status'].value,
+        sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
+        price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
         customer:{
           customer_contact: this.state.state_contact,
           customer_tel: this.state.state_tel,
@@ -829,7 +830,7 @@ class SalesOrder extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_status} onC   hange={()=>this.updateParam('status')}>
+                  <select ref = 'status' value = {this.state.state_status} onChange={()=>this.updateParam('status')}>
                       {this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}
                   </select>
               </div>
@@ -892,22 +893,22 @@ class SalesOrder extends React.Component {
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Contact Person :</label>
-                  <input className='flex' type="text" ref='contact' value={this.state.state_contact}/>
+                  <input className='flex' type="text" ref='contact' value={this.state.state_contact} onChange={()=>this.updateParam('contact')}/>
               </div>
               <div className='input-box flex'>
                   <label>Tel :</label>
-                  <input className='flex' type="text" ref='tel'  value={this.state.state_tel}/>
+                  <input className='flex' type="text" ref='tel'  value={this.state.state_tel} onChange={()=>this.updateParam('tel')}/>
               </div>
               <div className='input-box flex'>
                   <label>Fax :</label>
-                  <input className='flex' type="text" ref='fax' value={this.state.state_fax}/>
+                  <input className='flex' type="text" ref='fax' value={this.state.state_fax} onChange={()=>this.updateParam('fax')}/>
               </div>
 
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Email :</label>
-                  <input className='flex' type="text" ref='email' value={this.state.state_email}/>
+                  <input className='flex' type="text" ref='email' value={this.state.state_email} onChange={()=>this.updateParam('email')}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
@@ -943,7 +944,7 @@ class SalesOrder extends React.Component {
                   <div className='action-group-btn'>
                       <button><img src={emailIcon}/><p>Email</p></button>
                       <button><img src={printIcon}/><p>Print</p></button>
-                      <button onClick={()=>this.props.getContent('Quotation')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick={()=>this.props.getContent('Sales Order')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.save()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>

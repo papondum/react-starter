@@ -728,6 +728,7 @@ class Quotation extends React.Component {
     }
 
     getGeneralContent(){
+      console.log(this.state.state_status, 'status::::');
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
@@ -765,7 +766,7 @@ class Quotation extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value} value={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'status' value = {this.state.states_status} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value} value={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
