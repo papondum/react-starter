@@ -3,6 +3,7 @@ import fuzzysearch from 'fuzzysearch';
 import './style.scss';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import Table from './Table';
 import { post } from '../../../utils'
 import * as DeleteActions from '../../actions/deleteCall'
 class ContentForm extends React.Component {
@@ -87,11 +88,8 @@ class ContentForm extends React.Component {
       }
 
       if(this.state.checkedItem.length==0){
-        //send existing state checked id state
-
         this.props.checkedSingleItem(this.refs[id].value)
       }
-
     }
     else{   //if checked item that not want it will return wrong val
       var array = this.state.checkedItem;
@@ -106,10 +104,7 @@ class ContentForm extends React.Component {
         this.props.checkedSingleItem(this.state.checkedItem[0])
       }
     }
-
   }
-
-
 
   componentWillReceiveProps(nextProps){
     if(this.props.type!==nextProps.type){
@@ -160,21 +155,9 @@ class ContentForm extends React.Component {
       this.props.deleteItem(obj,'Sales Order')
     }
   }
-  setFilterState(key, value) {
-    const filters = Object.assign({}, this.state.filters);
-    filters[key] = value;
-    this.setState({ filters });
-  }
-  filterContent(rows) {
-    return rows.filter(this.filterRow.bind(this));
-  }
-  filterRow(row) {
-    const result = Object.keys(row).map(key => fuzzysearch(this.state.filters[key] || '', row[key]));
-    return result.every(r => r === true);
-  }
   render() {
     return (<div>
-      <table>
+      {/*<table>
         <thead>
           <tr>
             {this._headerGen(this.props.content)}
@@ -183,8 +166,9 @@ class ContentForm extends React.Component {
         <tbody>
           {this._contentGen(this.props.content)}
         </tbody>
-      </table>
-      <div>{this.renderLine(this.props.type)}</div>
+      </table>*/}
+      <Table header="Purchase Order Line(s)" content={this.props.content || []} type={this.props.type} />
+      {/*<div>{this.renderLine(this.props.type)}</div>*/}
     </div>)
   }
 
@@ -226,6 +210,7 @@ class ContentForm extends React.Component {
       <div className='action-bar'>
         <h2>Sales Order Line(s)</h2>
       </div>
+
       <table>
         <thead>
           <tr>
@@ -250,7 +235,7 @@ class ContentForm extends React.Component {
             {this.getHeaderPurchaseOrderLine(this.props.content)}
           </thead>
           <tbody>
-            {this.getPurchaseOrderLineContent(this.filterContent(this.props.content))}
+            {this.getPurchaseOrderLineContent(this.props.content)}
           </tbody>
         </table>
       </div>

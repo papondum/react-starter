@@ -5,27 +5,27 @@
   height: calc(100% - 115px);
 }
 table {
-    border-collapse: collapse;
-    width: 100%;
-    tr:nth-child(odd){background-color: #f2f2f2}
-    tr:nth-child(even){background-color: #ffffff}
-    tr{
-      height: 35px;
-      td{
-        padding: 3px 8px;
-        font-size: 14px;
-        color:#5e5e5e;
-      }
-    }
-    thead{
-      border-bottom: 2px solid #e0e0e0;
+  border-collapse: collapse;
+  width: 100%;
+  tr:nth-child(odd){background-color: #f2f2f2}
+  tr:nth-child(even){background-color: #ffffff}
+  tr{
+    height: 35px;
+    td{
       padding: 3px 8px;
-      td{
-        font-weight: 600;
-        font-size:14px;
-        color:#454545;
-      }
+      font-size: 14px;
+      color:#5e5e5e;
     }
+  }
+  thead{
+    border-bottom: 2px solid #e0e0e0;
+    padding: 3px 8px;
+    td{
+      font-weight: 600;
+      font-size:14px;
+      color:#454545;
+    }
+  }
 
 
 }
@@ -47,4 +47,57 @@ table {
 }
 .filter-input:focus {
   outline: none;
+}
+.ant-input {
+  border-radius: 0px !important;
+  height: 25px !important;
+  border: 1px #CCCCCC solid !important;
+}
+.ant-input:focus {
+  outline: none !important;
+}
+.ant-calendar-picker {
+  width: 100% !important;
+}
+
+.ant-select {
+  border-radius: 0px !important;
+  height: 25px !important;
+  border: 1px #CCCCCC solid !important;
+  width: 100% !important;
+  display: none;
+}
+.ant-select-ant-select-selection, .ant-select-selection--single {
+  border-radius: 0px !important;
+  border: none !important;
+  width: 100% !important;
+  margin: 0px !important;
+  height: 23px !important;
+}
+.ant-select-selection--single:focus {
+  outline: none !important;
+}
+
+.ant-btn-group {
+  position: relative !important;
+  width: 100% !important;
+}
+.ant-btn-group:hover {
+  .ant-dropdown-trigger {
+    display: inline-block !important;
+  }
+}
+.ant-btn-group, .ant-btn-default {
+  border: none !important;
+  padding: 0px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+.ant-dropdown-trigger {
+  display: none !important;
+  position: absolute !important;
+  right: 0 !important;
+}
+.ant-dropdown-menu-submenu-vertical .ant-dropdown-menu-submenu {
+  padding: 0px !important;
 }
