@@ -505,6 +505,7 @@ class SalesOrder extends React.Component {
       let objRemark = {}
       let objWidth = {}
       let objOrderqty = {}
+      let sum = 0
       for(let i in childList){
         objFilm[childList[i]['id']] = childList[i].filmtype_id
         objBrand[childList[i]['id']] = childList[i].brand_id
@@ -516,6 +517,7 @@ class SalesOrder extends React.Component {
         objRemark[childList[i]['id']] = childList[i].remark
         objWidth[childList[i]['id']] = childList[i].width
         objOrderqty[childList[i]['id']] = childList[i].quantity
+        sum = sum+ childList[i].sub_total
       }
       this.setState({
         eFilmType: objFilm,
@@ -528,6 +530,7 @@ class SalesOrder extends React.Component {
         eUnitprice: objUnit,
         eRemark: objRemark,
         eWidth: objWidth,
+        total_before_discount: sum,
       })
 
       //initiate generate selector from edit val list
@@ -697,6 +700,7 @@ class SalesOrder extends React.Component {
             return w*u
           }
         }
+        console.log(this.state.eOrderqty);
         return (<tr key={i.id} id = {i.id}>
             <td><input type='checkbox' ref = {'checkbox'+i.id} onChange= {()=>this.ifChecked(i.id)}/>{indexNo(index)}</td>
             <td>
