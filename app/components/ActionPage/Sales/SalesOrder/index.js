@@ -575,7 +575,7 @@ class SalesOrder extends React.Component {
             width:  this.refs['width'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
-            order_qty: this.refs['order_qty'+i.id].value ,
+            quantity: this.refs['order_qty'+i.id].value ,
             weight: this.refs['weight'+i.id].value,
             based_price: 0,
             subtotal: this.refs['subTotal'+i.id].value,
@@ -622,7 +622,6 @@ class SalesOrder extends React.Component {
     }
 
     getBrandTypeOption(id){
-      console.log(this.state.brandList);
       let getBrand = this.state.brandList.find(i=>i.id==('brandType'+id))
       if(getBrand){
         let result =  getBrand.content.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
@@ -700,7 +699,6 @@ class SalesOrder extends React.Component {
             return w*u
           }
         }
-        console.log(this.state.eOrderqty);
         return (<tr key={i.id} id = {i.id}>
             <td><input type='checkbox' ref = {'checkbox'+i.id} onChange= {()=>this.ifChecked(i.id)}/>{indexNo(index)}</td>
             <td>
