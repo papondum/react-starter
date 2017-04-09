@@ -37,32 +37,25 @@ class Purchase extends React.Component {
           ],
           selectedSupplier : '',
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
-          selectedCustomer: '',
           selectedTab: 'General',
           filmType: '',
           filmList:[],
           childItem: [{id:'0001'}],
           state_contactPerson : '',
-          state_contact: '',
           state_tel: '',
           state_fax: '',
           state_email: '',
           state_company:'',
           state_buyer : '',
           state_orderdate:'',
-          state_ponumber:'',
           state_payterm:'',
           state_invoice:'',
-          state_status:'',
-          state_salePerson:'',
-          state_priceListId:'',
+          state_status:'Open',
           state_deliverterm: '',
           state_shipto: '',
           state_shipvia : '',
           state_cif : '',
           state_requestdeliverdate: '',
-          state_actualdeliverdate: '',
-          state_actualdelivertime: '',
           state_estimatedtimedeparture : '',
           state_estimatedtimearrival : '',
           total_before_discount: 0,
@@ -208,7 +201,17 @@ class Purchase extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
+        let buyer_default;
+        let saleList = response.map((i,index)=>{
+          if(index === 0){
+            buyer_default = i.id
+          }
+          return Object.assign({},{value:i.id,label:i.Firstname})
+        })
+        this.setState({
+          saleList: saleList,
+          state_buyer : buyer_default
+        })
 
       })
       .catch(err=>console.log(err))
@@ -437,7 +440,6 @@ class Purchase extends React.Component {
     }
 
     _getEditItem(){
-      console.log(this.props.editItem);
       post('/api/purchase/id', {id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
@@ -446,43 +448,39 @@ class Purchase extends React.Component {
     }
 
     _setInitialVal(res){
+      console.log(res);
       let item = res[0]
-      let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
-      let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
-      //
-      //
-       this.setState({
-
-      //   state_company: item.company,
-      //   state_date: item.quotation_date,
-
-      //   state_priceListId: pricelist,
-      //   total: item.total,
-         childItem: item.contents,
-         selectedCustomer: item.customer_id,
-         state_orderdate: item.order_date,
-         state_ponumber: item.po_number,
-         state_payterm: item.payment_term,
-         state_invoice: item.invoice_to,
-         state_status: item.status,
-         state_salePerson: saleperson.value,
-         state_priceListId: pricelist.value,
-         state_deliverterm: item.delivery_term,
-         state_shipto:  item.ship_to,
-         state_requestdeliverdate: item.request_deliver_date,
-         state_actualdeliverdate: item.actual_deliver_date,
-         state_actualdelivertime: item.actual_deliver_time,
-         state_contact: item.customer.contact,
-         state_tel: item.customer.tel,
-         state_fax: item.customer.fax,
-         state_email:  item.customer.email,
+      let selectedSupplier = this.state.supplierList.find((supplier) => {
+        return supplier.id == item.supplier_id
+      })
+      this.setState({
+        selectedCompany : item.company,
+        selectedSupplier : selectedSupplier,
+        state_orderdate: item.order_date,
+        state_payterm: item.payterm,
+        state_invoice: item.invoice,
+        state_status: item.status,
+        state_deliverterm: item.deliver,
+        state_shipto:  item.shipto,
+        state_requestdeliverdate: item.delivery_date,
+        state_buyer : item.buyer_id,
+        state_contactPerson : item.customer.contact_person,
+        state_tel : item.customer.tel,
+        state_fax : item.customer.fax,
+        state_email : item.customer.email,
+        state_shipvia : item.shipvia,
+        state_cif : item.cif,
+        state_estimatedtimedeparture : item.departure_date,
+        state_estimatedtimearrival : item.arrival_date,
+        childItem: item.contents,
+        edit_id : item.id
       })
       // console.log('Test', this.state.customerList);
       // console.log('Test', this.state.customerList);
       this.refs['discount'].value = item.discount ||0
       this.refs['taxes'].value = item.tax ||0
       this.refs['wotaxes'].value = item.wotax ||0
-      this.refs['remark'].value= item.remark
+      this.refs['remark'].value= item.remark || ''
       this._setInitialEditContent()
     }
 
@@ -536,7 +534,6 @@ class Purchase extends React.Component {
 
     save(){
       //send Quatations
-      console.log(this.state.selectedSupplier.id);
       let obj = Object.assign({},{
         company : this.state.selectedCompany,
         supplier_id : this.state.selectedSupplier.id,
@@ -584,8 +581,8 @@ class Purchase extends React.Component {
         arrival_date : this.state.state_estimatedtimearrival
       })
       if(this.props.type=='edit'){
-        console.log();
-        obj.order_id = parseInt(this.props.editItem)
+        console.log(this.state.edit_id);
+        obj.order_id = parseInt(this.state.edit_id)
       }
       console.log(obj)
       let url = this.props.type=='create'? '/api/purchase/create':'/api/purchase/update'
