@@ -582,7 +582,7 @@ class Purchase extends React.Component {
       })
       if(this.props.type=='edit'){
         console.log(this.state.edit_id);
-        obj.order_id = parseInt(this.state.edit_id)
+        obj.purchase_id = parseInt(this.state.edit_id)
       }
       console.log(obj)
       let url = this.props.type=='create'? '/api/purchase/create':'/api/purchase/update'
