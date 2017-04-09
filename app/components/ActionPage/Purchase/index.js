@@ -555,7 +555,7 @@ class Purchase extends React.Component {
             width:  this.refs['width'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
-            order_qty: this.refs['order_qty'+i.id].value ,
+            quantity: this.refs['order_qty'+i.id].value ,
             weight: this.refs['weight'+i.id].value,
             based_price: 0,
             subtotal: this.refs['subTotal'+i.id].value,
