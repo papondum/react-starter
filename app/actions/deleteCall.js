@@ -22,6 +22,8 @@ export const DELETE_QUOTATION_TRIGGER = 'DELETE_QUOTATION_TRIGGER'
 export const DELETE_SALES_TRIGGER = 'DELETE_SALES_TRIGGER'
 export const DELETE_QUOTATION_IDLE = 'DELETE_QUOTATION_IDLE'
 export const DELETE_SALES_IDLE = 'DELETE_SALES_IDLE'
+export const DELETE_PURCHASE_IDLE = "DELETE_PURCHASE_IDLE"
+export const DELETE_PURCHASE_TRIGGER = "DELETE_PURCHASE_TRIGGER"
 export function deleteAcc(){
   return {type:DELETE_USERACC_TRIGGER}
 }
@@ -89,6 +91,12 @@ export function deleteSales(){
 export function deleteSalesToIdle(){
   return {type:DELETE_SALES_IDLE}
 }
+export function deletePurchase() {
+  return { type : DELETE_PURCHASE_TRIGGER}
+}
+export function deletePurchaseToIdle() {
+  return { type : DELETE_PURCHASE_IDLE}
+}
 
 export function deleteTrig(item){           //Trigger state   do noti
   console.log(item)
@@ -144,6 +152,10 @@ export function deleteTrig(item){           //Trigger state   do noti
     case 'Sales Order':
       return dispatch => {
         dispatch(deleteSales())
+      }
+    case 'Purchase Order':
+      return dispatch => {
+        dispatch(deletePurchase())
       }
     default:
       console.log(item);
@@ -259,6 +271,12 @@ export function deleteItem(item,type){
       return dispatch=>{
         dispatch(apiSelector(url10,item))
         dispatch(deleteSalesToIdle())
+      }
+    case 'Purchase Order':
+      let url11 = '/api/purchase/delete'
+      return dispatch=>{
+        dispatch(apiSelector(url11,item))
+        dispatch(deletePurchaseToIdle())
       }
     default:
       break;

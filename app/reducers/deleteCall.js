@@ -10,6 +10,7 @@ import { DELETE_USERACC_TRIGGER, DELETE_USERACC_IDLE ,
   DELETE_USERROLE_TRIGGER ,DELETE_USERROLE_IDLE,
   DELETE_QUOTATION_TRIGGER,DELETE_QUOTATION_IDLE,
   DELETE_SALES_TRIGGER, DELETE_SALES_IDLE,
+  DELETE_PURCHASE_TRIGGER, DELETE_PURCHASE_IDLE
 } from '../actions/deleteCall';
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
   grade: 'idle',
   quotation:'idle',
   sales: 'idle',
+  purchase : 'idle'
 };
 
 const actions = {
@@ -92,6 +94,12 @@ const actions = {
     },
     [DELETE_SALES_IDLE]: (state, payload) =>{
       return Object.assign({},state, {sales: 'idle'})
+    },
+    [DELETE_PURCHASE_TRIGGER]: (state, payload) => {
+      return Object.assign({},state,{purchase: 'active'})
+    },
+    [DELETE_PURCHASE_IDLE]: (state, payload) =>{
+      return Object.assign({},state, {purchase: 'idle'})
     },
 };
 export default createReducer(initialState, actions);

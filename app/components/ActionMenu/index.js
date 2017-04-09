@@ -47,6 +47,7 @@ class ActionMenu extends React.Component {
     }
 
     showDeleteModal(){
+      console.log(this.props.activePage);
       this.setState({
         showModal:{
           show:true,
