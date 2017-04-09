@@ -482,6 +482,7 @@ class Purchase extends React.Component {
       this.refs['wotaxes'].value = item.wotax ||0
       this.refs['remark'].value= item.remark || ''
       this._setInitialEditContent()
+      this.updateAll(0)
     }
 
     _setInitialEditContent(){
