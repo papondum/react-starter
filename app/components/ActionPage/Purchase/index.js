@@ -497,6 +497,7 @@ class Purchase extends React.Component {
       let objRemark = {}
       let objWidth = {}
       let objOrderqty = {}
+      var sum = 0
       for(let i in childList){
         objFilm[childList[i]['id']] = childList[i].filmtype_id
         objBrand[childList[i]['id']] = childList[i].brand_id
@@ -508,6 +509,7 @@ class Purchase extends React.Component {
         objRemark[childList[i]['id']] = childList[i].remark
         objWidth[childList[i]['id']] = childList[i].width
         objOrderqty[childList[i]['id']] = childList[i].quantity
+        sum = sum + childList[i].sub_total
       }
       this.setState({
         eFilmType: objFilm,
@@ -520,6 +522,7 @@ class Purchase extends React.Component {
         eUnitprice: objUnit,
         eRemark: objRemark,
         eWidth: objWidth,
+        total_before_discount: sum,
       })
 
       //initiate generate selector from edit val list
