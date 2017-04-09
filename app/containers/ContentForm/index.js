@@ -71,7 +71,7 @@ class ContentForm extends React.Component {
       }
       else if(this.props.type == "Purchase Order"){
         console.log('triggered');
-        post('/api/purchase/line', {'pucchase_id':i})
+        post('/api/purchase/line', {'purchase_id':i})
           .then(response=>
             this.setState({thisLine:response})
           )
