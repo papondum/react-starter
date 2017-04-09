@@ -404,6 +404,7 @@ class Quotation extends React.Component {
       this.refs['revise_message'].value= item.revise_message
       this.refs['remark'].value= item.remark
       this._setInitialEditContent()
+      this.updateAll(0)
     }
 
     save(){
@@ -909,17 +910,17 @@ class Quotation extends React.Component {
                           <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
                           <span>{this.state.total_before_discount}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
+                          <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Taxes
-                        <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                        <span>{this.state.taxes}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Taxes
+                              <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                          <span>{this.state.taxes}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
-                        <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                        <span>{this.state.wotaxes}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
+                              <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                          <span>{this.state.wotaxes}</span></div>
                       <div className = 'flex-row flex'>
-                        <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
                   </div>
               </div>
           </div>)
