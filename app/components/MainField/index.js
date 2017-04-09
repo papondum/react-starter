@@ -148,7 +148,6 @@ class MainField extends React.Component {
           break;
         case 'Quotation':
           this.getJson('/api/sales/quotation/all')
-          // this.getJson('Quatation')
           break;
         case 'Sales Order':
           this.getJson('/api/sales/order/all')
@@ -156,6 +155,12 @@ class MainField extends React.Component {
         case 'Purchase Order':
           this.getJson('Purchase Order')
           break;
+        //case 'Delivery Order':
+          //this.getJson('/api/inventory/delivery/all')
+          //break;
+        //case 'Good Receipt':
+          //this.getJson('/api/inventory/good/all')
+          //break;
         default:
           this.setState({'mainContent':''})
           break;
