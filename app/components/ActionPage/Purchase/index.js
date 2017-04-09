@@ -448,6 +448,7 @@ class Purchase extends React.Component {
     }
 
     _setInitialVal(res){
+      console.log("res");
       console.log(res);
       let item = res[0]
       let selectedSupplier = this.state.supplierList.find((supplier) => {
@@ -480,7 +481,7 @@ class Purchase extends React.Component {
       this.refs['discount'].value = item.discount ||0
       this.refs['taxes'].value = item.tax ||0
       this.refs['wotaxes'].value = item.wotax ||0
-      this.refs['remark'].value= item.remark || ''
+      this.refs['remark'].value= item.remarks || ''
       this._setInitialEditContent()
       this.updateAll(0)
     }
