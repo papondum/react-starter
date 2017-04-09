@@ -69,6 +69,13 @@ class ContentForm extends React.Component {
             this.setState({thisLine:response})
           )
       }
+      else if(this.props.type == "Purchase Order"){
+        console.log('triggered');
+        post('/api/purchase/line', {'pucchase_id':i})
+          .then(response=>
+            this.setState({thisLine:response})
+          )
+      }
 
       //this.setState({thisLine:i})
     }
@@ -229,43 +236,23 @@ class ContentForm extends React.Component {
     }
 
     renderPurchaseOrder(){
-      return(
-        <div>
+      return (<div>
           <div className='action-bar'>
               <h2>Purchase Order Line(s)</h2>
           </div>
           <table>
               <thead>
                   <tr>
-                      {this.getHeaderPurchaseOrderLine(this.props.content)}
+                      {this._headerQuotationGen(this.state.thisLine)}
                   </tr>
               </thead>
               <tbody>
-                  {this.getPurchaseOrderLineContent(this.props.content)}
+                   {this._salesOrderLineGen(this.state.thisLine)}
               </tbody>
           </table>
-        </div>
-      )
+        </div>)
     }
 
-    getHeaderPurchaseOrderLine(content){
-      let genHead=[]
-      if(content.length>0){
-        var head = Object.keys(content[0])
-        genHead = head.map(item=>{
-          if (item == 'id') {
-            return (<td key= {item} style={{display: 'none'}}>{item}</td>)
-          } else {
-            return (<td key= {item}>{item}</td>)
-          }
-        })
-      }
-      return genHead
-    }
-
-    getPurchaseOrderLineContent(content){
-      return this._contentGen(content)
-    }
 
     // _headerQuotationGen(content){
     //   var result = []

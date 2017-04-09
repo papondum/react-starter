@@ -437,7 +437,8 @@ class Purchase extends React.Component {
     }
 
     _getEditItem(){
-      post('/api/purchase/id', {order_id: +this.props.editItem})
+      console.log(this.props.editItem);
+      post('/api/purchase/id', {id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
         console.log("response::::", response);
