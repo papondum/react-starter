@@ -535,13 +535,13 @@ class Purchase extends React.Component {
 
     save(){
       //send Quatations
-      console.log(this.state);
+      console.log(this.state.selectedSupplier.id);
       let obj = Object.assign({},{
         company : this.state.selectedCompany,
         supplier_id : this.state.selectedSupplier.id,
         order_date : this.state.state_orderdate,
         payterm : this.state.state_payterm,
-        delivery : this.state.state_deliverterm,
+        deliver : this.state.state_deliverterm,
         invoice : this.state.state_invoice,
         status : this.state.state_status,
         buyer_id : this.state.state_buyer,
@@ -571,20 +571,16 @@ class Purchase extends React.Component {
         tax: this.refs['taxes'].value ? this.refs['taxes'].value : 0,
         wotax: this.refs['wotaxes'].value ? this.refs['wotaxes'].value : 0,
         total: this.state.total ? this.state.total : 0,
-        supplier_contact : {
-          contact_person : this.state.state_contactPerson,
-          tel : this.state.state_tel,
-          fax : this.state.state_fax,
-          email : this.state.state_email
-        },
-        shipment : {
-          shipto : this.state.state_shipto,
-          shipvia : this.state.state_shipvia,
-          cif : this.state.state_cif,
-          delivery_date : this.state.state_requestdeliverdate,
-          depature_date : this.state.state_estimatedtimedeparture,
-          arrival_date : this.state.state_estimatedtimearrival
-        }
+        contact_person : this.state.state_contactPerson,
+        tel : this.state.state_tel,
+        fax : this.state.state_fax,
+        email : this.state.state_email,
+        shipto : this.state.state_shipto,
+        shipvia : this.state.state_shipvia,
+        cif : this.state.state_cif,
+        delivery_date : this.state.state_requestdeliverdate,
+        departure_date : this.state.state_estimatedtimedeparture,
+        arrival_date : this.state.state_estimatedtimearrival
       })
       if(this.props.type=='edit'){
         console.log();
@@ -844,6 +840,7 @@ class Purchase extends React.Component {
                   <label>Buyer :</label>
                   <select ref = 'buyer' value = {this.state.state_buyer} onChange={()=>this.updateParam('buyer')}>
                       {this.state.saleList.map(i=> {
+                        console.log(i);
                           return <option value={i.value}>{i.label}</option>})}
                   </select>
               </div>
