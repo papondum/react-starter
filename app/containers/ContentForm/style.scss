@@ -101,3 +101,65 @@ table {
 .ant-dropdown-menu-submenu-vertical .ant-dropdown-menu-submenu {
   padding: 0px !important;
 }
+.ant-menu-item, .ant-menu-submenu {
+  line-height: 30px !important;
+  height: 30px !important;
+  padding: 0px 20px !important;
+  width: 170px !important;
+}
+.ant-menu-item-group {
+  .ant-menu-item-group-title {
+    padding: 0px !important;
+  }
+}
+.ant-menu-root {
+  box-shadow: 1px 18px 40px -18px rgba(0,0,0,0.75) !important;
+}
+.ant-menu-submenu-vertical {
+  .ant-menu-submenu-title {
+    padding: 0px !important;
+    margin: 0px !important;
+    line-height: 30px !important;
+  }
+}
+.ant-menu-vertical .ant-menu-item:after {
+  content: inherit !important;
+}
+
+
+table.scroll {
+    width: 100%;
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+    border: 2px solid black;
+}
+
+table.scroll tbody,
+table.scroll thead {
+  display: block;
+  padding: 0px !important;
+}
+
+thead tr th {
+    height: 30px;
+    line-height: 30px;
+    /* text-align: left; */
+}
+
+table.scroll tbody {
+    height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+tbody { border-top: 2px solid black; }
+
+tbody td, thead th {
+    /* width: 20%; */ /* Optional */
+    border-right: 1px solid black;
+    /* white-space: nowrap; */
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none;
+}
