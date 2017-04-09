@@ -368,14 +368,21 @@ class Quotation extends React.Component {
 
     }
 
+    getInitialTotal(items){
+      let sum = 0
+      for (let i in items){
+        sum = sum+items[i].sub_total
+      }
+      return sum
+    }
+
     _setInitialVal(res){
 
       let item = res[0]
       let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
       let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
-      console.log(item);
       this.setState({
-        state_contact:item.contact,
+        state_contact:item.customer ? item.customer.contact:item.contact,
         state_tel: item.customer ? item.customer.tel:item.tel ,
         state_fax: item.customer ? item.customer.fax:item.fax,
         state_email: item.customer? item.customer.email:item.email,
@@ -388,10 +395,9 @@ class Quotation extends React.Component {
         state_priceListId: pricelist,
         total: item.total,
         childItem: item.contents,
-        selectedCustomer: item.customer_id
+        selectedCustomer: item.customer_id,
+        total_before_discount: this.getInitialTotal(item.contents)
       })
-      console.log('Test', this.state.customerList);
-      console.log('Test', this.state.customerList);
       this.refs['discount'].value = item.discount ||0
       this.refs['taxes'].value = item.tax ||0
       this.refs['wotaxes'].value = item.wotax ||0
@@ -409,7 +415,7 @@ class Quotation extends React.Component {
         date: this.state.state_date || this.refs['date'].value,
         payterm: this.state.state_payterm || this.refs['payterm'].value,
         deliver: this.state.state_deliver|| this.refs['deliver'].value,
-        status:   this.state.states_staus|| this.refs['status'].value,
+        status:   this.state.state_status|| this.refs['status'].value,
         sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
         price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
         customer_contact: this.state.state_contact,
@@ -444,7 +450,6 @@ class Quotation extends React.Component {
       })
 
       if(this.props.type=='edit'){
-        console.log();
         obj.quotation_id = parseInt(this.props.editItem)
       }
       console.log('obj',obj);
@@ -519,7 +524,6 @@ class Quotation extends React.Component {
         }
       })
       this.setState({total_before_discount: total_before_discount})
-      console.log(total_before_discount)
       this.updateAll(total_before_discount)
     }
 
@@ -724,6 +728,7 @@ class Quotation extends React.Component {
     }
 
     getGeneralContent(){
+      console.log(this.state.state_status, 'status::::');
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
@@ -761,7 +766,7 @@ class Quotation extends React.Component {
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
                   <label>Status :</label>
-                  <select ref = 'status' value = {this.state.states_staus} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value} value={i.value}>{i.value}</option>)}</select>
+                  <select ref = 'status' value = {this.state.states_status} onChange={()=>this.updateParam('status')}>{this.state.statusList.map(i=> <option key={i.value} value={i.value}>{i.value}</option>)}</select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
@@ -770,7 +775,9 @@ class Quotation extends React.Component {
               <div className='input-box flex'>
                   <label>Price list :</label>
 
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>{this.state.priceList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>
+                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>
+                      {this.state.priceList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
+                  </select>
               </div>
           </div>
       </div>)
@@ -833,7 +840,6 @@ class Quotation extends React.Component {
       console.log('checkedLL::', this.state.checkedItem);
     }
     render() {
-      console.log('selected::', this.state.selectedCustomer);
         return(
           <div className='page-style'>
               <div className='page-head'>
@@ -900,8 +906,8 @@ class Quotation extends React.Component {
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
-                      <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
-                      <span>{this.state.total_before_discount}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
+                          <span>{this.state.total_before_discount}</span></div>
                       <div className = 'flex-row flex'>
                         <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
                       <div className = 'flex-row flex'>
