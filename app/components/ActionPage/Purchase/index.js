@@ -455,6 +455,7 @@ class Purchase extends React.Component {
     }
 
     _setInitialVal(res){
+      console.log("res");
       console.log(res);
       let item = res[0]
       let selectedSupplier = this.state.supplierList.find((supplier) => {
@@ -488,8 +489,9 @@ class Purchase extends React.Component {
       this.refs['discount'].value = item.discount ||0
       this.refs['taxes'].value = item.tax ||0
       this.refs['wotaxes'].value = item.wotax ||0
-      this.refs['remark'].value= item.remark || ''
+      this.refs['remark'].value= item.remarks || ''
       this._setInitialEditContent()
+      this.updateAll(0)
     }
 
     _setInitialEditContent(){
@@ -504,6 +506,7 @@ class Purchase extends React.Component {
       let objRemark = {}
       let objWidth = {}
       let objOrderqty = {}
+      var sum = 0
       for(let i in childList){
         objFilm[childList[i]['id']] = childList[i].filmtype_id
         objBrand[childList[i]['id']] = childList[i].brand_id
@@ -515,6 +518,7 @@ class Purchase extends React.Component {
         objRemark[childList[i]['id']] = childList[i].remark
         objWidth[childList[i]['id']] = childList[i].width
         objOrderqty[childList[i]['id']] = childList[i].quantity
+        sum = sum + childList[i].sub_total
       }
       this.setState({
         eFilmType: objFilm,
@@ -527,6 +531,7 @@ class Purchase extends React.Component {
         eUnitprice: objUnit,
         eRemark: objRemark,
         eWidth: objWidth,
+        total_before_discount: sum,
       })
 
       //initiate generate selector from edit val list
@@ -562,7 +567,7 @@ class Purchase extends React.Component {
             width:  this.refs['width'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
-            order_qty: this.refs['order_qty'+i.id].value ,
+            quantity: this.refs['order_qty'+i.id].value ,
             weight: this.refs['weight'+i.id].value,
             based_price: 0,
             subtotal: this.refs['subTotal'+i.id].value,
