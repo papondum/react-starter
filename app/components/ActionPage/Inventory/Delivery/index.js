@@ -22,11 +22,6 @@ class Delivery extends React.Component {
           gradeList: [],
           thickList: [],
           length: [],
-          basedPrice: '',
-          companyList: [
-                { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
-                { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
-            ],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
           eFilmType: {},
@@ -36,7 +31,9 @@ class Delivery extends React.Component {
           eLength: {},
           eWeight: {},
           eRemark: {},
-          eUnitprice: {},
+          eWidth: {},
+          eStock: {},
+          eOrderqty: {},
           filmList:[],
           childItem: [{id:'0001'}],
           currentChild: 1,
@@ -44,20 +41,15 @@ class Delivery extends React.Component {
           state_tel:'',
           state_fax:'',
           state_email:'',
-          // state_company:'',
           state_sonumber: '',
           state_ponumber: '',
           state_shipto: '',
           state_date: '',
-          state_timr: '',
+          state_time: '',
           state_payterm: '',
           state_deliver: '',
           state_status: '',
           state_salePerson: '',
-          //state_priceListId: '',
-          total_before_discount: 0,
-          taxes: 0,
-          wotaxes: 0,
           total: 0,
           checkedItem: [],
         }
@@ -66,10 +58,10 @@ class Delivery extends React.Component {
 
     _genHeader(type){
       if(type=='create'){
-        return 'Create - Quotaion'
+        return 'Create - Delivery Order'
       }
       else if(type=='edit'){
-        return 'Edit - Quotation'
+        return 'Edit - Delivery Order'
       }
     }
 
@@ -215,10 +207,20 @@ class Delivery extends React.Component {
           stateW[id] =  this.refs['weight'+id].value
           this.setState({eWeight:stateW})
           break;
-        case  'eUnitprice':
-          var stateU = this.state[state];
-          stateU[id] =  this.refs['unitPrice'+id].value
-          this.setState({eUnitprice:stateU})
+        case  'eWidth':
+          var stateWi = this.state[state];
+          stateWi[id] =  this.refs['width'+id].value
+          this.setState({eWidth:stateWi})
+          break;
+        case  'eOrderqty':
+          var stateOr = this.state[state];
+          stateOr[id] =  this.refs['order_qty'+id].value
+          this.setState({eOrderqty:stateOr})
+          break;
+        case  'eStock':
+          var stateSt = this.state[state];
+          stateSt[id] =  this.refs['stock'+id].value
+          this.setState({eStock:stateSt})
           break;
         default:
 
@@ -246,14 +248,22 @@ class Delivery extends React.Component {
           break;
         case 'last':
           this._updateStateSelector(id, 'eLength')
+          break;
         case 'weight':
           this._updateStateSelector(id, 'eWeight')
-          this.updateSubTotal(id)
+          break;
         case 'remark':
           this._updateStateSelector(id, 'eRemark')
-        case 'unitprice':
-          this._updateStateSelector(id, 'eUnitprice')
-          this.updateSubTotal(id)
+          break;
+        case 'width':
+          this._updateStateSelector(id, 'eWidth')
+          break;
+        case 'orderqty':
+          this._updateStateSelector(id, 'eOrderqty')
+          break;
+        case 'stock':
+          this._updateStateSelector(id, 'eStock')
+          break;
         default:
 
       }
@@ -292,24 +302,6 @@ class Delivery extends React.Component {
       .catch(err=>console.log(err))
     }
 
-    getBasedPrice(id){
-      if(this.state.basedPrice){
-        console.log(this.state.basedPrice);
-      post('/api/sales/quotation/based_price',{
-        "filmtype_id": this.refs['filmType'+id].value||'',
-        "brand_id": this.refs['brandType'+id].value,
-        "grade_id": this.refs['gradeType'+id].value,
-        "thickness": this.refs['thickNess'+id].value,
-        "length": this.refs['length'+id].value,
-        "pricelist_id": this.refs['priceListId'].value })
-        .then((response)=>{
-          this.setState({basedPrice:response})
-        })
-        .catch(err=>console.log(err))
-        return this.state.basedPrice
-      }
-    }
-
     componentDidMount(){
       this.getCustomerList()
       this.props.type=='edit'? this._getEditItem():''
@@ -336,18 +328,21 @@ class Delivery extends React.Component {
       let objThick = {}
       let objLength = {}
       let objWeight = {}
-      let objUnit = {}
       let objRemark = {}
+      let objWidth = {}
+      let objOrderqty = {}
+      let objStock = {}
       for(let i in childList){
-        console.log('eachChildVal::',childList[i]);
         objFilm[childList[i]['id']] = childList[i].filmtype_id
         objBrand[childList[i]['id']] = childList[i].brand_id
         objGrade[childList[i]['id']] = childList[i].grade_id
         objThick[childList[i]['id']] = childList[i].thickness
         objLength[childList[i]['id']] = childList[i].product_length
         objWeight[childList[i]['id']] = childList[i].weight
-        objUnit[childList[i]['id']] = childList[i].unit_price
         objRemark[childList[i]['id']] = childList[i].remark
+        objWidth[childList[i]['id']] = childList[i].width
+        objOrderqty[childList[i]['id']] = childList[i].quantity
+        objStock[childList[i]['id']] = childList[i].stock||0
       }
       this.setState({
         eFilmType: objFilm,
@@ -356,8 +351,10 @@ class Delivery extends React.Component {
         eThick: objThick,
         eLength: objLength,
         eWeight: objWeight,
-        eUnitprice: objUnit,
         eRemark: objRemark,
+        eWidth: objWidth,
+        eOrderqty: objOrderqty,
+        eStock: objStock
       })
 
       //initiate generate selector from edit val list
@@ -371,14 +368,6 @@ class Delivery extends React.Component {
 
     }
 
-    getInitialTotal(items){
-      let sum = 0
-      for (let i in items){
-        sum = sum+items[i].sub_total
-      }
-      return sum
-    }
-
     _setInitialVal(res){
 
       let item = res[0]
@@ -389,7 +378,6 @@ class Delivery extends React.Component {
         state_tel: item.customer ? item.customer.tel:item.tel ,
         state_fax: item.customer ? item.customer.fax:item.fax,
         state_email: item.customer? item.customer.email:item.email,
-        // state_company: item.company,
         state_date: item.quotation_date,
         state_time: '',
         state_sonumber: '',
@@ -399,17 +387,11 @@ class Delivery extends React.Component {
         state_deliver: item.delivery_term,
         state_status: item.status,
         state_salePerson: saleperson,
-        //state_priceListId: pricelist,
         total: item.total,
         childItem: item.contents,
         selectedCustomer: item.customer_id,
-        total_before_discount: this.getInitialTotal(item.contents)
       })
       this.refs['discount'].value = item.discount ||0
-      this.refs['taxes'].value = item.tax ||0
-      // this.refs['wotaxes'].value = item.wotax ||0
-      // this.refs['revise_message'].value= item.revise_message
-      // this.refs['remark'].value= item.remark
       this._setInitialEditContent()
     }
 
@@ -417,7 +399,6 @@ class Delivery extends React.Component {
       //send Quatations
       let obj = Object.assign({},
       {
-        // company: this.state.state_company|| this.refs['company'].value,
         customer: this.state.selectedCustomer || this.refs['customer'].value,
         date: this.state.state_date || this.refs['date'].value,
         time: this.state.state_time || this.refs['time'].value,
@@ -428,18 +409,13 @@ class Delivery extends React.Component {
         so_number: this.state.state_sonumber || this.refs['sonumber'].value,
         po_number: this.state.state_ponumber || this.refs['ponumber'].value,
         shipto: this.state.state_shipto || this.refs['shipto'].value,
-        //price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
         customer_contact: this.state.state_contact,
         customer_tel: this.state.state_tel,
         customer_fax: this.state.state_fax,
         customer_email: this.state.state_email,
 
         discount: this.refs['discount'].value ? this.refs['discount'].value : 0,
-        tax: this.refs['taxes'].value ? this.refs['taxes'].value : 0,
-        // wotax: this.refs['wotaxes'].value ? this.refs['wotaxes'].value : 0,
         total: this.state.total ? this.state.total : 0,
-        // revise_message: this.refs['revise_message'].value,
-        // remark: this.refs['remark'].value,
         content:// list of content
           this.state.childItem.map(i=>{
             return Object.assign({},{
@@ -452,8 +428,6 @@ class Delivery extends React.Component {
                 length: this.refs['length'+i.id].value,
                 weight: this.refs['weight'+i.id].value,
                 remark: this.refs['remark'+i.id].value,
-                based_price: this.state.basedPrice ? this.state.basedPrice : 0,//   need select id
-                unitprice: this.refs['unitPrice'+i.id].value,
                 subtotal: this.refs['subTotal'+i.id].value,
               }
           })
@@ -517,117 +491,6 @@ class Delivery extends React.Component {
       }
     }
 
-    updateSubTotal(id) {
-      let price = this.refs['unitPrice'+id].value;
-      let weight = this.refs['weight'+id].value;
-      if (price && weight) {
-        console.log("Set")
-        this.refs['subTotal'+id].value = price * weight
-      } else {
-        this.refs['subTotal'+id].value = 0
-      }
-
-      var total_before_discount = 0.0
-      this.state.childItem.map(i=> {
-        let total = this.refs['subTotal'+i.id].value;
-        if (total > 0) {
-          total_before_discount += parseFloat(total)
-        }
-      })
-      this.setState({total_before_discount: total_before_discount})
-      // this.updateAll(total_before_discount)
-    }
-
-    // updateAll(total_before_discount) {
-    //   console.log("updateAll")
-    //   var total
-    //   if (total_before_discount > 0) {
-    //     total = total_before_discount
-    //   } else {
-    //     total = parseFloat(this.state.total_before_discount)
-    //   }
-    //   // total = parseFloat(this.state.total_before_discount)
-    //   console.log("total_before_discount: " + total)
-    //   let discount = this.refs['discount'].value;
-    //   if ( discount > 0 ) {
-    //     total = total - parseFloat(discount)
-    //   }
-    //   console.log("discount: " + discount)
-    //   console.log("total after discount: " + total)
-    //   let total_after_discount = total
-    //   let wotaxes = this.refs['wotaxes'].value;
-    //   if ( wotaxes > 0 ) {
-    //     let w = (total_after_discount * wotaxes / 100)
-    //     this.setState({wotaxes: w})
-    //     total = total - parseFloat(w)
-    //   }
-    //   console.log("wotaxes: " + wotaxes)
-    //   console.log("total after wotaxes: " + total)
-    //   let taxes = this.refs['taxes'].value;
-    //   if ( taxes > 0 ) {
-    //     let t = (total_after_discount * taxes / 100)
-    //     this.setState({taxes: t})
-    //     total = total + parseFloat(t)
-    //   }
-    //   console.log("taxes: " + taxes)
-    //   console.log("total after taxes: " + total)
-    //
-    //   this.setState({total: total})
-    // }
-    //
-    // updateDiscount() {
-    //   console.log("updateDiscount")
-    //   let total_before_discount = parseFloat(this.state.total_before_discount)
-    //   this.setState({discount: total_before_discount - this.refs['discount'].value})
-    //   this.updateWithholdingTax()
-    // }
-    //
-    // updateWithholdingTax() {
-    //   console.log("updateWithholdingTax")
-    //   let total_before_discount = this.state.discount
-    //   let taxP = this.refs['wotaxes'].value;
-    //
-    //   let tax = (total_before_discount * taxP / 100)
-    //   console.log(tax)
-    //   this.setState({wotaxes: tax})
-    //   this.updateTax()
-    // }
-
-    // updateTax() {
-    //   console.log("updateTax")
-    //   let total_before_discount = this.state.discount
-    //   let taxP = this.refs['taxes'].value;
-    //
-    //   let tax = (total_before_discount * taxP / 100)
-    //   this.setState({taxes: tax})
-    //   this.updateTotal()
-    //
-    // }
-    //
-    // updateTotal() {
-    //   var total = parseFloat(this.state.total_before_discount)
-    //   // console.log("total value: " + total)
-    //   let discount = this.refs['discount'].value;
-    //   // console.log("discount value: " + discount)
-    //   if (discount > 0) {
-    //     total = total - parseInt(discount)
-    //   }
-    //   // console.log("discount: " + total)
-    //   var wotaxes = parseFloat(this.state.wotaxes)
-    //   // console.log("wotaxes value: " + wotaxes)
-    //   if (wotaxes > 0) {
-    //     total = total - wotaxes
-    //   }
-    //   // console.log("wotaxes: " + total)
-    //   var taxes = this.state.taxes
-    //   if (taxes > 0) {
-    //     total = total + taxes
-    //   }
-    //   // console.log("taxes: " + total)
-    //   this.setState({total: total})
-    // }
-
-
 
     getChildItem(){
       let items = this.state.childItem
@@ -652,7 +515,7 @@ class Delivery extends React.Component {
             return w*u
           }
         }
-
+        //Line No > Film Type >> Brand >> Grade >> Width >> Thickness >> Length >> Order Quantity >> Total Weight >> Stock on hand >> Remark
         return (<tr key={i.id} id = {i.id}>
             <td><input type='checkbox' ref = {'checkbox'+i.id} onChange= {()=>this.ifChecked(i.id)}/>{indexNo(index)}</td>
             <td>
@@ -671,22 +534,23 @@ class Delivery extends React.Component {
                 </select>
             </td>
             <td>
+                <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/>
+            </td>
+            <td>
                 <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','thickNess'], i.id), 'length', i.id)}>
                     {this.getThickNessOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id}  key={i.id} value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate({},'last', i.id)}>// value = {i.product_length? i.product_length:''}
+                <select ref = {'length'+i.id}  key={i.id} value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate({},'last', i.id)}>
                     {this.getLengthOption(i.id)}
                 </select>
             </td>
+            <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
             <td><input onChange = {() => this.onChangeUpdate({},'weight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'stock', i.id)} value = {this.state.eStock[i.id]} type='number' ref = {'stock'+i.id}/></td>
             <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
 
-            {/* <td>{this.getBasedPrice(i.id)}</td> */}
-            <td>0</td>
-            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/></td>
         </tr>)
       })
       return result
@@ -739,14 +603,8 @@ class Delivery extends React.Component {
     }
 
     getGeneralContent(){
-// status:
-// Saleperson:
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
-              {/* <div className='input-box flex'>
-                  <label>Company :</label>
-                  <select ref = 'company' value={this.state.state_company} onChange={()=>this.updateParam('company')}>{this.state.companyList.map(i=> <option key={i.value}>{i.value}</option>)}</select>
-              </div> */}
               <div className='input-box flex'>
                   <label>Customer :</label>
                   <Select
@@ -792,45 +650,9 @@ class Delivery extends React.Component {
                   <label>Saleperson :</label>
                   <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>
               </div>
-              {/*<div className='input-box flex'>
-                  <label>Price list :</label>
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>
-                      {this.state.priceList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
-                  </select>
-              </div>*/}
           </div>
       </div>)
     }
-
-    // getContactContent(){
-    //   return (  <div className="flex flex-row">
-    //       <div className='flex flex-1 flex-col'>
-    //           <div className='input-box flex'>
-    //               <label>Contact Person :</label>
-    //               <input className='flex' type="text" ref='contact' value={this.state.state_contact} onChange={()=>this.updateParam('contact')}/>
-    //           </div>
-    //           <div className='input-box flex'>
-    //               <label>Tel :</label>
-    //               <input className='flex' type="text" ref='tel'  value={this.state.state_tel} onChange={()=>this.updateParam('tel')}/>
-    //           </div>
-    //           <div className='input-box flex'>
-    //               <label>Fax :</label>
-    //               <input className='flex' type="text" ref='fax' value={this.state.state_fax} onChange={()=>this.updateParam('fax')}/>
-    //           </div>
-    //
-    //       </div>
-    //       <div className="flex flex-1 flex-col">
-    //           <div className='input-box flex'>
-    //               <label>Email :</label>
-    //               <input className='flex' type="text" ref='email' value={this.state.state_email}
-    //               onChange={()=>this.updateParam('email')}/>
-    //           </div>
-    //       </div>
-    //       <div className="flex flex-1 flex-col">
-    //
-    //       </div>
-    //   </div>)
-    // }
 
     ifChecked(id){
       if(this.refs["checkbox"+id].checked){
@@ -893,13 +715,13 @@ class Delivery extends React.Component {
                               <td>Film Type</td>
                               <td>Brand</td>
                               <td>Grade</td>
+                              <td>Width</td>
                               <td>Thickness</td>
                               <td>Length</td>
-                              <td>Weight(Kg)</td>
+                              <td>Order Quantity(Roll)</td>
+                              <td>Total Weight(Kg)</td>
+                              <td>Stock on hand(ROll)</td>
                               <td>Remark</td>
-                              <td>Based Price</td>
-                              <td>Unit Price(THB/Kg)</td>
-                              <td>Subtotal(THB)</td>
                           </tr>
                       </thead>
                       <tbody>
@@ -907,33 +729,6 @@ class Delivery extends React.Component {
                       </tbody>
                   </table>
               </div>
-              {/* <div className = 'flex create-quo-btm'>
-                  <div className = 'flex-1'>
-                  <p>Remarks</p>
-                  <textarea rows="5" cols="40" ref = 'remark' />
-                  </div>
-                  <div className = 'flex-1'>
-                  <p>Revise Message</p>
-                  <input type = 'text' ref = 'revise_message' size="50"/>
-                  </div>
-                  <div className = 'flex-1'>
-                  <div className = 'flex-row flex'>
-                  <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
-                  <span>{this.state.total_before_discount}</span></div>
-                  <div className = 'flex-row flex'>
-                  <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
-                  <div className = 'flex-row flex'>
-                  <span className = 'create-quo-btm-input-label-left'>Taxes
-                  <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                  <span>{this.state.taxes}</span></div>
-                  <div className = 'flex-row flex'>
-                  <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
-                  <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                  <span>{this.state.wotaxes}</span></div>
-                  <div className = 'flex-row flex'>
-                  <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
-                  </div>
-              </div> */}
           </div>)
         }
     }

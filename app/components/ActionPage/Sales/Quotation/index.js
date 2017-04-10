@@ -243,14 +243,18 @@ class Quotation extends React.Component {
           break;
         case 'last':
           this._updateStateSelector(id, 'eLength')
+          break;
         case 'weight':
           this._updateStateSelector(id, 'eWeight')
           this.updateSubTotal(id)
+          break;
         case 'remark':
           this._updateStateSelector(id, 'eRemark')
+          break;
         case 'unitprice':
           this._updateStateSelector(id, 'eUnitprice')
           this.updateSubTotal(id)
+          break;
         default:
 
       }

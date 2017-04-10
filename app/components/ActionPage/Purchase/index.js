@@ -73,6 +73,7 @@ class Purchase extends React.Component {
           eRemark: {},
           eWidth: {},
           checkedItem: [],
+          remark:''
         }
     }
 
@@ -163,19 +164,25 @@ class Purchase extends React.Component {
           break;
         case 'last':
           this._updateStateSelector(id, 'eLength')
+          break;
         case 'orderqty':
           this._updateStateSelector(id, 'eOrderqty')
+          break;
         case 'weight':
           this._updateStateSelector(id, 'eWeight')
           this.updateSubTotal(id)
+          break;
         case 'remark':
           this._updateStateSelector(id, 'eRemark')
+          break;
         case 'unitprice':
           this._updateStateSelector(id, 'eUnitprice')
           this.updateSubTotal(id)
+          break;
         case 'width':
           this._updateStateSelector(id, 'eWidth')
           this.updateSubTotal(id)
+          break;
         default:
 
       }
@@ -473,7 +480,8 @@ class Purchase extends React.Component {
         state_estimatedtimedeparture : item.departure_date,
         state_estimatedtimearrival : item.arrival_date,
         childItem: item.contents,
-        edit_id : item.id
+        edit_id : item.id,
+        remark: item.remark,
       })
       // console.log('Test', this.state.customerList);
       // console.log('Test', this.state.customerList);
@@ -995,7 +1003,7 @@ class Purchase extends React.Component {
               <div className = 'flex create-quo-btm'>
                   <div className = 'flex-1'>
                       <p>Remarks</p>
-                      <textarea rows="5" cols="40" ref = 'remark' />
+                      <textarea rows="5" cols="40" ref = 'remark' value= {this.state.remark} />
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
