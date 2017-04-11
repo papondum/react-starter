@@ -207,18 +207,18 @@ class ActionMenu extends React.Component {
               refreshAction:'',
             })
             break;
-            case 'Sales Order':
-              this.setState({
-                createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-                editAction:()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-                copyAction:'',
-                deleteAction:()=>this.showDeleteModal(),
-                emailAction:'',
-                printAction:'',
-                exportAction:'',
-                refreshAction:'',
-              })
-              break;
+          case 'Sales Order':
+            this.setState({
+              createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              editAction:()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+              copyAction:'',
+              deleteAction:()=>this.showDeleteModal(),
+              emailAction:'',
+              printAction:'',
+              exportAction:'',
+              refreshAction:'',
+            })
+            break;
           case 'Purchase Order':
             this.setState({
               createAction:()=>this.props.setContent((<Purchase type='create' getContent={(item)=>this.props.getContent(item)}/>)),
@@ -243,7 +243,7 @@ class ActionMenu extends React.Component {
               refreshAction:'',
             })
             break;
-          case 'Good Reciept':
+          case 'Good Receipt':
             this.setState({
               createAction:()=>this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>)),
               editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),

@@ -21,6 +21,8 @@ class SalesOrder extends React.Component {
           brandList: [],
           gradeList: [],
           thickList: [],
+          widthList: [],
+          weight: [],
           length: [],
           basedPrice: '',
           companyList: [
@@ -110,9 +112,16 @@ class SalesOrder extends React.Component {
           stateR[id] =  this.refs['remark'+id].value
           this.setState({eRemark:stateR})
           break;
-        case  'eWeight':
+        case  'eWeight': //make to usable
           var stateW = this.state[state];
-          stateW[id] =  this.refs['weight'+id].value
+          // stateW[id] =  this.refs['weight'+id].value
+          if(this.refs['weight'+id].value){
+            stateW[id] =  this.refs['weight'+id].value
+          }
+          else{
+            stateW[id] = (this.state.weight['weight'+id]*this.refs['order_qty'+id].value).toFixed(2)
+          }
+          console.log(stateW);
           this.setState({eWeight:stateW})
           break;
         case  'eUnitprice':
@@ -122,13 +131,16 @@ class SalesOrder extends React.Component {
           break;
         case  'eWidth':
           var stateWi = this.state[state];
-          stateWi[id] =  this.refs['width'+id].value
+          stateWi[id] =  this.refs['widthType'+id].value
           this.setState({eWidth:stateWi})
           break;
         case  'eOrderqty':
           var stateOr = this.state[state];
+          var stateW = this.state.eWeight
           stateOr[id] =  this.refs['order_qty'+id].value
-          this.setState({eOrderqty:stateOr})
+          let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
+          stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
+          this.setState({eOrderqty:stateOr,eWeight:stateW})
           break;
         default:
 
@@ -148,19 +160,21 @@ class SalesOrder extends React.Component {
           break;
         case 'thickNess':
           this.getThickNess(item, type, id)
-          this._updateStateSelector(id, 'eGradeType')
+          this._updateStateSelector(id, 'eWidth')
           break;
         case 'length':
-          this.getLength(item , type, id)
+          this.getLength(item, type, id)
           this._updateStateSelector(id, 'eThick')
-          break;
-        case 'last':
-          this._updateStateSelector(id, 'eLength')
           break;
         case 'orderqty':
           this._updateStateSelector(id, 'eOrderqty')
           break;
         case 'weight':
+          this.getWeight(item, type, id)
+          this._updateStateSelector(id, 'eLength')
+          this.updateSubTotal(id)
+          break;
+        case 'thisweight':
           this._updateStateSelector(id, 'eWeight')
           this.updateSubTotal(id)
           break;
@@ -172,7 +186,8 @@ class SalesOrder extends React.Component {
           this.updateSubTotal(id)
           break;
         case 'width':
-          this._updateStateSelector(id, 'eWidth')
+          this.getWidth(item, type, id)
+          this._updateStateSelector(id, 'eGradeType')
           this.updateSubTotal(id)
           break;
         default:
@@ -297,18 +312,33 @@ class SalesOrder extends React.Component {
     }
 
     getThickNess(item, type, id){
-      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
+      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "width": item.widthType })
       .then((response)=>{
           this.updateStateItemSet('thickList', response, type+id)
       })
       .catch(err=>console.log(err))
     }
 
+    getWidth(item, type, id){
+      post ('/api/sales/quotation/width', { "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
+      .then((response)=>{
+        this.updateStateItemSet('widthList', response, type+id)
+      })
+    }
+
     getLength(item, type, id){
-      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
+      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType })
       .then((response)=>{
         console.log(response);
         this.updateStateItemSet('length', response, type+id)
+      })
+      .catch(err=>console.log(err))
+    }
+
+    getWeight(item, type, id){
+      post('/api/sales/quotation/weight',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType, "length": item.length })
+      .then((response)=>{
+        this.updateStateItemSet('weight', response, type+id)
       })
       .catch(err=>console.log(err))
     }
@@ -545,8 +575,9 @@ class SalesOrder extends React.Component {
           let item = childList[k]
           this.getBrandType({filmType: item.filmtype_id}, 'brandType', item.id)
           this.getGradeType({filmType: item.filmtype_id, brandType: item.brand_id}, 'gradeType', item.id)
-          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'thickNess', item.id)
-          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, thickNess: item.thickness}, 'length', item.id)
+          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width}, 'thickNess', item.id)
+          this.getWidth({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'width', item.id)
+          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width, thickNess: item.thickness}, 'length', item.id)
       }
 
     }
@@ -579,7 +610,7 @@ class SalesOrder extends React.Component {
             film_type:  this.refs['filmType'+i.id].value,
             brand_type: this.refs['brandType'+i.id].value,
             grade_type: this.refs['gradeType'+i.id].value,
-            width:  this.refs['width'+i.id].value,
+            width:  this.refs['widthType'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
             quantity: this.refs['order_qty'+i.id].value ,
@@ -641,6 +672,16 @@ class SalesOrder extends React.Component {
       let getGrade = this.state.gradeList.find(i=>i.id==('gradeType'+id))
       if(getGrade){
         let result =  getGrade.content.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
+        result.unshift(<option key='select'>Select Item</option>)
+        return result
+      }
+    }
+
+    getWidthTypeOption(id){
+      console.log('widthItem', this.state.widthList);
+      let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
+      if(getWidth){
+        let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
         result.unshift(<option key='select'>Select Item</option>)
         return result
       }
@@ -719,43 +760,47 @@ class SalesOrder extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'thickNess', i.id)}>
+                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'width', i.id)}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/>
+                {/* <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/> */}
+                <select ref = {'widthType'+i.id} value = {this.state.eWidth[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType', 'widthType'], i.id), 'thickNess', i.id)}>
+                    {this.getWidthTypeOption(i.id)}
+                </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','thickNess'], i.id), 'length', i.id)}>
-                    }>
+                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess'], i.id), 'length', i.id)}>
                     {this.getThickNessOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate({},'last', i.id)}>
+                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
                     {this.getLengthOption(i.id)}
                 </select>
-            </td>
-            <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
-            <td><input onChange = {() => this.onChangeUpdate({},'weight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
-            <td>0</td>
-            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/></td>
-            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
-        </tr>)
-      })
-      return result
-    }
+                    </td>
+                        <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
+                            <td><input onChange = {() => this.onChangeUpdate({},'thisweight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
+                            <td>0</td>
+                            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
+                            <td>
+                                <input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/>
+                            </td>
+                            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
+                    </tr>)
+                    })
+                    return result
+                }
 
-    addChild(){
-      let items = this.state.childItem
-      let idNo = ''+(items.length+1)+''
-      if(idNo.length<4){
-        for (var i = 0; i < 6-idNo.length; i++) {;
-          idNo = "0" + idNo
-        }
-      }
+                    addChild(){
+                        let items = this.state.childItem
+                        let idNo = ''+(items.length+1)+''
+                        if(idNo.length<4){
+                            for (var i = 0; i < 6-idNo.length; i++) {;
+                                idNo = "0" + idNo
+                            }
+                        }
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
       this.setState({childItem:newArr})

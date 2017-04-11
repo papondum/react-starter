@@ -10,7 +10,7 @@ import Select from 'react-select';
 import { indexOf, find } from 'lodash'
 import 'react-select/dist/react-select.css';
 import './style.scss'
-class SalesOrder extends React.Component {
+class GoodReceipt extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -1035,4 +1035,4 @@ class SalesOrder extends React.Component {
     }
 
 
-export default SalesOrder;
+export default GoodReceipt;
