@@ -193,10 +193,11 @@ class Product extends React.Component {
                       <input className='flex' type="text" ref = 'thickness'/>
                   </div>
                   <div className='input-box flex'>
-                      <label><i>Rounding Methode :</i></label>
+                      <label><i>Rounding Method :</i></label>
                       <select style={{'width': '173px'}} ref = 'rounding'>
                           <option value='up'>Up</option>
                           <option value='down'>Down</option>
+                          <option value='actual'>Actual</option>
                       </select>
                   </div>
               </div>
