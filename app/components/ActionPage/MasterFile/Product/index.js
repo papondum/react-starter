@@ -140,7 +140,7 @@ class Product extends React.Component {
         this.refs.grade.value = obj[0].grade
         this.refs.width.value = obj[0].width
         this.refs.density.value = obj[0].density
-        this.refs.decimal.value = obj[0].decimal
+        this.refs.decimal.value = obj[0].decimal_digit
         this.refs.thickness.value = obj[0].thickness
         this.refs.rounding.value = obj[0].rounding
         this.refs.product_length.value = obj[0].length
