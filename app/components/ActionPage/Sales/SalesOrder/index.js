@@ -29,6 +29,11 @@ class SalesOrder extends React.Component {
                 { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
                 { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
             ],
+          adt: [
+                { value: 'เช้าก่อน 10 โมง', label: 'เช้าก่อน 10 โมง' },
+                { value: 'ก่อนเที่ยง', label: 'ก่อนเที่ยง' },
+                { value: 'ก่อนบ่าย 3', label: 'ก่อนบ่าย 3' },
+            ],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
           selectedTab: 'General',
@@ -931,7 +936,9 @@ class SalesOrder extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Actual Deliver Time :</label>
-                  <input className='flex' type="time" ref='actualdelivertime' value = {this.state.state_actualdelivertime} onChange={()=>this.updateParam('actualdelivertime')}/>
+                  <select ref = 'actualdelivertime' value = {this.state.state_actualdelivertime} onChange={()=>this.updateParam('actualdelivertime')}>
+                      {this.state.adt.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
+                  </select>
               </div>
           </div>
 
