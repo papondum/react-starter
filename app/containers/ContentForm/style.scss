@@ -6,11 +6,12 @@
 }
 table {
   border-collapse: collapse;
-  width: 100%;
-  tr:nth-child(odd){background-color: #f2f2f2}
-  tr:nth-child(even){background-color: #ffffff}
+  tbody {
+    tr:nth-child(odd){background-color: #eeeff7}
+    tr:nth-child(even){background-color: #ffffff}
+  }
+
   tr{
-    height: 35px;
     td{
       padding: 3px 8px;
       font-size: 14px;
@@ -26,9 +27,8 @@ table {
       color:#454545;
     }
   }
-
-
 }
+
 .clickable-item {
   cursor:pointer;
   &:hover{
@@ -125,41 +125,38 @@ table {
 .ant-menu-vertical .ant-menu-item:after {
   content: inherit !important;
 }
-
+.ant-btn-default {
+  background: transparent !important;
+}
 
 table.scroll {
-    width: 100%;
-    /* border-collapse: collapse; */
-    border-spacing: 0;
-    border: 2px solid black;
+  max-width:100%;
+  width: 100%;
+  border-collapse: collapse;
+  thead {
+    padding: 0px;
+    td {
+      background: #f2f2f2;
+      border: 1px #ccc solid;
+      overflow: hidden;
+      input, .ant-select {
+        border: 0px !important;
+      }
+    }
+  }
+  tbody {
+    tr {
+      border: 1px #ccc solid;
+    }
+  }
 }
-
-table.scroll tbody,
-table.scroll thead {
-  display: block;
-  padding: 0px !important;
+.table-wrapper {
+  position: relative;
+  height: 45vh;
+  overflow: scroll;
 }
-
-thead tr th {
-    height: 30px;
-    line-height: 30px;
-    /* text-align: left; */
-}
-
-table.scroll tbody {
-    height: 100px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-tbody { border-top: 2px solid black; }
-
-tbody td, thead th {
-    /* width: 20%; */ /* Optional */
-    border-right: 1px solid black;
-    /* white-space: nowrap; */
-}
-
-tbody td:last-child, thead th:last-child {
-    border-right: none;
+.table-content-wrapper {
+  position: relative;
+  height: 20vh;
+  overflow: scroll;
 }

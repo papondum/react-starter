@@ -5,6 +5,7 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import 'antd/dist/antd.min.css'
 import moment from 'moment'
 import fuzzysearch from 'fuzzysearch';
+import { post } from '../../../utils'
 
 const Option = Select.Option;
 const SubMenu = Menu.SubMenu;
@@ -38,6 +39,7 @@ class Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      subContent: [],
       filters: {},
       selected: [],
       columns: [],
@@ -54,29 +56,6 @@ class Table extends React.Component {
       }
     }
   }
-  componentWillUpdate(nextProps, nextState) {
-    var $table = $('table.scroll'),
-    $bodyCells = $table.find('thead tr:first').children(),
-    colWidth;
-    console.log($bodyCells)
-
-    // Adjust the width of thead cells when window resizes
-    $(window).resize(function() {
-
-      // Get the tbody columns width array
-
-      colWidth = $bodyCells.map(function() {
-        return $(this).width();
-      })
-      // Set the width of thead columns
-      $table.find('tbody tr').children().each(function(i, v) {
-        $(v).width(colWidth[i]);
-      });
-      $table.find('thead tr').children().each(function(i, v) {
-        $(v).width(colWidth[i]);
-      });
-    }).resize(); // Trigger resize handler
-  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.content.length > 0) {
       this.setState({
@@ -84,6 +63,24 @@ class Table extends React.Component {
       })
     }
   }
+  componentDidMount() {
+    $('.table-wrapper > table').floatThead({
+      autoReflow: true,
+      position: 'fixed'
+    })
+    $('.table-content-wrapper > table').floatThead({
+      autoReflow: true,
+      position: 'fixed'
+    })
+  }
+  componentDidUpdate(prevProps, prevState) {
+    $('.table-content-wrapper > table').floatThead('destroy')
+    $('.table-content-wrapper > table').floatThead({
+      autoReflow: true,
+      position: 'fixed'
+    })
+  }
+
   getSelected() {
     return this.state.selected;
   }
@@ -130,6 +127,16 @@ class Table extends React.Component {
       })
     }
   }
+  rowClicked(id) {
+    if(this.props.type == 'Quotation') {
+      post('/api/sales/quotation/line', {'quotation_id': id })
+      .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
+    }
+    else if(this.props.type == "Sales Order"){
+      post('/api/sales/order/line', {'order_id': id})
+      .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
+    }
+  }
   get filterHeaders() {
     const { content } = this.props;
     const genHead = []
@@ -151,13 +158,13 @@ class Table extends React.Component {
             filter = (
               <td style={{ margin: 0, padding: 0 }}>
                 <DatePicker
-                  value={this.state.filters[item] && moment(this.state.filters[item], 'DD/MM/YYYY')}
+                  value={this.state.filters[item] && moment(this.state.filters[item], 'YYYY-MM-DD')}
                   format="DD/MM/YYYY"
-                  onChange={date => this.setFilterState([item], date ? date.format('DD/MM/YYYY') : '')}
+                  onChange={date => this.setFilterState([item], date ? date.format('YYYY-MM-DD') : '')}
                   />
               </td>
             );
-          } else if (['Document Status', 'Salesperson'].includes(item)) {
+          } else if (['Document Status', 'Salesperson', 'Status'].includes(item)) {
             filter = (
               <td style={{ margin: 0, padding: 0 }}>
                 <Select
@@ -202,8 +209,8 @@ class Table extends React.Component {
     genHead.push(<td></td>)
     return [<tr className="head">{filterHead}</tr>, <tr className="head">{genHead}</tr>]
   }
-  get headers() {
-    const { content } = this.props;
+  get headersContent() {
+    const content = this.state.subContent;
     const genHead = []
     if (content.length > 0) {
       const head = Object.keys(content[0]).filter(key => !this.state.bodyFilters.columns.includes(key))
@@ -226,12 +233,14 @@ class Table extends React.Component {
     .sort(this.sorting.bind(this))
     return this.convertContent(rows, true)
   }
-  get body() {
-    return this.convertContent(this.state.selected.map(id => this.props.content.find(c => c.id === id)));
+  get bodySubContent() {
+    const content = this.state.subContent;
+    return this.convertContent(content);
   }
   filterRow(row) {
-    const result = Object.keys(row).map(key => fuzzysearch((this.state.filters[key] || '').toLowerCase(), row[key].toLowerCase()));
+    const result = Object.keys(row).map(key => fuzzysearch(this.state.filters[key] || '', row[key] || ''));
     return result.every(r => r === true);
+    // return true;
   }
   filterColumn(row) {
     const { filter } = this.state.bodyFilters;
@@ -282,6 +291,7 @@ class Table extends React.Component {
     return content.map(row => {
       let eachRow = this._getEachVal(row, isParent);
       return <tr className = {this.props.type =="Quotation"||this.props.type == "Sales Order"||this.props.type == "Purchase Order" ? 'clickable-item':''}
+        onClick={() => this.rowClicked(row.id)}
         key={row.id}>{eachRow}</tr>
     });
   }
@@ -299,27 +309,21 @@ class Table extends React.Component {
     if(isParent === true){
       result.unshift((<td key='checkbox'><input
       onClick={() => {
-        const isSelected = this.state.selected.includes(id)
-        if (isSelected) {
-          this.setState({ selected: this.state.selected.filter(s => s !== id) });
-        } else {
-          this.select(id);
-        }
+        this.setState({ editItem: obj.id })
+        this.props.checkedSingleItem(obj.id)
       }}
       type='checkbox'
-      value={obj.id}
-      checked={this.state.selected.includes(obj.id)}
+      checked={this.state.editItem === obj.id}
       /></td>))
     }
     result.push(<td></td>)
     return result
   }
   render () {
-    console.log(this.props.content)
     return (
       <LocaleProvider locale={enUS}>
         <div>
-          <div>
+          <div className="table-wrapper">
             <table className="scroll">
               <thead>
                 {this.filterHeaders}
@@ -330,16 +334,18 @@ class Table extends React.Component {
             </table>
           </div>
           <div className='action-bar'>
-            <h2>Purchase Order Line(s)</h2>
+            <h2>{this.props.header}</h2>
           </div>
-          <table>
-            <thead>
-              {this.headers}
-            </thead>
-            <tbody>
-              {this.body}
-            </tbody>
-          </table>
+          {this.state.subContent.length > 0 && <div className="table-content-wrapper">
+            <table className="scroll">
+              <thead>
+                {this.headersContent}
+              </thead>
+              <tbody>
+                {this.bodySubContent}
+              </tbody>
+            </table>
+          </div>}
         </div>
       </LocaleProvider>
     )
