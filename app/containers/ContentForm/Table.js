@@ -39,7 +39,6 @@ class Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      subContent: [],
       filters: {},
       selected: [],
       columns: [],
@@ -127,16 +126,6 @@ class Table extends React.Component {
       })
     }
   }
-  rowClicked(id) {
-    if(this.props.type == 'Quotation') {
-      post('/api/sales/quotation/line', {'quotation_id': id })
-      .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
-    }
-    else if(this.props.type == "Sales Order"){
-      post('/api/sales/order/line', {'order_id': id})
-      .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
-    }
-  }
   get filterHeaders() {
     const { content } = this.props;
     const genHead = []
@@ -210,7 +199,7 @@ class Table extends React.Component {
     return [<tr className="head">{filterHead}</tr>, <tr className="head">{genHead}</tr>]
   }
   get headersContent() {
-    const content = this.state.subContent;
+    const content = this.props.subContent;
     const genHead = []
     if (content.length > 0) {
       const head = Object.keys(content[0]).filter(key => !this.state.bodyFilters.columns.includes(key))
@@ -234,7 +223,7 @@ class Table extends React.Component {
     return this.convertContent(rows, true)
   }
   get bodySubContent() {
-    const content = this.state.subContent;
+    const content = this.props.subContent;
     return this.convertContent(content);
   }
   filterRow(row) {
@@ -291,7 +280,7 @@ class Table extends React.Component {
     return content.map(row => {
       let eachRow = this._getEachVal(row, isParent);
       return <tr className = {this.props.type =="Quotation"||this.props.type == "Sales Order"||this.props.type == "Purchase Order" ? 'clickable-item':''}
-        onClick={() => this.rowClicked(row.id)}
+        onClick={() => this.props.rowClicked(row.id)}
         key={row.id}>{eachRow}</tr>
     });
   }
@@ -323,7 +312,10 @@ class Table extends React.Component {
     return (
       <LocaleProvider locale={enUS}>
         <div>
-          <div className="table-wrapper">
+          <div
+            style={this.props.subContent.length === 0 ? { height: '80vh' } : null}
+            className="table-wrapper"
+            >
             <table className="scroll">
               <thead>
                 {this.filterHeaders}
@@ -333,18 +325,20 @@ class Table extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className='action-bar'>
-            <h2>{this.props.header}</h2>
-          </div>
-          {this.state.subContent.length > 0 && <div className="table-content-wrapper">
-            <table className="scroll">
-              <thead>
-                {this.headersContent}
-              </thead>
-              <tbody>
-                {this.bodySubContent}
-              </tbody>
-            </table>
+          {this.props.subContent.length > 0 && <div>
+            <div className='action-bar'>
+              <h2>{this.props.header}</h2>
+            </div>
+            <div className="table-content-wrapper">
+              <table className="scroll">
+                <thead>
+                  {this.headersContent}
+                </thead>
+                <tbody>
+                  {this.bodySubContent}
+                </tbody>
+              </table>
+            </div>
           </div>}
         </div>
       </LocaleProvider>

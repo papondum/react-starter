@@ -12,6 +12,7 @@ class ContentForm extends React.Component {
     this.state = {
       checkedItem: [],
       thisLine: [],
+      subContent: [],
     }
   }
 
@@ -74,6 +75,20 @@ class ContentForm extends React.Component {
     }
   }
 
+  rowClicked(id) {
+    switch (this.props.type) {
+      case 'Quotation': {
+        return post('/api/sales/quotation/line', {'quotation_id': id })
+        .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
+      }
+      case 'Sales Order' : {
+        return post('/api/sales/order/line', {'order_id': id})
+        .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
+      }
+      default: return this.setState({ subContent: [] })
+    }
+  }
+
   render() {
     if (this.props.content.length === 0) {
       return <div></div>
@@ -82,7 +97,9 @@ class ContentForm extends React.Component {
       <Table
         header={this.subContentHeader}
         checkedSingleItem={this.props.checkedSingleItem}
+        rowClicked={id => this.rowClicked(id)}
         content={this.props.content || []}
+        subContent={this.state.subContent}
         type={this.props.type}
         />
     </div>)
