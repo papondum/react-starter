@@ -50,6 +50,7 @@ class Table extends React.Component {
         columns: ['id'],
       }
     }
+    this.inputs = {}
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -83,6 +84,11 @@ class Table extends React.Component {
     this.setState({ filters });
   }
   clearFilter() {
+    this.state.columns.forEach((column) => {
+      if(this.inputs[column]) {
+        this.inputs[column].value = ''
+      }
+    })
     this.setState({
       bodyFilters: {
         sorting: {
@@ -159,7 +165,14 @@ class Table extends React.Component {
           } else {
             filter = (
               <td style={{ margin: 0, padding: 0 }}>
-                <input value={this.state.filters[item] || ''} onChange={e => this.setFilterState([item], e.target.value)} className="filter-input" />
+                <input
+                  ref={x => this.inputs[item] = x}
+                  onKeyPress={e => {
+                    if (e.which === 13) {
+                      this.setFilterState([item], e.target.value)
+                    }
+                  }}
+                  className="filter-input" />
               </td>
             );
           }
