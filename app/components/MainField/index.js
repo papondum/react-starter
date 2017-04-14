@@ -148,14 +148,20 @@ class MainField extends React.Component {
           break;
         case 'Quotation':
           this.getJson('/api/sales/quotation/all')
-          // this.getJson('Quatation')
           break;
         case 'Sales Order':
           this.getJson('/api/sales/order/all')
           break;
         case 'Purchase Order':
-          this.getJson('Purchase Order')
+          this.getJson('/api/purchase/all')
+          // this.getJson('Purchase Order')
           break;
+        //case 'Delivery Order':
+          //this.getJson('/api/inventory/delivery/all')
+          //break;
+        //case 'Good Receipt':
+          //this.getJson('/api/inventory/good/all')
+          //break;
         default:
           this.setState({'mainContent':''})
           break;
@@ -212,7 +218,7 @@ class MainField extends React.Component {
               <Content
                   contentHeader = {this.state.openedTab}
                   mainContent={this.state.mainContent}
-                  checkedSingleItem = {(item)=>this.checkedSingleItem(item)}
+                  checkedSingleItem={(item)=>this.checkedSingleItem(item)}
                   activePage={this.props.tab.activeTabs}
                   getContent={(item)=>this._getContent(item)}
                   setContent={(item)=>this.setContent(item)}

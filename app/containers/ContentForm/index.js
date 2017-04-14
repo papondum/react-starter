@@ -6,66 +6,70 @@ import { connect } from 'react-redux'
 import Table from './Table';
 import { post } from '../../../utils'
 import * as DeleteActions from '../../actions/deleteCall'
+
 class ContentForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       checkedItem: [],
-      thisLine: [],
+      subContent: [],
       subContent: [],
     }
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.type!==nextProps.type){
-      this.setState({checkedItem:[],thisLine:[]})
+    if(this.props.type !== nextProps.type){
+      this.setState({ checkedItem:[], subContent: [] })
     }
-    if(nextProps.deleteCall.userAcc=='active'){
-      let obj = {user_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'User account')
+    if(nextProps.deleteCall.userAcc === 'active'){
+      let obj = { user_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'User account')
     }
-    if(nextProps.deleteCall.userRole=='active'){
-      let obj = {role_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'User role')
+    if(nextProps.deleteCall.userRole === 'active'){
+      let obj = { role_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'User role')
     }
-    if(nextProps.deleteCall.customer=='active'){
-      let obj = {customer_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Customer')
+    if(nextProps.deleteCall.customer === 'active'){
+      let obj = { customer_id:this.state.checkedItem }
+      this.props.deleteItem(obj, 'Customer')
     }
-    if(nextProps.deleteCall.supplier=='active'){
-      let obj = {supplier:this.state.checkedItem}
-      this.props.deleteItem(obj,'Supplier')
+    if(nextProps.deleteCall.supplier === 'active'){
+      let obj = { supplier: this.state.checkedItem }
+      this.props.deleteItem(obj, 'Supplier')
     }
-    if(nextProps.deleteCall.price=='active'){
-      let obj = {pricelist_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Price list')
+    if(nextProps.deleteCall.price === 'active'){
+      let obj = { pricelist_id:  this.state.checkedItem }
+      this.props.deleteItem(obj, 'Price list')
     }
-    if(nextProps.deleteCall.product=='active'){
-      let obj = {product_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Product')
+    if(nextProps.deleteCall.product === 'active'){
+      let obj = { product_id:  this.state.checkedItem }
+      this.props.deleteItem(obj, 'Product')
     }
-    if(nextProps.deleteCall.brand=='active'){
-      let obj = {brand_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Brand')
+    if(nextProps.deleteCall.brand === 'active'){
+      let obj = { brand_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'Brand')
     }
-    if(nextProps.deleteCall.film=='active'){
-      let obj = {film_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Film Type')
+    if(nextProps.deleteCall.film === 'active'){
+      let obj = { film_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'Film Type')
     }
-    if(nextProps.deleteCall.grade=='active'){
-      let obj = {grade_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Grade')
+    if(nextProps.deleteCall.grade === 'active'){
+      let obj = { grade_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'Grade')
     }
-    if(nextProps.deleteCall.quotation=='active'){
-      let obj = {quotation_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Quotation')
+    if(nextProps.deleteCall.quotation === 'active'){
+      let obj = { quotation_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'Quotation')
     }
-    if(nextProps.deleteCall.sales=='active'){
-      let obj = {order_id:this.state.checkedItem}
-      this.props.deleteItem(obj,'Sales Order')
+    if(nextProps.deleteCall.sales === 'active'){
+      let obj = { order_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'Sales Order')
+    }
+    if(nextProps.deleteCall.purchase === 'active'){
+      let obj = { purchase_id: this.state.checkedItem }
+      this.props.deleteItem(obj, 'Purchase Order')
     }
   }
-
   get subContentHeader() {
     switch (this.props.type) {
       case 'Quotation': return 'Quotation Line(s)'
@@ -74,7 +78,6 @@ class ContentForm extends React.Component {
       default: return ''
     }
   }
-
   rowClicked(id) {
     switch (this.props.type) {
       case 'Quotation': {
@@ -85,8 +88,19 @@ class ContentForm extends React.Component {
         return post('/api/sales/order/line', {'order_id': id})
         .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
       }
+      case 'Purchase Order': {
+        return post('/api/purchase/line', {'purchase_id':i})
+        .then(subContent => this.setState({ subContent: [] }, () => ths.setState({ subContent })))
+      }
       default: return this.setState({ subContent: [] })
     }
+  }
+
+  get columns() {
+    if (this.props.content.length === 0) {
+      return []
+    }
+    return Object.keys(this.props.content[0]).filter(key => key !== 'id')
   }
 
   render() {
@@ -99,6 +113,7 @@ class ContentForm extends React.Component {
         checkedSingleItem={this.props.checkedSingleItem}
         rowClicked={id => this.rowClicked(id)}
         content={this.props.content || []}
+        columns={this.columns}
         subContent={this.state.subContent}
         type={this.props.type}
         />

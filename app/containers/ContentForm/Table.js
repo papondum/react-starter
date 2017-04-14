@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import { DatePicker, LocaleProvider, Select, Dropdown, Menu, Icon } from 'antd';
-import './fontIcon/style.css'
 import enUS from 'antd/lib/locale-provider/en_US';
 import 'antd/dist/antd.min.css'
 import moment from 'moment'
@@ -41,7 +40,7 @@ class Table extends React.Component {
     this.state = {
       filters: {},
       selected: [],
-      columns: [],
+      columns: props.columns,
       bodyFilters: {
         sorting: {
           key: '',
@@ -56,11 +55,9 @@ class Table extends React.Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.content.length > 0) {
-      this.setState({
-        columns: Object.keys(nextProps.content[0]).map(key => key).filter(key => key !== 'id'),
-      })
-    }
+    this.setState({
+      columns: nextProps.columns,
+    })
   }
   componentDidMount() {
     $('.table-wrapper > table').floatThead({

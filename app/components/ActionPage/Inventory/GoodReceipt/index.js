@@ -10,7 +10,7 @@ import Select from 'react-select';
 import { indexOf, find } from 'lodash'
 import 'react-select/dist/react-select.css';
 import './style.scss'
-class SalesOrder extends React.Component {
+class GoodReceipt extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,18 +21,11 @@ class SalesOrder extends React.Component {
           brandList: [],
           gradeList: [],
           thickList: [],
-          widthList: [],
-          weight: [],
           length: [],
           basedPrice: '',
           companyList: [
                 { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
                 { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
-            ],
-          adt: [
-                { value: 'เช้าก่อน 10 โมง', label: 'เช้าก่อน 10 โมง' },
-                { value: 'ก่อนเที่ยง', label: 'ก่อนเที่ยง' },
-                { value: 'ก่อนบ่าย 3', label: 'ก่อนบ่าย 3' },
             ],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
@@ -117,16 +110,9 @@ class SalesOrder extends React.Component {
           stateR[id] =  this.refs['remark'+id].value
           this.setState({eRemark:stateR})
           break;
-        case  'eWeight': //make to usable
+        case  'eWeight':
           var stateW = this.state[state];
-          // stateW[id] =  this.refs['weight'+id].value
-          if(this.refs['weight'+id].value){
-            stateW[id] =  this.refs['weight'+id].value
-          }
-          else{
-            stateW[id] = (this.state.weight['weight'+id]*this.refs['order_qty'+id].value).toFixed(2)
-          }
-          console.log(stateW);
+          stateW[id] =  this.refs['weight'+id].value
           this.setState({eWeight:stateW})
           break;
         case  'eUnitprice':
@@ -136,16 +122,13 @@ class SalesOrder extends React.Component {
           break;
         case  'eWidth':
           var stateWi = this.state[state];
-          stateWi[id] =  this.refs['widthType'+id].value
+          stateWi[id] =  this.refs['width'+id].value
           this.setState({eWidth:stateWi})
           break;
         case  'eOrderqty':
           var stateOr = this.state[state];
-          var stateW = this.state.eWeight
           stateOr[id] =  this.refs['order_qty'+id].value
-          let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
-          stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
-          this.setState({eOrderqty:stateOr,eWeight:stateW})
+          this.setState({eOrderqty:stateOr})
           break;
         default:
 
@@ -165,36 +148,27 @@ class SalesOrder extends React.Component {
           break;
         case 'thickNess':
           this.getThickNess(item, type, id)
-          this._updateStateSelector(id, 'eWidth')
+          this._updateStateSelector(id, 'eGradeType')
           break;
         case 'length':
-          this.getLength(item, type, id)
+          this.getLength(item , type, id)
           this._updateStateSelector(id, 'eThick')
           break;
+        case 'last':
+          this._updateStateSelector(id, 'eLength')
         case 'orderqty':
           this._updateStateSelector(id, 'eOrderqty')
-          break;
         case 'weight':
-          this.getWeight(item, type, id)
-          this._updateStateSelector(id, 'eLength')
-          this.updateSubTotal(id)
-          break;
-        case 'thisweight':
           this._updateStateSelector(id, 'eWeight')
           this.updateSubTotal(id)
-          break;
         case 'remark':
           this._updateStateSelector(id, 'eRemark')
-          break;
         case 'unitprice':
           this._updateStateSelector(id, 'eUnitprice')
           this.updateSubTotal(id)
-          break;
         case 'width':
-          this.getWidth(item, type, id)
-          this._updateStateSelector(id, 'eGradeType')
+          this._updateStateSelector(id, 'eWidth')
           this.updateSubTotal(id)
-          break;
         default:
 
       }
@@ -317,33 +291,18 @@ class SalesOrder extends React.Component {
     }
 
     getThickNess(item, type, id){
-      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "width": item.widthType })
+      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
           this.updateStateItemSet('thickList', response, type+id)
       })
       .catch(err=>console.log(err))
     }
 
-    getWidth(item, type, id){
-      post ('/api/sales/quotation/width', { "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
-      .then((response)=>{
-        this.updateStateItemSet('widthList', response, type+id)
-      })
-    }
-
     getLength(item, type, id){
-      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType })
+      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
       .then((response)=>{
         console.log(response);
         this.updateStateItemSet('length', response, type+id)
-      })
-      .catch(err=>console.log(err))
-    }
-
-    getWeight(item, type, id){
-      post('/api/sales/quotation/weight',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType, "length": item.length })
-      .then((response)=>{
-        this.updateStateItemSet('weight', response, type+id)
       })
       .catch(err=>console.log(err))
     }
@@ -532,7 +491,6 @@ class SalesOrder extends React.Component {
       this.refs['wotaxes'].value = item.wotax ||0
       this.refs['remark'].value= item.remark
       this._setInitialEditContent()
-      this.updateAll(0)
     }
 
     _setInitialEditContent(){
@@ -580,9 +538,8 @@ class SalesOrder extends React.Component {
           let item = childList[k]
           this.getBrandType({filmType: item.filmtype_id}, 'brandType', item.id)
           this.getGradeType({filmType: item.filmtype_id, brandType: item.brand_id}, 'gradeType', item.id)
-          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width}, 'thickNess', item.id)
-          this.getWidth({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'width', item.id)
-          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width, thickNess: item.thickness}, 'length', item.id)
+          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'thickNess', item.id)
+          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, thickNess: item.thickness}, 'length', item.id)
       }
 
     }
@@ -615,7 +572,7 @@ class SalesOrder extends React.Component {
             film_type:  this.refs['filmType'+i.id].value,
             brand_type: this.refs['brandType'+i.id].value,
             grade_type: this.refs['gradeType'+i.id].value,
-            width:  this.refs['widthType'+i.id].value,
+            width:  this.refs['width'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
             quantity: this.refs['order_qty'+i.id].value ,
@@ -677,16 +634,6 @@ class SalesOrder extends React.Component {
       let getGrade = this.state.gradeList.find(i=>i.id==('gradeType'+id))
       if(getGrade){
         let result =  getGrade.content.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
-        result.unshift(<option key='select'>Select Item</option>)
-        return result
-      }
-    }
-
-    getWidthTypeOption(id){
-      console.log('widthItem', this.state.widthList);
-      let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
-      if(getWidth){
-        let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
         result.unshift(<option key='select'>Select Item</option>)
         return result
       }
@@ -765,47 +712,43 @@ class SalesOrder extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'width', i.id)}>
+                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'thickNess', i.id)}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                {/* <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/> */}
-                <select ref = {'widthType'+i.id} value = {this.state.eWidth[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType', 'widthType'], i.id), 'thickNess', i.id)}>
-                    {this.getWidthTypeOption(i.id)}
-                </select>
+                <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess'], i.id), 'length', i.id)}>
+                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','thickNess'], i.id), 'length', i.id)}>
+                    }>
                     {this.getThickNessOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
+                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate({},'last', i.id)}>
                     {this.getLengthOption(i.id)}
                 </select>
-                    </td>
-                        <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
-                            <td><input onChange = {() => this.onChangeUpdate({},'thisweight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
-                            <td>0</td>
-                            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
-                            <td>
-                                <input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/>
-                            </td>
-                            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
-                    </tr>)
-                    })
-                    return result
-                }
+            </td>
+            <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'weight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
+            <td>0</td>
+            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
+            <td><input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
+        </tr>)
+      })
+      return result
+    }
 
-                    addChild(){
-                        let items = this.state.childItem
-                        let idNo = ''+(items.length+1)+''
-                        if(idNo.length<4){
-                            for (var i = 0; i < 6-idNo.length; i++) {;
-                                idNo = "0" + idNo
-                            }
-                        }
+    addChild(){
+      let items = this.state.childItem
+      let idNo = ''+(items.length+1)+''
+      if(idNo.length<4){
+        for (var i = 0; i < 6-idNo.length; i++) {;
+          idNo = "0" + idNo
+        }
+      }
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
       this.setState({childItem:newArr})
@@ -936,9 +879,7 @@ class SalesOrder extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Actual Deliver Time :</label>
-                  <select ref = 'actualdelivertime' value = {this.state.state_actualdelivertime} onChange={()=>this.updateParam('actualdelivertime')}>
-                      {this.state.adt.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
-                  </select>
+                  <input className='flex' type="time" ref='actualdelivertime' value = {this.state.state_actualdelivertime} onChange={()=>this.updateParam('actualdelivertime')}/>
               </div>
           </div>
 
@@ -1094,4 +1035,4 @@ class SalesOrder extends React.Component {
     }
 
 
-export default SalesOrder;
+export default GoodReceipt;

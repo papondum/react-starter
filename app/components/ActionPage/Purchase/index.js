@@ -25,32 +25,39 @@ class Purchase extends React.Component {
           length: [],
           basedPrice: '',
           companyList: [
-                { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
-                { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
-            ],
+            { value: 'Siam Nomura Co.,Ltd.', label: 'Siam Nomura Co.,Ltd.', address:'บริษัท สยามโนมูระ จำกัด 169 หมู่ที่ 4 ซอยเทพกาญจนา ถนนเศรษฐกิจ ตำบลแคราย อำเภอกระทุ่มแบน จังหวัดสมุทรสาคร 74110' },
+            { value: 'Poly Mirae Co.,Ltd.', label: 'Poly Mirae Co.,Ltd.',address : 'Poly Mirae Company Limited  9/6 Soi Thamma, Krungkasem Road, Rong muang Pathumwan, Bangkok Thailand 10330' },
+            { value : 'Gold Star Line Co.,Ltd.', label : 'Gold Star Line Co.,Ltd.' ,address : 'Gold Star Line Co.,Ltd. 953 Soi Phetkasem 51, Phetkasem Road Bangkae, Bangkok Thailand'},
+            { value : 'Lumirror Pet Co.,Ltd.' , label : 'Lumirror Pet Co.,Ltd.',address: 'Lumirror Pet Co.,Ltd. 169 Moo 4 Soi Thepkarnchana Bangkae, Bangkok Thailand Sethakij Road, Kaerai, Kratumbaen Samutsakorn, Thailand'},
+            { value : 'WNP Group Co.,Ltd.', label : 'WNP Group Co.,Ltd.', address:'Lumirror Pet Co.,Ltd. WNP Group Co.,Ltd. 106/26 Phahon yothin Road Klong Thanon, Sai mai Bangkok, Thailand '}
+          ],
+          selectedCompany : '',
+          supplierList : [
+            { value : 'WNP Group Co.,Ltd.', label : 'WNP Group Co.,Ltd.', address:'Lumirror Pet Co.,Ltd. WNP Group Co.,Ltd. 106/26 Phahon yothin Road Klong Thanon, Sai mai Bangkok, Thailand '}
+          ],
+          selectedSupplier : '',
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
-          selectedCustomer: '',
           selectedTab: 'General',
           filmType: '',
           filmList:[],
           childItem: [{id:'0001'}],
-          state_contact: '',
+          state_contactPerson : '',
           state_tel: '',
           state_fax: '',
           state_email: '',
           state_company:'',
+          state_buyer : '',
           state_orderdate:'',
-          state_ponumber:'',
           state_payterm:'',
           state_invoice:'',
-          state_status:'',
-          state_salePerson:'',
-          state_priceListId:'',
+          state_status:'Open',
           state_deliverterm: '',
           state_shipto: '',
+          state_shipvia : '',
+          state_cif : '',
           state_requestdeliverdate: '',
-          state_actualdeliverdate: '',
-          state_actualdelivertime: '',
+          state_estimatedtimedeparture : '',
+          state_estimatedtimearrival : '',
           total_before_discount: 0,
           taxes: 0,
           wotaxes: 0,
@@ -66,8 +73,8 @@ class Purchase extends React.Component {
           eRemark: {},
           eWidth: {},
           checkedItem: [],
+          remark:''
         }
-        this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
 
     _genHeader(type){
@@ -157,46 +164,27 @@ class Purchase extends React.Component {
           break;
         case 'last':
           this._updateStateSelector(id, 'eLength')
+          break;
         case 'orderqty':
           this._updateStateSelector(id, 'eOrderqty')
+          break;
         case 'weight':
           this._updateStateSelector(id, 'eWeight')
           this.updateSubTotal(id)
+          break;
         case 'remark':
           this._updateStateSelector(id, 'eRemark')
+          break;
         case 'unitprice':
           this._updateStateSelector(id, 'eUnitprice')
           this.updateSubTotal(id)
+          break;
         case 'width':
           this._updateStateSelector(id, 'eWidth')
           this.updateSubTotal(id)
+          break;
         default:
 
-      }
-    }
-
-    updateUser(){
-      let firstname = this.refs.firstname.value
-      let lastname = this.refs.lastname.value
-      let username = this.refs.username.value
-      let password = this.refs.password.value
-      let email = this.refs.email.value
-      let role = this.refs.role.value
-      let url = this.props.type=='create'? '/api/user/create':'/api/user/update'
-
-      if(firstname&&lastname&&password&&email&&role){
-        post(url,{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
-        .then((response)=> {
-          if (response.status >= 400) {
-            throw new Error("Bad response from server");
-          }
-          //Notify fn value added
-          this.props.getContent('User account')
-        })
-        .catch(err=>console.log(err))
-      }
-      else{
-        console.log('invalid Input');
       }
     }
 
@@ -220,7 +208,17 @@ class Purchase extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
+        let buyer_default;
+        let saleList = response.map((i,index)=>{
+          if(index === 0){
+            buyer_default = i.id
+          }
+          return Object.assign({},{value:i.id,label:i.Firstname})
+        })
+        this.setState({
+          saleList: saleList,
+          state_buyer : buyer_default
+        })
 
       })
       .catch(err=>console.log(err))
@@ -235,19 +233,6 @@ class Purchase extends React.Component {
         }
         this.setState({priceList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Name})})})
 
-      })
-      .catch(err=>console.log(err))
-    }
-
-    getInitialVal(){
-      post('/api/user/id',{"user_id":this.props.editItem})
-      .then((response)=> {
-        if (response.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-        //Notify fn value added
-        // this.setState({editItem:response})
-        this.setEditItem(response)
       })
       .catch(err=>console.log(err))
     }
@@ -438,6 +423,7 @@ class Purchase extends React.Component {
     }
 
     componentDidMount(){
+      this.getSupplierList()
       this.getCustomerList()
       this.props.type=='edit'? this._getEditItem():''
       this.getSaleList()
@@ -445,8 +431,23 @@ class Purchase extends React.Component {
       this.getFilmType()
     }
 
+    getSupplierList(){
+      get('/api/supplier/raw')
+      .then((response)=>{
+        let tempSupplierList = response.map((supplier) => {
+          return Object.assign({},supplier,{
+            value : supplier.name,
+            label : supplier.name
+          })
+        })
+        this.setState({
+          supplierList : tempSupplierList
+        })
+      })
+    }
+
     _getEditItem(){
-      post('/api/purchase/id', {order_id: +this.props.editItem})
+      post('/api/purchase/id', {id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
         console.log("response::::", response);
@@ -454,44 +455,43 @@ class Purchase extends React.Component {
     }
 
     _setInitialVal(res){
+      console.log("res");
+      console.log(res);
       let item = res[0]
-      let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
-      let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
-      //
-      //
-       this.setState({
-
-      //   state_company: item.company,
-      //   state_date: item.quotation_date,
-
-      //   state_priceListId: pricelist,
-      //   total: item.total,
-         childItem: item.contents,
-         selectedCustomer: item.customer_id,
-         state_orderdate: item.order_date,
-         state_ponumber: item.po_number,
-         state_payterm: item.payment_term,
-         state_invoice: item.invoice_to,
-         state_status: item.status,
-         state_salePerson: saleperson.value,
-         state_priceListId: pricelist.value,
-         state_deliverterm: item.delivery_term,
-         state_shipto:  item.ship_to,
-         state_requestdeliverdate: item.request_deliver_date,
-         state_actualdeliverdate: item.actual_deliver_date,
-         state_actualdelivertime: item.actual_deliver_time,
-         state_contact: item.customer.contact,
-         state_tel: item.customer.tel,
-         state_fax: item.customer.fax,
-         state_email:  item.customer.email,
+      let selectedSupplier = this.state.supplierList.find((supplier) => {
+        return supplier.id == item.supplier_id
+      })
+      this.setState({
+        selectedCompany : item.company,
+        selectedSupplier : selectedSupplier,
+        state_orderdate: item.order_date,
+        state_payterm: item.payterm,
+        state_invoice: item.invoice,
+        state_status: item.status,
+        state_deliverterm: item.deliver,
+        state_shipto:  item.shipto,
+        state_requestdeliverdate: item.delivery_date,
+        state_buyer : item.buyer_id,
+        state_contactPerson : item.customer.contact_person,
+        state_tel : item.customer.tel,
+        state_fax : item.customer.fax,
+        state_email : item.customer.email,
+        state_shipvia : item.shipvia,
+        state_cif : item.cif,
+        state_estimatedtimedeparture : item.departure_date,
+        state_estimatedtimearrival : item.arrival_date,
+        childItem: item.contents,
+        edit_id : item.id,
+        remark: item.remark,
       })
       // console.log('Test', this.state.customerList);
       // console.log('Test', this.state.customerList);
       this.refs['discount'].value = item.discount ||0
       this.refs['taxes'].value = item.tax ||0
       this.refs['wotaxes'].value = item.wotax ||0
-      this.refs['remark'].value= item.remark
+      this.refs['remark'].value= item.remarks || ''
       this._setInitialEditContent()
+      this.updateAll(0)
     }
 
     _setInitialEditContent(){
@@ -506,6 +506,7 @@ class Purchase extends React.Component {
       let objRemark = {}
       let objWidth = {}
       let objOrderqty = {}
+      var sum = 0
       for(let i in childList){
         objFilm[childList[i]['id']] = childList[i].filmtype_id
         objBrand[childList[i]['id']] = childList[i].brand_id
@@ -517,6 +518,7 @@ class Purchase extends React.Component {
         objRemark[childList[i]['id']] = childList[i].remark
         objWidth[childList[i]['id']] = childList[i].width
         objOrderqty[childList[i]['id']] = childList[i].quantity
+        sum = sum + childList[i].sub_total
       }
       this.setState({
         eFilmType: objFilm,
@@ -529,6 +531,7 @@ class Purchase extends React.Component {
         eUnitprice: objUnit,
         eRemark: objRemark,
         eWidth: objWidth,
+        total_before_discount: sum,
       })
 
       //initiate generate selector from edit val list
@@ -544,24 +547,15 @@ class Purchase extends React.Component {
 
     save(){
       //send Quatations
-      console.log(this.state.state_salePerson);
-      let obj = Object.assign({},
-      {
-        customer_id: this.state.selectedCustomer ,
-        order_date: this.state['state_orderdate'],
-        po_num: this.state['state_ponumber'],
-        payterm: this.state['state_payterm'],
-        invoice: this.state['state_invoice'],
-        status: this.state.state_status|| this.refs['status'].value,
-        sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
-        price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
-        customer:{
-          customer_contact: this.state.state_contact,
-          customer_tel: this.state.state_tel,
-          customer_fax: this.state.state_fax,
-          customer_email: this.state.state_email,
-        },
-
+      let obj = Object.assign({},{
+        company : this.state.selectedCompany,
+        supplier_id : this.state.selectedSupplier.id,
+        order_date : this.state.state_orderdate,
+        payterm : this.state.state_payterm,
+        deliver : this.state.state_deliverterm,
+        invoice : this.state.state_invoice,
+        status : this.state.state_status,
+        buyer_id : this.state.state_buyer,
         content:
         this.state.childItem.map(i=>
         {return Object.assign({},{
@@ -573,7 +567,7 @@ class Purchase extends React.Component {
             width:  this.refs['width'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
-            order_qty: this.refs['order_qty'+i.id].value ,
+            quantity: this.refs['order_qty'+i.id].value ,
             weight: this.refs['weight'+i.id].value,
             based_price: 0,
             subtotal: this.refs['subTotal'+i.id].value,
@@ -588,19 +582,20 @@ class Purchase extends React.Component {
         tax: this.refs['taxes'].value ? this.refs['taxes'].value : 0,
         wotax: this.refs['wotaxes'].value ? this.refs['wotaxes'].value : 0,
         total: this.state.total ? this.state.total : 0,
-
-        shipment:{
-          deliverterm:  this.state.state_deliverterm,
-          shipto: this.state.state_shipto,
-          requestdeliverdate: this.state.state_requestdeliverdate,
-          actualdeliverdate:  this.state.state_actualdeliverdate,
-          actualdelivertime:  this.state.state_actualdelivertime,
-        },
-        attachment:[]
+        contact_person : this.state.state_contactPerson,
+        tel : this.state.state_tel,
+        fax : this.state.state_fax,
+        email : this.state.state_email,
+        shipto : this.state.state_shipto,
+        shipvia : this.state.state_shipvia,
+        cif : this.state.state_cif,
+        delivery_date : this.state.state_requestdeliverdate,
+        departure_date : this.state.state_estimatedtimedeparture,
+        arrival_date : this.state.state_estimatedtimearrival
       })
       if(this.props.type=='edit'){
-        console.log();
-        obj.order_id = parseInt(this.props.editItem)
+        console.log(this.state.edit_id);
+        obj.purchase_id = parseInt(this.state.edit_id)
       }
       console.log(obj)
       let url = this.props.type=='create'? '/api/purchase/create':'/api/purchase/update'
@@ -759,30 +754,6 @@ class Purchase extends React.Component {
       return result
     }
 
-    updateSelectedCustomer(newVal) {
-      this.getCustomerAsync(newVal.value).then((customer) => {
-        console.log(customer);
-        this.setState({state_contact: customer[0].contact_person})
-        this.setState({state_tel: customer[0].telephone})
-        this.setState({state_fax: customer[0].fax})
-        this.setState({state_email: customer[0].email})
-        this.setState({selectedCustomer:newVal.value})
-      })
-    }
-
-    getCustomerAsync(customer_id) {
-      console.log(customer_id);
-      return new Promise((resolve,reject)=>{
-        post('/api/customer/id', {customer_id: customer_id})
-          .then((response)=>{
-            if (response.status >= 400) {
-              throw new Error("Bad response from server");
-            }
-            resolve(response)
-          })
-          .catch(err=>reject())
-        })
-    }
 
     updateParam(item){
       let obj ={}
@@ -790,30 +761,68 @@ class Purchase extends React.Component {
       this.setState(obj)
     }
 
+    setCompanySelected(obj){
+      if(obj){
+        this.setState({
+          selectedCompany : obj.value,
+          state_invoice : obj.address,
+          state_shipto : obj.address
+        })
+      }
+      else{
+        this.setState({
+          selectedCompany : '',
+          state_invoice : '',
+          state_shipto : ''
+        })
+      }
+    }
+
+    setSupplierSelected(obj){
+      if(obj){
+        this.setState({
+          selectedSupplier : obj
+        })
+      }
+      else{
+        this.setState({
+          selectedSupplier : ''
+        })
+      }
+    }
+
     getGeneralContent(){
       return (  <div className="flex flex-row ">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
-                  <label>Customer :</label>
+                  <label>Company :</label>
                   <Select
-                      name="customer"
-                      ref = 'customer'
-                      value={this.state.selectedCustomer}
-                      options={this.state.customerList}
-                      onChange={this.updateSelectedCustomer}
+                      name="company"
+                      ref = 'company'
+                      value={this.state.selectedCompany}
+                      options={this.state.companyList}
+                      onChange={(selected) => this.setCompanySelected(selected)}
                       className = 'selector-class'
                       autosize = {true}
                   />
               </div>
 
               <div className='input-box flex'>
-                  <label>Order Date :</label>
-                  <input className='flex' type="date" ref='orderdate' value = {this.state.state_orderdate} onChange={()=>this.updateParam('orderdate')}/>
+                  <label>Supplier :</label>
+                  <Select
+                      name="supplier"
+                      ref = 'supplier'
+                      value={this.state.selectedSupplier.value}
+                      options={this.state.supplierList}
+                      onChange={(selected) => this.setSupplierSelected(selected)}
+                      className = 'selector-class'
+                      autosize = {true}
+                  />
               </div>
 
               <div className='input-box flex'>
-                  <label>P/O Number:</label>
-                  <input className='flex' type="text" ref='ponumber' value = {this.state.state_ponumber} onChange={()=>this.updateParam('ponumber')}/>
+                <label>Order Date:</label>
+                <input className='flex' type="date" ref='orderdate' value = {this.state.state_orderdate} onChange={()=>this.updateParam('orderdate')}/>
               </div>
 
           </div>
@@ -821,6 +830,10 @@ class Purchase extends React.Component {
               <div className='input-box flex'>
                   <label>Payment Term :</label>
                   <input className='flex' type="text" ref='payterm' value = {this.state.state_payterm} onChange={()=>this.updateParam('payterm')}/>
+              </div>
+              <div className='input-box flex'>
+                  <label>Delivery Term :</label>
+                  <input className='flex' type="text" ref='deliverterm' value = {this.state.state_deliverterm} onChange={()=>this.updateParam('deliverterm')}/>
               </div>
               <div className='input-box flex'>
                   <label>Invoice To :</label>
@@ -835,16 +848,11 @@ class Purchase extends React.Component {
                   </select>
               </div>
               <div className='input-box flex'>
-                  <label>Saleperson :</label>
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>
+                  <label>Buyer :</label>
+                  <select ref = 'buyer' value = {this.state.state_buyer} onChange={()=>this.updateParam('buyer')}>
                       {this.state.saleList.map(i=> {
+                        console.log(i);
                           return <option value={i.value}>{i.label}</option>})}
-                  </select>
-              </div>
-              <div className='input-box flex'>
-                  <label>Price list :</label>
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>
-                      {this.state.priceList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
                   </select>
               </div>
           </div>
@@ -855,29 +863,32 @@ class Purchase extends React.Component {
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
-                  <label>Deliver Terms:</label>
-                  <input className='flex' type="text" ref='deliverterm' value = {this.state.state_deliverterm} onChange={()=>this.updateParam('deliverterm')}/>
+                <label>Ship To:</label>
+                <input className='flex' type="text" ref='shipto' value = {this.state.state_shipto} onChange={()=>this.updateParam('shipto')}/>
               </div>
 
               <div className='input-box flex'>
-                  <label>Ship To:</label>
-                  <input className='flex' type="text" ref='shipto' value = {this.state.state_shipto} onChange={()=>this.updateParam('shipto')}/>
+                  <label>Ship Via:</label>
+                  <input className='flex' type="text" ref='shipvia' value = {this.state.state_shipvia} onChange={()=>this.updateParam('shipvia')}/>
               </div>
 
               <div className='input-box flex'>
-                  <label>Request Deliver Date :</label>
-                  <input className='flex' type="date" ref='requestdeliverdate' value = {this.state.state_requestdeliverdate} onChange={()=>this.updateParam('requestdeliverdate')}/>
+                <label>C.I.F. :</label>
+                <input className='flex' type="date" ref='cif' value = {this.state.state_cif} onChange={()=>this.updateParam('cif')}/>
               </div>
-
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
-                  <label>Actual Deliver Date :</label>
-                  <input className='flex' type="date" ref='actualdeliverdate' value = {this.state.state_actualdeliverdate} onChange={()=>this.updateParam('actualdeliverdate')}/>
+                <label>Request Deliver Date :</label>
+                <input className='flex' type="date" ref='requestdeliverdate' value = {this.state.state_requestdeliverdate} onChange={()=>this.updateParam('requestdeliverdate')}/>
               </div>
               <div className='input-box flex'>
-                  <label>Actual Deliver Time :</label>
-                  <input className='flex' type="time" ref='actualdelivertime' value = {this.state.state_actualdelivertime} onChange={()=>this.updateParam('actualdelivertime')}/>
+                  <label>Estimated Time of Departure(ETD) :</label>
+                  <input className='flex' type="date" ref='estimatedtimedeparture' value = {this.state.state_estimatedtimedeparture} onChange={()=>this.updateParam('estimatedtimedeparture')}/>
+              </div>
+              <div className='input-box flex'>
+                  <label>Estimated Time of Arrival(ATD) :</label>
+                  <input className='flex' type="date" ref='estimatedtimearrival' value = {this.state.state_estimatedtimearrival} onChange={()=>this.updateParam('estimatedtimearrival')}/>
               </div>
           </div>
 
@@ -888,12 +899,12 @@ class Purchase extends React.Component {
       this.setState({selectedTab:item})
     }
 
-    getContactContent(){
+    getSupplierContent(){
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Contact Person :</label>
-                  <input className='flex' type="text" ref='contact' value={this.state.state_contact} onChange={()=>this.updateParam('contact')}/>
+                  <input className='flex' type="text" ref='contactPerson' value={this.state.state_contactPerson} onChange={()=>this.updateParam('contactPerson')}/>
               </div>
               <div className='input-box flex'>
                   <label>Tel :</label>
@@ -922,14 +933,11 @@ class Purchase extends React.Component {
         case 'General':
           return this.getGeneralContent()
           break;
-        case 'Contact':
-          return this.getContactContent()
+        case 'Supplier Contact':
+          return this.getSupplierContent()
           break;
         case 'Ship':
           return this.getShipment()
-          break;
-        case 'Attachment':
-
           break;
         default:
 
@@ -953,24 +961,17 @@ class Purchase extends React.Component {
                       <div className={this.state.selectedTab === 'General'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('General')}>
                           General
                       </div>
-                      <div className={this.state.selectedTab === 'Contact'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Contact')}>
-                          Customers Contact
+                      <div className={this.state.selectedTab === 'Supplier Contact'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Supplier Contact')}>
+                          Supplier Contact
                       </div>
                       <div className={this.state.selectedTab === 'Ship'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Ship')}>
                           Shipment
                       </div>
-                      {/*
-                          <div className={this.state.selectedTab === 'Attach'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attach')}>
-                          Attachment
-                          </div>
-                      */}
                   </div>
                   <hr style={{margin : 0}}/>
                   <div className = 'top-content'>
                       {this.getContentFromTab(this.state.selectedTab)}
                   </div>
-
-                  {/* {this.state.selectedTab=='Gen'? this.getGeneralContent():this.getContactContent()} */}
 
               </div>
               <hr style={{margin : 0}}/>
@@ -1007,7 +1008,7 @@ class Purchase extends React.Component {
               <div className = 'flex create-quo-btm'>
                   <div className = 'flex-1'>
                       <p>Remarks</p>
-                      <textarea rows="5" cols="40" ref = 'remark' />
+                      <textarea rows="5" cols="40" ref = 'remark' value= {this.state.remark} />
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>

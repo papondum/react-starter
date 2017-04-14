@@ -25,6 +25,8 @@ import Grade from '../ActionPage/MasterFile/Grade'
 import Quotation from '../ActionPage/Sales/Quotation'
 import Salesorder from '../ActionPage/Sales/SalesOrder'
 import Purchase from '../ActionPage/Purchase'
+import Delivery from '../ActionPage/Inventory/Delivery'
+import GoodReceipt from '../ActionPage/Inventory/GoodReceipt'
 class ActionMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -45,6 +47,7 @@ class ActionMenu extends React.Component {
     }
 
     showDeleteModal(){
+      console.log(this.props.activePage);
       this.setState({
         showModal:{
           show:true,
@@ -204,18 +207,18 @@ class ActionMenu extends React.Component {
               refreshAction:'',
             })
             break;
-            case 'Sales Order':
-              this.setState({
-                createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-                editAction:()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-                copyAction:'',
-                deleteAction:()=>this.showDeleteModal(),
-                emailAction:'',
-                printAction:'',
-                exportAction:'',
-                refreshAction:'',
-              })
-              break;
+          case 'Sales Order':
+            this.setState({
+              createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              editAction:()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+              copyAction:'',
+              deleteAction:()=>this.showDeleteModal(),
+              emailAction:'',
+              printAction:'',
+              exportAction:'',
+              refreshAction:'',
+            })
+            break;
           case 'Purchase Order':
             this.setState({
               createAction:()=>this.props.setContent((<Purchase type='create' getContent={(item)=>this.props.getContent(item)}/>)),
@@ -228,10 +231,33 @@ class ActionMenu extends React.Component {
               refreshAction:'',
             })
             break;
+          case 'Delivery Order':
+            this.setState({
+              createAction:()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              editAction:()=>this.props.setContent((<Delivery type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
+              copyAction:'',
+              deleteAction:()=>this.showDeleteModal(),
+              emailAction:'',
+              printAction:'',
+              exportAction:'',
+              refreshAction:'',
+            })
+            break;
+          case 'Good Receipt':
+            this.setState({
+              createAction:()=>this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
+              copyAction:'',
+              deleteAction:()=>this.showDeleteModal(),
+              emailAction:'',
+              printAction:'',
+              exportAction:'',
+              refreshAction:'',
+            })
+            break;
           default:
         }
       }, 100);
-
     }
 
     _addNotification(event , type) {
