@@ -46,10 +46,7 @@ class Table extends React.Component {
           key: '',
           sort: 'asc',
         },
-        filter: {
-          key: '',
-          type: '',
-        },
+        filters: {},
         columns: ['id'],
       }
     }
@@ -92,10 +89,7 @@ class Table extends React.Component {
           key: '',
           sort: 'asc',
         },
-        filter: {
-          key: '',
-          type: '',
-        },
+        filters: {},
         columns: ['id'],
       },
       filters: {},
@@ -104,7 +98,7 @@ class Table extends React.Component {
   sortingMenu(key, value) {
     if (value.keyPath.includes('filter')) {
       this.setState({
-        bodyFilters: Object.assign(this.state.bodyFilters, { filter: { key, type: value.key } })
+        bodyFilters: Object.assign(this.state.bodyFilters, { filters: { ...this.state.bodyFilters.filters, [key]: value.key} })
       })
     } else if (value.keyPath.includes('columns')) {
       const { columns } = this.state.bodyFilters;
@@ -215,8 +209,9 @@ class Table extends React.Component {
   get filterBody() {
     const rows = this.props.content
     .filter(this.filterRow.bind(this))
-    .filter(this.filterColumn.bind(this))
+    // .filter(this.filterColumn.bind(this))
     .sort(this.sorting.bind(this))
+    console.log(rows)
     return this.convertContent(rows, true)
   }
   get bodySubContent() {
@@ -224,34 +219,34 @@ class Table extends React.Component {
     return this.convertContent(content);
   }
   filterRow(row) {
-    const result = Object.keys(row).map(key => fuzzysearch(this.state.filters[key] || '', row[key] || ''));
+    // const result = Object.keys(row).map(key => fuzzysearch((this.state.filters[key] || '').toString(), (row[key] || '').toString()));
+    const result = Object.keys(row).map(key => this.filterColumn(row, key))
     return result.every(r => r === true);
     // return true;
   }
-  filterColumn(row) {
-    const { filter } = this.state.bodyFilters;
-    if (filter.key === '') {
-      return true;
-    }
-    const { key, type } = filter;
+  filterColumn(row, key) {
+    const { filters } = this.state.bodyFilters;
+
+    const type = filters[key];
+    if(!type) return fuzzysearch(this.state.filters[key] || '', row[key] || '')
     switch (type) {
       case 'equal': {
-        return row[key] === this.state.filters[key]
+        return row[key] === this.state.filters[key].toString()
       }
       case 'not equal': {
-        return row[key] !== this.state.filters[key]
+        return row[key] !== this.state.filters[key].toString()
       }
       case 'less than': {
-        return row[key] < this.state.filters[key]
+        return row[key] < this.state.filters[key].toString()
       }
       case 'greater than': {
-        return row[key] > this.state.filters[key]
+        return row[key] > this.state.filters[key].toString()
       }
       case 'less than or': {
-        return row[key] <= this.state.filters[key]
+        return row[key] <= this.state.filters[key].toString()
       }
       case 'greater than or': {
-        return row[key] >= this.state.filters[key]
+        return row[key] >= this.state.filters[key].toString()
       }
       default: return true
     }
