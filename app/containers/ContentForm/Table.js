@@ -241,7 +241,7 @@ class Table extends React.Component {
     const { filters } = this.state.bodyFilters;
 
     const type = filters[key];
-    if(!type) return fuzzysearch(this.state.filters[key] || '', row[key] || '')
+    if(!type) return fuzzysearch((this.state.filters[key] || '').toString(), (row[key] || '').toString())
     switch (type) {
       case 'equal': {
         return row[key] === this.state.filters[key].toString()
