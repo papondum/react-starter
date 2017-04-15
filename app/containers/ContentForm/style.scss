@@ -4,30 +4,30 @@
   overflow: auto;
   height: calc(100% - 115px);
 }
-table {
-  border-collapse: collapse;
-  tbody {
-    tr:nth-child(odd){background-color: #eeeff7}
-    tr:nth-child(even){background-color: #ffffff}
-  }
-
-  tr{
-    td{
-      padding: 3px 8px;
-      font-size: 14px;
-      color:#5e5e5e;
-    }
-  }
-  thead{
-    border-bottom: 2px solid #e0e0e0;
-    padding: 3px 8px;
-    td{
-      font-weight: 600;
-      font-size:14px;
-      color:#454545;
-    }
-  }
-}
+// table {
+//   border-collapse: collapse;
+//   tbody {
+//     tr:nth-child(odd){background-color: #eeeff7}
+//     tr:nth-child(even){background-color: #ffffff}
+//   }
+//
+//   tr{
+//     td{
+//       padding: 3px 8px;
+//       font-size: 14px;
+//       color:#5e5e5e;
+//     }
+//   }
+//   thead{
+//     border-bottom: 2px solid #e0e0e0;
+//     padding: 3px 8px;
+//     td{
+//       font-weight: 600;
+//       font-size:14px;
+//       color:#454545;
+//     }
+//   }
+// }
 
 .clickable-item {
   cursor:pointer;
@@ -130,11 +130,12 @@ table {
 }
 
 table.scroll {
-  max-width:100%;
-  width: 100%;
+  // max-width:100%;
+  // width: 100%;
   border-collapse: collapse;
   thead {
     padding: 0px;
+    // display: block;
     td {
       background: #f2f2f2;
       border: 1px #ccc solid;
@@ -145,6 +146,9 @@ table.scroll {
     }
   }
   tbody {
+    // display: block;
+    overflow-y: scroll;
+    max-height: 200px;
     tr {
       border: 1px #ccc solid;
     }
@@ -152,11 +156,54 @@ table.scroll {
 }
 .table-wrapper {
   position: relative;
-  height: 45vh;
+  height: 55vh;
   overflow: scroll;
+  .floatThead-container {
+    // width: 100% !important;
+    // max-width: 100% !important;
+    // transform: translate(23.1%, 169px) !important;
+    // overflow: scroll !important;
+  }
 }
 .table-content-wrapper {
   position: relative;
   height: 20vh;
   overflow: scroll;
+}
+
+.header-fixed {
+  width: 77%;
+  right: 0;
+  left: 23%;
+  top: 170px;
+  background: #f2f2f2;
+  position: fixed;
+  transform: translate(0%, 0px) !important;
+}
+.body-fixed {
+  width: 77%;
+  right: 0;
+  left: 23%;
+  top: 170px;
+}
+
+.ant-table-thead>tr>th {
+  padding: 0px !important;
+}
+.ant-dropdown-trigger {
+  display: block !important;
+  position: relative !important;
+  color: #000;
+}
+.ant-table-tbody>tr>td {
+  padding: 5px 8px !important;
+}
+
+.ant-table-tbody {
+  tr:nth-child(odd){background-color: #eeeff7}
+  tr:nth-child(even){background-color: #ffffff}
+}
+th {
+  white-space: nowrap;
+  overflow: hidden;
 }

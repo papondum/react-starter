@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { DatePicker, LocaleProvider, Select, Dropdown, Menu, Icon } from 'antd';
+import { Table, DatePicker, LocaleProvider, Select, Dropdown, Menu, Icon } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 import 'antd/dist/antd.min.css'
 import moment from 'moment'
@@ -34,7 +34,7 @@ const OverlayMenu = ({ onClick, columns, unselected }) => (
   </Menu>
 );
 
-class Table extends React.Component {
+class CustomTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,24 +57,6 @@ class Table extends React.Component {
       columns: nextProps.columns,
     })
   }
-  componentDidMount() {
-    $('.table-wrapper > table').floatThead({
-      autoReflow: true,
-      position: 'fixed'
-    })
-    $('.table-content-wrapper > table').floatThead({
-      autoReflow: true,
-      position: 'fixed'
-    })
-  }
-  componentDidUpdate(prevProps, prevState) {
-    $('.table-content-wrapper > table').floatThead('destroy')
-    $('.table-content-wrapper > table').floatThead({
-      autoReflow: true,
-      position: 'fixed'
-    })
-  }
-
   getSelected() {
     return this.state.selected;
   }
@@ -123,113 +105,11 @@ class Table extends React.Component {
       })
     }
   }
-  get filterHeaders() {
-    const { content } = this.props;
-    const genHead = []
-    const filterHead = []
-    if (content.length > 0) {
-      const head = Object.keys(content[0]).filter(key => !this.state.bodyFilters.columns.includes(key))
-      head.forEach(item => {
-        let header;
-        let filter;
-        if (item == 'id') {
-          // header = (<td key= {item} style={{display: 'none'}}>{item}</td>);
-        } else {
-          header = (
-            <td key= {item}>
-              <Dropdown.Button overlay={<OverlayMenu onClick={e => this.sortingMenu(item, e)} columns={this.state.columns} unselected={this.state.bodyFilters.columns} />}>{item}</Dropdown.Button>
-            </td>
-          );
-          if (item.includes('Date')) {
-            filter = (
-              <td style={{ margin: 0, padding: 0 }}>
-                <DatePicker
-                  value={this.state.filters[item] && moment(this.state.filters[item], 'YYYY-MM-DD')}
-                  format="DD/MM/YYYY"
-                  onChange={date => this.setFilterState([item], date ? date.format('YYYY-MM-DD') : '')}
-                  />
-              </td>
-            );
-          } else if (['Document Status', 'Salesperson', 'Status'].includes(item)) {
-            filter = (
-              <td style={{ margin: 0, padding: 0 }}>
-                <Select
-                  value={this.state.filters[item]}
-                  onChange={v => this.setFilterState([item], v || '')}
-                  allowClear
-                  >
-                  {content.reduce((p, c) => p.includes(c[item]) ? p : p.concat(c[item]), []).map(c => <Option value={c}>{c}</Option>)}
-                </Select>
-              </td>
-            )
-          } else {
-            filter = (
-              <td style={{ margin: 0, padding: 0 }}>
-                <input
-                  ref={x => this.inputs[item] = x}
-                  onKeyPress={e => {
-                    if (e.which === 13) {
-                      this.setFilterState([item], e.target.value)
-                    }
-                  }}
-                  className="filter-input" />
-              </td>
-            );
-          }
-        }
-        filterHead.push(filter)
-        genHead.push(header);
-      })
-    }
-    genHead.unshift(
-      <td key='checkbox'>
-        <input
-          onClick={() => {
-            const isChecked = this.state.selected.length === this.props.content.length;
-            if (isChecked) {
-              this.setState({ selected: [] })
-            } else {
-              this.setState({ selected: this.props.content.map(c => c.id) })
-            }
-          }}
-          type='checkbox'
-          checked={this.state.selected.length === this.props.content.length}
-          />
-      </td>
-    )
-    filterHead.push((<td><Icon onClick={this.clearFilter.bind(this)} style={{ cursor: 'pointer' }} type="filter" /></td>))
-    filterHead.unshift((<td></td>))
-    genHead.push(<td></td>)
-    return [<tr className="head">{filterHead}</tr>, <tr className="head">{genHead}</tr>]
-  }
-  get headersContent() {
-    const content = this.props.subContent;
-    const genHead = []
-    if (content.length > 0) {
-      const head = Object.keys(content[0]).filter(key => !this.state.bodyFilters.columns.includes(key))
-      head.forEach(item => {
-        let header;
-        if (item == 'id') {
-          // header = (<td key= {item} style={{display: 'none'}}>{item}</td>);
-        } else {
-          header = (<td key= {item}>{item}</td>);
-        }
-        genHead.push(header);
-      })
-    }
-    return [<tr>{genHead}</tr>]
-  }
+
   get filterBody() {
-    const rows = this.props.content
+    return this.props.content
     .filter(this.filterRow.bind(this))
-    // .filter(this.filterColumn.bind(this))
-    .sort(this.sorting.bind(this))
-    console.log(rows)
-    return this.convertContent(rows, true)
-  }
-  get bodySubContent() {
-    const content = this.props.subContent;
-    return this.convertContent(content);
+    .sort(this.sorting.bind(this));
   }
   filterRow(row) {
     // const result = Object.keys(row).map(key => fuzzysearch((this.state.filters[key] || '').toString(), (row[key] || '').toString()));
@@ -239,27 +119,26 @@ class Table extends React.Component {
   }
   filterColumn(row, key) {
     const { filters } = this.state.bodyFilters;
-
     const type = filters[key];
     if(!type) return fuzzysearch((this.state.filters[key] || '').toString(), (row[key] || '').toString())
     switch (type) {
       case 'equal': {
-        return row[key] === this.state.filters[key].toString()
+        return row[key] === (this.state.filters[key] || '').toString()
       }
       case 'not equal': {
-        return row[key] !== this.state.filters[key].toString()
+        return row[key] !== (this.state.filters[key] || '').toString()
       }
       case 'less than': {
-        return row[key] < this.state.filters[key].toString()
+        return row[key] < (this.state.filters[key] || '').toString()
       }
       case 'greater than': {
-        return row[key] > this.state.filters[key].toString()
+        return row[key] > (this.state.filters[key] || '').toString()
       }
       case 'less than or': {
-        return row[key] <= this.state.filters[key].toString()
+        return row[key] <= (this.state.filters[key] || '').toString()
       }
       case 'greater than or': {
-        return row[key] >= this.state.filters[key].toString()
+        return row[key] >= (this.state.filters[key] || '').toString()
       }
       default: return true
     }
@@ -281,79 +160,112 @@ class Table extends React.Component {
       selected: this.state.selected.concat(id).reduce(getUnique, []),
     })
   }
-  convertContent(content, isParent = false) {
-    return content.map(row => {
-      let eachRow = this._getEachVal(row, isParent);
-      return <tr className = {this.props.type =="Quotation"||this.props.type == "Sales Order"||this.props.type == "Purchase Order" ? 'clickable-item':''}
-        onClick={() => this.props.rowClicked(row.id)}
-        key={row.id}>{eachRow}</tr>
-    });
-  }
-  _getEachVal(obj, isParent){
-    const result = [];
-    const { id } = obj;
-    const columns = Object.keys(obj).filter(key => !this.state.bodyFilters.columns.includes(key))
-    columns.forEach(column => {
-      if (column === 'id') {
-        // result.push((<td key={o} style={{display: 'none'}}>{obj[o]}</td>))
-      } else {
-        result.push((<td key={column}>{obj[column]}</td>))
-      }
-    })
-    if(isParent === true){
-      result.unshift((<td key='checkbox'><input
-      onClick={() => {
-        this.setState({ editItem: obj.id })
-        this.props.checkedSingleItem(obj.id)
-      }}
-      type='checkbox'
-      checked={this.state.editItem === obj.id}
-      /></td>))
+  renderColumn(column) {
+    if (column.includes('Date')) {
+      return <DatePicker
+        value={this.state.filters[column] && moment(this.state.filters[column], 'YYYY-MM-DD')}
+        format="DD/MM/YYYY"
+        onChange={date => this.setFilterState([column], date ? date.format('YYYY-MM-DD') : '')}
+        />
     }
-    result.push(<td></td>)
-    return result
+    if (['Document Status', 'Salesperson', 'Status'].includes(column)) {
+      return <Select
+        style={{ width: 300 }}
+        value={this.state.filters[column]}
+        onChange={v => this.setFilterState([column], v || '')}
+        allowClear
+        >
+        {this.props.content.reduce((p, c) => p.includes(c[column]) ? p : p.concat(c[column]), []).map(c => <Option value={c}>{c}</Option>)}
+      </Select>
+    }
+    return <input
+      ref={x => this.inputs[column] = x}
+      onKeyPress={e => {
+        if (e.which === 13) {
+          this.setFilterState([column], e.target.value)
+        }
+      }}
+      className="filter-input" />
   }
-  render () {
-    return (
-      <LocaleProvider locale={enUS}>
+  columns() {
+    const filterColumns = this.state.bodyFilters.columns
+    const columns = this.props.columns.filter(column => !filterColumns.includes(column))
+    return columns.map((column, index) => ({
+      title: (<div>
         <div>
-          <div
-            style={this.props.subContent.length === 0 ? { height: '80vh' } : null}
-            className="table-wrapper"
-            >
-            <table className="scroll">
-              <thead>
-                {this.filterHeaders}
-              </thead>
-              <tbody>
-                {this.filterBody}
-              </tbody>
-            </table>
-          </div>
-          {this.props.subContent.length > 0 && <div>
-            <div className='action-bar'>
-              <h2>{this.props.header}</h2>
-            </div>
-            <div className="table-content-wrapper">
-              <table className="scroll">
-                <thead>
-                  {this.headersContent}
-                </thead>
-                <tbody>
-                  {this.bodySubContent}
-                </tbody>
-              </table>
-            </div>
-          </div>}
+          {this.renderColumn(column)}
         </div>
-      </LocaleProvider>
-    )
-  }
-}
+        <div style={{ padding: '5px 5px',
+          border: '0.5px #ccc solid' }}>
+          <Dropdown placement="bottomLeft" overlay={<OverlayMenu
+              onClick={e => this.sortingMenu(column, e)}
+              columns={this.state.columns}
+              unselected={this.state.bodyFilters.columns} />}>
+              <a className="ant-dropdown-link" href="#">{column}</a>
+            </Dropdown>
+          </div>
+        </div>),
+        dataIndex: column,
+        key: column,
+        width: `${1 / columns.length * 100}%`,
+        onCellClick: record => this.props.rowClicked(record.id),
+        render: (t, record) => index === 0 ? (
+          <div key={t}>
+            <input
+              onClick={() => {
+                this.setState({ editItem: record.id })
+                this.props.checkedSingleItem(record.id)
+              }}
+              type='checkbox'
+              checked={this.state.editItem === record.id}
+              /> {t}
+            </div>
+          ) : <div key={t}>{t}</div>
+        }))
+        .concat({
+          title: <div><div><Icon onClick={this.clearFilter.bind(this)} style={{ cursor: 'pointer' }} type="filter" /></div><br /></div>,
+          render: () => ''
+        })
+      }
+      render () {
+        return (
+          <LocaleProvider locale={enUS}>
+            <div>
+              <Table
+                pagination={false}
+                scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
+                columns={this.columns()}
+                dataSource={this.filterBody}
+                />
+              {this.props.subContent.length > 0 &&
+                <div className="subcontent-table">
+                  <div className='action-bar' style={{ paddingBottom: 10 }}>
+                    <h2>{this.props.header}</h2>
+                  </div>
+                  <Table
+                    pagination={false}
+                    scroll={{ x: 120, y: '20vh' }}
+                    columns={Object.keys(this.props.subContent[0]).map(key => ({
+                      title: <div style={{ padding: '5px 5px',
+                        border: '0.5px #ccc solid',
+                      }}>{key}</div>,
+                      key,
+                      dataIndex: key,
+                      width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
+                    }))}
+                    dataSource={this.props.subContent}
+                    />
+                </div>
+              }
+            </div>
+          </LocaleProvider>
+        )
+      }
+    }
 
-const getUnique = (p, c) => {
-  if (p.includes(c)) return p;
-  return p.concat(c);
-}
+    const getUnique = (p, c) => {
+      if (p.includes(c)) return p;
+      return p.concat(c);
+    }
 
-export default Table;
+    export default CustomTable;
