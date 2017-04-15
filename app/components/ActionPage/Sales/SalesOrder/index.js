@@ -119,14 +119,12 @@ class SalesOrder extends React.Component {
           break;
         case  'eWeight': //make to usable
           var stateW = this.state[state];
-          // stateW[id] =  this.refs['weight'+id].value
           if(this.refs['weight'+id].value){
             stateW[id] =  this.refs['weight'+id].value
           }
           else{
             stateW[id] = (this.state.weight['weight'+id]*this.refs['order_qty'+id].value).toFixed(2)
           }
-          console.log(stateW);
           this.setState({eWeight:stateW})
           break;
         case  'eUnitprice':
@@ -770,7 +768,6 @@ class SalesOrder extends React.Component {
                 </select>
             </td>
             <td>
-                {/* <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/> */}
                 <select ref = {'widthType'+i.id} value = {this.state.eWidth[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType', 'widthType'], i.id), 'thickNess', i.id)}>
                     {this.getWidthTypeOption(i.id)}
                 </select>
