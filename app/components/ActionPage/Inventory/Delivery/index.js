@@ -21,7 +21,9 @@ class Delivery extends React.Component {
           brandList: [],
           gradeList: [],
           thickList: [],
+          widthList: [],
           length: [],
+          weight: [],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
           eFilmType: {},
@@ -53,7 +55,6 @@ class Delivery extends React.Component {
           total: 0,
           checkedItem: [],
         }
-        this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
 
     _genHeader(type){
@@ -202,9 +203,14 @@ class Delivery extends React.Component {
           stateR[id] =  this.refs['remark'+id].value
           this.setState({eRemark:stateR})
           break;
-        case  'eWeight':
+        case  'eWeight': //make to usable
           var stateW = this.state[state];
-          stateW[id] =  this.refs['weight'+id].value
+          if(this.refs['weight'+id].value){
+            stateW[id] =  this.refs['weight'+id].value
+          }
+          else{
+            stateW[id] = (this.state.weight['weight'+id]*this.refs['order_qty'+id].value).toFixed(2)
+          }
           this.setState({eWeight:stateW})
           break;
         case  'eWidth':
@@ -214,8 +220,11 @@ class Delivery extends React.Component {
           break;
         case  'eOrderqty':
           var stateOr = this.state[state];
+          var stateW = this.state.eWeight
           stateOr[id] =  this.refs['order_qty'+id].value
-          this.setState({eOrderqty:stateOr})
+          let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
+          stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
+          this.setState({eOrderqty:stateOr,eWeight:stateW})
           break;
         case  'eStock':
           var stateSt = this.state[state];
@@ -240,7 +249,7 @@ class Delivery extends React.Component {
           break;
         case 'thickNess':
           this.getThickNess(item, type, id)
-          this._updateStateSelector(id, 'eGradeType')
+          this._updateStateSelector(id, 'eWidth')
           break;
         case 'length':
           this.getLength(item , type, id)
@@ -250,13 +259,15 @@ class Delivery extends React.Component {
           this._updateStateSelector(id, 'eLength')
           break;
         case 'weight':
-          this._updateStateSelector(id, 'eWeight')
+          this.getWeight(item, type, id)
+          this._updateStateSelector(id, 'eLength')
           break;
         case 'remark':
           this._updateStateSelector(id, 'eRemark')
           break;
         case 'width':
-          this._updateStateSelector(id, 'eWidth')
+          this.getWidth(item, type, id)
+          this._updateStateSelector(id, 'eGradeType')
           break;
         case 'orderqty':
           this._updateStateSelector(id, 'eOrderqty')
@@ -287,15 +298,30 @@ class Delivery extends React.Component {
     }
 
     getThickNess(item, type, id){
-      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
+      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "width": item.widthType })
       .then((response)=>{
           this.updateStateItemSet('thickList', response, type+id)
       })
       .catch(err=>console.log(err))
     }
 
+    getWidth(item, type, id){
+      post ('/api/sales/quotation/width', { "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
+      .then((response)=>{
+        this.updateStateItemSet('widthList', response, type+id)
+      })
+    }
+
+    getWeight(item, type, id){
+      post('/api/sales/quotation/weight',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType, "length": item.length })
+      .then((response)=>{
+        this.updateStateItemSet('weight', response, type+id)
+      })
+      .catch(err=>console.log(err))
+    }
+
     getLength(item , type, id){
-      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
+      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType })
       .then((response)=>{
         this.updateStateItemSet('length', response, type+id)
       })
@@ -362,8 +388,9 @@ class Delivery extends React.Component {
           let item = childList[k]
           this.getBrandType({filmType: item.filmtype_id}, 'brandType', item.id)
           this.getGradeType({filmType: item.filmtype_id, brandType: item.brand_id}, 'gradeType', item.id)
-          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'thickNess', item.id)
-          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, thickNess: item.thickness}, 'length', item.id)
+          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width}, 'thickNess', item.id)
+          this.getWidth({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'width', item.id)
+          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width, thickNess: item.thickness}, 'length', item.id)
       }
 
     }
@@ -375,19 +402,19 @@ class Delivery extends React.Component {
       //let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
       this.setState({
         state_contact:item.customer ? item.customer.contact:item.contact,
-        state_tel: item.customer ? item.customer.tel:item.tel ,
-        state_fax: item.customer ? item.customer.fax:item.fax,
-        state_email: item.customer? item.customer.email:item.email,
-        state_date: item.quotation_date,
-        state_time: '',
-        state_sonumber: '',
-        state_ponumber: '',
-        state_shipto: '',
-        state_payterm: item.payment_term,
-        state_deliver: item.delivery_term,
+        // state_tel: item.customer ? item.customer.tel:item.tel ,
+        // state_fax: item.customer ? item.customer.fax:item.fax,
+        // state_email: item.customer? item.customer.email:item.email,
+        state_date: item.quotation_date||'',
+        state_time: item.quotation_time||'',
+        state_sonumber: item.so_number||'',
+        state_ponumber: item.po_number||'',
+        state_shipto: item.shipto||'',
+        // state_payterm: item.payment_term,
+        // state_deliver: item.delivery_term,
         state_status: item.status,
         state_salePerson: saleperson,
-        total: item.total,
+        // total: item.total,
         childItem: item.contents,
         selectedCustomer: item.customer_id,
       })
@@ -402,20 +429,19 @@ class Delivery extends React.Component {
         customer: this.state.selectedCustomer || this.refs['customer'].value,
         date: this.state.state_date || this.refs['date'].value,
         time: this.state.state_time || this.refs['time'].value,
-        payterm: this.state.state_payterm || this.refs['payterm'].value,
-        deliver: this.state.state_deliver|| this.refs['deliver'].value,
-        status:   this.state.state_status|| this.refs['status'].value,
-        sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
+        // payterm: this.state.state_payterm || this.refs['payterm'].value,
+        // deliver: this.state.state_deliver|| this.refs['deliver'].value,
         so_number: this.state.state_sonumber || this.refs['sonumber'].value,
         po_number: this.state.state_ponumber || this.refs['ponumber'].value,
         shipto: this.state.state_shipto || this.refs['shipto'].value,
-        customer_contact: this.state.state_contact,
-        customer_tel: this.state.state_tel,
-        customer_fax: this.state.state_fax,
-        customer_email: this.state.state_email,
-
-        discount: this.refs['discount'].value ? this.refs['discount'].value : 0,
-        total: this.state.total ? this.state.total : 0,
+        status:   this.state.state_status|| this.refs['status'].value,
+        sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
+        // customer_contact: this.state.state_contact,
+        // customer_tel: this.state.state_tel,
+        // customer_fax: this.state.state_fax,
+        // customer_email: this.state.state_email,
+        // discount: this.refs['discount'].value ? this.refs['discount'].value : 0,
+        // total: this.state.total ? this.state.total : 0,
         content:// list of content
           this.state.childItem.map(i=>{
             return Object.assign({},{
@@ -424,11 +450,14 @@ class Delivery extends React.Component {
                 film_type:  this.refs['filmType'+i.id].value,
                 brand_type: this.refs['brandType'+i.id].value,
                 grade_type: this.refs['gradeType'+i.id].value,
+                width: this.refs['widthType'+i.id].value,
                 thickness: this.refs['thickNess'+i.id].value,
                 length: this.refs['length'+i.id].value,
+                order_qty: this.refs['order_qty'+i.id].value,
                 weight: this.refs['weight'+i.id].value,
+                stock: this.refs['stock'+i.id].value,
                 remark: this.refs['remark'+i.id].value,
-                subtotal: this.refs['subTotal'+i.id].value,
+                // subtotal: this.refs['subTotal'+i.id].value,
               }
           })
         })
@@ -467,6 +496,15 @@ class Delivery extends React.Component {
       let getGrade = this.state.gradeList.find(i=>i.id==('gradeType'+id))
       if(getGrade){
         let result =  getGrade.content.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
+        result.unshift(<option key='select'>Select Item</option>)
+        return result
+      }
+    }
+
+    getWidthTypeOption(id){
+      let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
+      if(getWidth){
+        let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
         result.unshift(<option key='select'>Select Item</option>)
         return result
       }
@@ -529,25 +567,27 @@ class Delivery extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'thickNess', i.id)}>
+                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'width', i.id)}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/>
+                <select ref = {'widthType'+i.id} value = {this.state.eWidth[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType', 'widthType'], i.id), 'thickNess', i.id)}>
+                    {this.getWidthTypeOption(i.id)}
+                </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','thickNess'], i.id), 'length', i.id)}>
+                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType', 'brandType', 'gradeType', 'widthType', 'thickNess'], i.id), 'length', i.id)}>
                     {this.getThickNessOption(i.id)}
                 </select>
-            </td>
-            <td>
-                <select ref = {'length'+i.id}  key={i.id} value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate({},'last', i.id)}>
-                    {this.getLengthOption(i.id)}
-                </select>
+                </td>
+                <td>
+                    <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
+                        {this.getLengthOption(i.id)}
+                    </select>
             </td>
             <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
-            <td><input onChange = {() => this.onChangeUpdate({},'weight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'thisweight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
             <td><input onChange = {() => this.onChangeUpdate({},'stock', i.id)} value = {this.state.eStock[i.id]} type='number' ref = {'stock'+i.id}/></td>
             <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
 
@@ -574,10 +614,10 @@ class Delivery extends React.Component {
 
     updateSelectedCustomer(newVal) {
       this.getCustomerAsync(newVal.value).then((customer) => {
-        this.setState({state_contact: customer[0].contact_person})
-        this.setState({state_tel: customer[0].telephone})
-        this.setState({state_fax: customer[0].fax})
-        this.setState({state_email: customer[0].email})
+        // this.setState({state_contact: customer[0].contact_person})
+        // this.setState({state_tel: customer[0].telephone})
+        // this.setState({state_fax: customer[0].fax})
+        // this.setState({state_email: customer[0].email})
         this.setState({selectedCustomer:newVal.value})
       })
     }

@@ -645,7 +645,6 @@ class SalesOrder extends React.Component {
         console.log();
         obj.order_id = parseInt(this.props.editItem)
       }
-      console.log(obj)
       let url = this.props.type=='create'? '/api/sales/order/create':'/api/sales/order/update'
       post(url,obj)
       .then(response => {
@@ -681,7 +680,6 @@ class SalesOrder extends React.Component {
     }
 
     getWidthTypeOption(id){
-      console.log('widthItem', this.state.widthList);
       let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
       if(getWidth){
         let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))

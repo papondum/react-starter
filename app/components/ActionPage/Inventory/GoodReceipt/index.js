@@ -21,158 +21,57 @@ class GoodReceipt extends React.Component {
           brandList: [],
           gradeList: [],
           thickList: [],
+          widthList: [],
           length: [],
-          basedPrice: '',
-          companyList: [
-                { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
-                { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
-            ],
+          weight: [],
           statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
           selectedCustomer: '',
-          selectedTab: 'General',
-          filmType: '',
-          filmList:[],
-          childItem: [{id:'0001'}],
-          state_contact: '',
-          state_tel: '',
-          state_fax: '',
-          state_email: '',
-          state_company:'',
-          state_orderdate:'',
-          state_ponumber:'',
-          state_payterm:'',
-          state_invoice:'',
-          state_status:'',
-          state_salePerson:'',
-          state_priceListId:'',
-          state_deliverterm: '',
-          state_shipto: '',
-          state_requestdeliverdate: '',
-          state_actualdeliverdate: '',
-          state_actualdelivertime: '',
-          total_before_discount: 0,
-          taxes: 0,
-          wotaxes: 0,
-          total: 0,
           eFilmType: {},
-          eBrandType : {},
+          eBrandType: {},
           eGradeType: {},
           eThick: {},
           eLength: {},
-          eOrderqty: {},
           eWeight: {},
-          eUnitprice: {},
           eRemark: {},
           eWidth: {},
+          ePending: {},
+          eReceive: {},
+          eOrderqty: {},
+          filmList:[],
+          childItem: [{id:'0001'}],
+          currentChild: 1,
+          // state_contact:'',
+          // state_tel:'',
+          // state_fax:'',
+          // state_email:'',
+          // state_ponumber: '',
+          // state_shipto: '',
+          state_invoice: '',
+          state_lc: '',
+          state_reference: '',
+          state_etd: '',
+          state_eta: '',
+          state_ataDate: '',
+          state_buyer: '',
+          // state_time: '',
+          // state_payterm: '',
+          // state_deliver: '',
+          // state_status: '',
+          // state_salePerson: '',
+          total: 0,
           checkedItem: [],
         }
-        this.updateSelectedCustomer = this.updateSelectedCustomer.bind(this)
     }
 
     _genHeader(type){
       if(type=='create'){
-        return 'Create - Sales Order'
+        return 'Create - Good Receipt'
       }
       else if(type=='edit'){
-        return 'Edit - Sales Order'
+        return 'Edit - Good Receipt'
       }
     }
 
-    _updateStateSelector(id, state){
-      switch (state) {
-        case 'eFilmType':
-          var stateF = this.state[state];
-          stateF[id] = parseInt(this.refs['filmType'+id].value)
-          this.setState({eFilmType:stateF})
-          break;
-        case 'eBrandType':
-          var stateB = this.state[state];
-          stateB[id] = parseInt(this.refs['brandType'+id].value)
-          this.setState({eBrandType:stateB})
-          break;
-        case  'eGradeType':
-          var stateG = this.state[state];
-          stateG[id] = parseInt( this.refs['gradeType'+id].value)
-          this.setState({eGradeType:stateG})
-          break;
-        case  'eThick':
-          var stateT = this.state[state];
-          stateT[id] =  this.refs['thickNess'+id].value
-          this.setState({eThick:stateT})
-          break;
-        case  'eLength':
-          var stateL = this.state[state];
-          stateL[id] =  this.refs['length'+id].value
-          this.setState({eLength:stateL})
-          break;
-        case  'eRemark':
-          var stateR = this.state[state];
-          stateR[id] =  this.refs['remark'+id].value
-          this.setState({eRemark:stateR})
-          break;
-        case  'eWeight':
-          var stateW = this.state[state];
-          stateW[id] =  this.refs['weight'+id].value
-          this.setState({eWeight:stateW})
-          break;
-        case  'eUnitprice':
-          var stateU = this.state[state];
-          stateU[id] =  this.refs['unitPrice'+id].value
-          this.setState({eUnitprice:stateU})
-          break;
-        case  'eWidth':
-          var stateWi = this.state[state];
-          stateWi[id] =  this.refs['width'+id].value
-          this.setState({eWidth:stateWi})
-          break;
-        case  'eOrderqty':
-          var stateOr = this.state[state];
-          stateOr[id] =  this.refs['order_qty'+id].value
-          this.setState({eOrderqty:stateOr})
-          break;
-        default:
-
-      }
-
-    }
-
-    onChangeUpdate(item, type, id){
-      switch (type) {
-        case 'brandType':
-          this.getBrandType(item, type, id)
-          this._updateStateSelector(id, 'eFilmType')
-          break;
-        case 'gradeType':
-          this.getGradeType(item, type, id)
-          this._updateStateSelector(id, 'eBrandType')
-          break;
-        case 'thickNess':
-          this.getThickNess(item, type, id)
-          this._updateStateSelector(id, 'eGradeType')
-          break;
-        case 'length':
-          this.getLength(item , type, id)
-          this._updateStateSelector(id, 'eThick')
-          break;
-        case 'last':
-          this._updateStateSelector(id, 'eLength')
-        case 'orderqty':
-          this._updateStateSelector(id, 'eOrderqty')
-        case 'weight':
-          this._updateStateSelector(id, 'eWeight')
-          this.updateSubTotal(id)
-        case 'remark':
-          this._updateStateSelector(id, 'eRemark')
-        case 'unitprice':
-          this._updateStateSelector(id, 'eUnitprice')
-          this.updateSubTotal(id)
-        case 'width':
-          this._updateStateSelector(id, 'eWidth')
-          this.updateSubTotal(id)
-        default:
-
-      }
-    }
 
     updateUser(){
       let firstname = this.refs.firstname.value
@@ -206,8 +105,9 @@ class GoodReceipt extends React.Component {
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        this.setState({customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})})
-
+        this.setState({
+          customerList:response.map(i=>{return Object.assign({},{value:i.id,label:i.name})})
+        })
       })
       .catch(err=>console.log(err))
     }
@@ -274,12 +174,131 @@ class GoodReceipt extends React.Component {
       this.setState(obj)
 
     }
+
+    _updateStateSelector(id, state){
+      switch (state) {
+        case 'eFilmType':
+          var stateF = this.state[state];
+          stateF[id] = parseInt(this.refs['filmType'+id].value)
+          this.setState({eFilmType:stateF})
+          break;
+        case 'eBrandType':
+          var stateB = this.state[state];
+          stateB[id] = parseInt(this.refs['brandType'+id].value)
+          this.setState({eBrandType:stateB})
+          break;
+        case  'eGradeType':
+          var stateG = this.state[state];
+          stateG[id] = parseInt( this.refs['gradeType'+id].value)
+          this.setState({eGradeType:stateG})
+          break;
+        case  'eThick':
+          var stateT = this.state[state];
+          stateT[id] =  this.refs['thickNess'+id].value
+          this.setState({eThick:stateT})
+          break;
+        case  'eLength':
+          var stateL = this.state[state];
+          stateL[id] =  this.refs['length'+id].value
+          this.setState({eLength:stateL})
+          break;
+        case  'eRemark':
+          var stateR = this.state[state];
+          stateR[id] =  this.refs['remark'+id].value
+          this.setState({eRemark:stateR})
+          break;
+        case  'eWeight': //make to usable
+          var stateW = this.state[state];
+          if(this.refs['weight'+id].value){
+            stateW[id] =  this.refs['weight'+id].value
+          }
+          else{
+            stateW[id] = (this.state.weight['weight'+id]*this.refs['order_qty'+id].value).toFixed(2)
+          }
+          this.setState({eWeight:stateW})
+          break;
+        case  'eWidth':
+          var stateWi = this.state[state];
+          stateWi[id] =  this.refs['width'+id].value
+          this.setState({eWidth:stateWi})
+          break;
+        case  'eOrderqty':
+          var stateOr = this.state[state];
+          var stateW = this.state.eWeight
+          stateOr[id] =  this.refs['order_qty'+id].value
+          let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
+          stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
+          this.setState({eOrderqty:stateOr,eWeight:stateW})
+          break;
+        case  'ePending':
+          var statePend = this.state[state];
+          statePend[id] =  this.refs['pending'+id].value
+          this.setState({ePending:statePend})
+          break;
+        case  'eReceive':
+          var stateRece = this.state[state];
+          stateRece[id] =  this.refs['receive'+id].value
+          this.setState({eReceive:stateRece})
+          break;
+        default:
+
+      }
+
+    }
+
+    onChangeUpdate(item, type, id){
+      switch (type) {
+        case 'brandType':
+          this.getBrandType(item, type, id)
+          this._updateStateSelector(id, 'eFilmType')
+          break;
+        case 'gradeType':
+          this.getGradeType(item, type, id)
+          this._updateStateSelector(id, 'eBrandType')
+          break;
+        case 'thickNess':
+          this.getThickNess(item, type, id)
+          this._updateStateSelector(id, 'eWidth')
+          break;
+        case 'length':
+          this.getLength(item , type, id)
+          this._updateStateSelector(id, 'eThick')
+          break;
+        case 'last':
+          this._updateStateSelector(id, 'eLength')
+          break;
+        case 'weight':
+          this.getWeight(item, type, id)
+          this._updateStateSelector(id, 'eLength')
+          break;
+        case 'remark':
+          this._updateStateSelector(id, 'eRemark')
+          break;
+        case 'width':
+          this.getWidth(item, type, id)
+          this._updateStateSelector(id, 'eGradeType')
+          break;
+        case 'orderqty':
+          this._updateStateSelector(id, 'eOrderqty')
+          break;
+        case 'pending':
+          this._updateStateSelector(id, 'ePending')
+          break;
+        case 'receive':
+          this._updateStateSelector(id, 'eReceive')
+          break;
+        default:
+
+      }
+    }
+
     getBrandType(item, type, id){
       post('/api/sales/quotation/brand',{filmtype_id: item.filmType})
       .then((response)=>{
         this.updateStateItemSet('brandList', response, type+id)
       })
       .catch(err=>console.log(err))
+
     }
 
     getGradeType(item, type, id){
@@ -291,149 +310,34 @@ class GoodReceipt extends React.Component {
     }
 
     getThickNess(item, type, id){
-      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
+      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "width": item.widthType })
       .then((response)=>{
           this.updateStateItemSet('thickList', response, type+id)
       })
       .catch(err=>console.log(err))
     }
 
-    getLength(item, type, id){
-      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
+    getWidth(item, type, id){
+      post ('/api/sales/quotation/width', { "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
-        console.log(response);
-        this.updateStateItemSet('length', response, type+id)
+        this.updateStateItemSet('widthList', response, type+id)
+      })
+    }
+
+    getWeight(item, type, id){
+      post('/api/sales/quotation/weight',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType, "length": item.length })
+      .then((response)=>{
+        this.updateStateItemSet('weight', response, type+id)
       })
       .catch(err=>console.log(err))
     }
 
-    updateSubTotal(id) {
-      let price = this.refs['unitPrice'+id].value;
-      let weight = this.refs['weight'+id].value;
-      if (price && weight) {
-        console.log("Set")
-        this.refs['subTotal'+id].value = price * weight
-      } else {
-        this.refs['subTotal'+id].value = 0
-      }
-
-      console.log("updateSubTotal" + id)
-      var total_before_discount = 0.0
-      this.state.childItem.map(i=> {
-        let total = this.refs['subTotal'+i.id].value;
-        if (total > 0) {
-          total_before_discount += parseFloat(total)
-        }
+    getLength(item , type, id){
+      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType })
+      .then((response)=>{
+        this.updateStateItemSet('length', response, type+id)
       })
-      this.setState({total_before_discount: total_before_discount})
-      console.log(total_before_discount)
-      this.updateAll(total_before_discount)
-    }
-
-    updateAll(total_before_discount) {
-      console.log("updateAll")
-      var total
-      if (total_before_discount > 0) {
-        total = total_before_discount
-      } else {
-        total = parseFloat(this.state.total_before_discount)
-      }
-      // total = parseFloat(this.state.total_before_discount)
-      console.log("total_before_discount: " + total)
-      let discount = this.refs['discount'].value;
-      if ( discount > 0 ) {
-        total = total - parseFloat(discount)
-      }
-      console.log("discount: " + discount)
-      console.log("total after discount: " + total)
-      let total_after_discount = total
-      let wotaxes = this.refs['wotaxes'].value;
-      if ( wotaxes > 0 ) {
-        let w = (total_after_discount * wotaxes / 100)
-        this.setState({wotaxes: w})
-        total = total - parseFloat(w)
-      }
-      console.log("wotaxes: " + wotaxes)
-      console.log("total after wotaxes: " + total)
-      let taxes = this.refs['taxes'].value;
-      if ( taxes > 0 ) {
-        let t = (total_after_discount * taxes / 100)
-        this.setState({taxes: t})
-        total = total + parseFloat(t)
-      }
-      console.log("taxes: " + taxes)
-      console.log("total after taxes: " + total)
-
-      this.setState({total: total})
-    }
-
-    updateDiscount() {
-      console.log("updateDiscount")
-      let total_before_discount = parseFloat(this.state.total_before_discount)
-      this.setState({discount: total_before_discount - this.refs['discount'].value})
-      this.updateWithholdingTax()
-    }
-
-    updateWithholdingTax() {
-      console.log("updateWithholdingTax")
-      let total_before_discount = this.state.discount
-      let taxP = this.refs['wotaxes'].value;
-
-      let tax = (total_before_discount * taxP / 100)
-      console.log(tax)
-      this.setState({wotaxes: tax})
-      this.updateTax()
-    }
-
-    updateTax() {
-      console.log("updateTax")
-      let total_before_discount = this.state.discount
-      let taxP = this.refs['taxes'].value;
-
-      let tax = (total_before_discount * taxP / 100)
-      this.setState({taxes: tax})
-      this.updateTotal()
-
-    }
-
-    updateTotal() {
-      var total = parseFloat(this.state.total_before_discount)
-      // console.log("total value: " + total)
-      let discount = this.refs['discount'].value;
-      // console.log("discount value: " + discount)
-      if (discount > 0) {
-        total = total - parseInt(discount)
-      }
-      // console.log("discount: " + total)
-      var wotaxes = parseFloat(this.state.wotaxes)
-      // console.log("wotaxes value: " + wotaxes)
-      if (wotaxes > 0) {
-        total = total - wotaxes
-      }
-      // console.log("wotaxes: " + total)
-      var taxes = this.state.taxes
-      if (taxes > 0) {
-        total = total + taxes
-      }
-      // console.log("taxes: " + total)
-      this.setState({total: total})
-    }
-
-    getBasedPrice(id){
-      if(this.state.basedPrice){
-      post('/api/sales/quotation/based_price',{
-        "filmtype_id": this.refs['filmType'+id].value||'',
-        "brand_id": this.refs['brandType'+id].value,
-        "grade_id": this.refs['gradeType'+id].value,
-        "thickness": this.refs['thickNess'+id].value,
-        "length": this.refs['length'+id].value,
-        "pricelist_id": this.refs['priceListId'].value })
-        .then((response)=>{
-          this.setState({basedPrice:response})
-        })
-        .catch(err=>console.log(err))
-        return this.state.basedPrice
-      }
+      .catch(err=>console.log(err))
     }
 
     componentDidMount(){
@@ -445,52 +349,13 @@ class GoodReceipt extends React.Component {
     }
 
     _getEditItem(){
-      post('/api/sales/order/id', {order_id: +this.props.editItem})
+      post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
-        console.log("response::::", response);
+        console.log(response);
+        console.log(this.props.editItem);
       })
-    }
 
-    _setInitialVal(res){
-      let item = res[0]
-      let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
-      let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
-      //
-      //
-       this.setState({
-
-      //   state_company: item.company,
-      //   state_date: item.quotation_date,
-
-      //   state_priceListId: pricelist,
-      //   total: item.total,
-         childItem: item.contents,
-         selectedCustomer: item.customer_id,
-         state_orderdate: item.order_date,
-         state_ponumber: item.po_number,
-         state_payterm: item.payment_term,
-         state_invoice: item.invoice_to,
-         state_status: item.status,
-         state_salePerson: saleperson.value,
-         state_priceListId: pricelist.value,
-         state_deliverterm: item.delivery_term,
-         state_shipto:  item.ship_to,
-         state_requestdeliverdate: item.request_deliver_date,
-         state_actualdeliverdate: item.actual_deliver_date,
-         state_actualdelivertime: item.actual_deliver_time,
-         state_contact: item.customer.contact,
-         state_tel: item.customer.tel,
-         state_fax: item.customer.fax,
-         state_email:  item.customer.email,
-      })
-      // console.log('Test', this.state.customerList);
-      // console.log('Test', this.state.customerList);
-      this.refs['discount'].value = item.discount ||0
-      this.refs['taxes'].value = item.tax ||0
-      this.refs['wotaxes'].value = item.wotax ||0
-      this.refs['remark'].value= item.remark
-      this._setInitialEditContent()
     }
 
     _setInitialEditContent(){
@@ -501,11 +366,11 @@ class GoodReceipt extends React.Component {
       let objThick = {}
       let objLength = {}
       let objWeight = {}
-      let objUnit = {}
       let objRemark = {}
       let objWidth = {}
       let objOrderqty = {}
-      let sum = 0
+      let objPending = {}
+      let objReceive = {}
       for(let i in childList){
         objFilm[childList[i]['id']] = childList[i].filmtype_id
         objBrand[childList[i]['id']] = childList[i].brand_id
@@ -513,11 +378,11 @@ class GoodReceipt extends React.Component {
         objThick[childList[i]['id']] = childList[i].thickness
         objLength[childList[i]['id']] = childList[i].product_length
         objWeight[childList[i]['id']] = childList[i].weight
-        objUnit[childList[i]['id']] = childList[i].unit_price
         objRemark[childList[i]['id']] = childList[i].remark
         objWidth[childList[i]['id']] = childList[i].width
         objOrderqty[childList[i]['id']] = childList[i].quantity
-        sum = sum+ childList[i].sub_total
+        objPending[childList[i]['id']] = childList[i].pending_quantity
+        objReceive[childList[i]['id']] = childList[i].Receive_quantity
       }
       this.setState({
         eFilmType: objFilm,
@@ -525,12 +390,12 @@ class GoodReceipt extends React.Component {
         eGradeType: objGrade,
         eThick: objThick,
         eLength: objLength,
-        eOrderqty: objOrderqty,
         eWeight: objWeight,
-        eUnitprice: objUnit,
         eRemark: objRemark,
         eWidth: objWidth,
-        total_before_discount: sum,
+        eOrderqty: objOrderqty,
+        ePending: objPending,
+        eReceive: objReceive,
       })
 
       //initiate generate selector from edit val list
@@ -538,79 +403,101 @@ class GoodReceipt extends React.Component {
           let item = childList[k]
           this.getBrandType({filmType: item.filmtype_id}, 'brandType', item.id)
           this.getGradeType({filmType: item.filmtype_id, brandType: item.brand_id}, 'gradeType', item.id)
-          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'thickNess', item.id)
-          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, thickNess: item.thickness}, 'length', item.id)
+          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width}, 'thickNess', item.id)
+          this.getWidth({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'width', item.id)
+          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width, thickNess: item.thickness}, 'length', item.id)
       }
 
     }
 
+    _setInitialVal(res){
+
+      let item = res[0]
+      let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
+      //let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
+      console.log('//(GoodRec)###pls put iniatial for unset###');
+      this.setState({
+        // state_contact:item.customer ? item.customer.contact:item.contact,
+        // state_tel: item.customer ? item.customer.tel:item.tel ,
+        // state_fax: item.customer ? item.customer.fax:item.fax,
+        // state_email: item.customer? item.customer.email:item.email,
+        // state_time: '',
+        state_invoice: item.invoice || '',
+        state_lc: item.lc || '',
+        state_reference: item.reference || '',
+        state_etd: item.etd || '',
+        state_eta: item.eta || '',
+        state_ataDate: item.ata_date || '',
+        state_buyer: item.buyer|| '',
+        // state_ponumber: '',
+        // state_shipto: '',
+        // state_payterm: item.payment_term,
+        // state_deliver: item.delivery_term,
+        // state_status: item.status,
+        // state_salePerson: saleperson,
+        // total: item.total,
+        childItem: item.contents,
+        selectedCustomer: item.customer_id,
+      })
+      this.refs['discount'].value = item.discount ||0
+      this._setInitialEditContent()
+    }
+
     save(){
       //send Quatations
-      console.log(this.state.state_salePerson);
       let obj = Object.assign({},
       {
-        customer_id: this.state.selectedCustomer ,
-        order_date: this.state['state_orderdate'],
-        po_num: this.state['state_ponumber'],
-        payterm: this.state['state_payterm'],
-        invoice: this.state['state_invoice'],
-        status: this.state.state_status|| this.refs['status'].value,
-        sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
-        price_listId: this.state.state_priceListId|| this.refs['priceListId'].value,
-        customer:{
-          customer_contact: this.state.state_contact,
-          customer_tel: this.state.state_tel,
-          customer_fax: this.state.state_fax,
-          customer_email: this.state.state_email,
-        },
+        customer: this.state.selectedCustomer || this.refs['customer'].value,
+        date: this.state.state_date || this.refs['date'].value,
+        time: this.state.state_time || this.refs['time'].value,
+        // payterm: this.state.state_payterm || this.refs['payterm'].value,
+        // deliver: this.state.state_deliver|| this.refs['deliver'].value,
+        // status:   this.state.state_status|| this.refs['status'].value,
+        // sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
+        reference: this.state.state_reference || this.refs['reference'].value,
+        // po_number: this.state.state_ponumber || this.refs['ponumber'].value,
+        // shipto: this.state.state_shipto || this.refs['shipto'].value,
+        ata_date: this.state.state_ataDate || this.refs['ataDate'].value,
+        etd: this.state.state_etd || this.refs['etd'].value,
+        eta: this.state.state_eta || this.refs['eta'].value,
+        buyer: this.state.state_buyer || this.refs['buyer'].value,
+        // customer_contact: this.state.state_contact,
+        // customer_tel: this.state.state_tel,
+        // customer_fax: this.state.state_fax,
+        // customer_email: this.state.state_email,
 
-        content:
-        this.state.childItem.map(i=>
-        {return Object.assign({},{
-          id:i.id,
-          content:{
-            film_type:  this.refs['filmType'+i.id].value,
-            brand_type: this.refs['brandType'+i.id].value,
-            grade_type: this.refs['gradeType'+i.id].value,
-            width:  this.refs['width'+i.id].value,
-            thickness: this.refs['thickNess'+i.id].value,
-            length: this.refs['length'+i.id].value,
-            quantity: this.refs['order_qty'+i.id].value ,
-            weight: this.refs['weight'+i.id].value,
-            based_price: 0,
-            subtotal: this.refs['subTotal'+i.id].value,
-            unitprice: this.refs['unitPrice'+i.id].value,
-            remark: this.refs['remark'+i.id].value,
-          }
+        content:// list of content
+          this.state.childItem.map(i=>{
+            return Object.assign({},{
+              id:i.id,
+              content:{
+                film_type:  this.refs['filmType'+i.id].value,
+                brand_type: this.refs['brandType'+i.id].value,
+                grade_type: this.refs['gradeType'+i.id].value,
+                width: this.refs['widthType'+i.id].value,
+                thickness: this.refs['thickNess'+i.id].value,
+                length: this.refs['length'+i.id].value,
+                order_qty: this.refs['order_qty'+i.id].value,
+                weight: this.refs['weight'+i.id].value,
+                pending_qty: this.refs['pending'+i.id].value,
+                receive_qty: this.refs['receive'+i.id].value,
+                remark: this.refs['remark'+i.id].value,
+                // subtotal: this.refs['subTotal'+i.id].value,
+              }
           })
-        }),
-        remarks: this.refs['remark'].value,
-        totalbefore:  this.state.total_before_discount,
-        discount: this.refs['discount'].value ? this.refs['discount'].value : 0,
-        tax: this.refs['taxes'].value ? this.refs['taxes'].value : 0,
-        wotax: this.refs['wotaxes'].value ? this.refs['wotaxes'].value : 0,
-        total: this.state.total ? this.state.total : 0,
-
-        shipment:{
-          deliverterm:  this.state.state_deliverterm,
-          shipto: this.state.state_shipto,
-          requestdeliverdate: this.state.state_requestdeliverdate,
-          actualdeliverdate:  this.state.state_actualdeliverdate,
-          actualdelivertime:  this.state.state_actualdelivertime,
-        },
-        attachment:[]
+        })
       })
+
       if(this.props.type=='edit'){
-        console.log();
-        obj.order_id = parseInt(this.props.editItem)
+        obj.quotation_id = parseInt(this.props.editItem)
       }
-      console.log(obj)
-      let url = this.props.type=='create'? '/api/sales/order/create':'/api/sales/order/update'
-      post(url,obj)
+      console.log('obj',obj);
+      let url = this.props.type=='create'? '/api/sales/quotation/create':'/api/sales/quotation/update'
+      post(url, obj)
       .then(response => {
         console.log(response);
 
-        this.props.getContent('Sales Order')
+        this.props.getContent('Quotation')
       })
       .catch(err=>console.log(err))
     }
@@ -639,6 +526,15 @@ class GoodReceipt extends React.Component {
       }
     }
 
+    getWidthTypeOption(id){
+      let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
+      if(getWidth){
+        let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
+        result.unshift(<option key='select'>Select Item</option>)
+        return result
+      }
+    }
+
     getThickNessOption(id){
       let getThick = this.state.thickList.find(i=>i.id==('thickNess'+id))
       if(getThick){
@@ -658,36 +554,19 @@ class GoodReceipt extends React.Component {
       }
     }
 
-    ifChecked(id){
-      if(this.refs["checkbox"+id].checked){
-        if(this.state.checkedItem.find((i) => i==this.refs["checkbox"+id].value)==undefined){
-          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])})
-        }
-      }
-      else{
-          var array = this.state.checkedItem;
-          var index = array.indexOf(this.refs["checkbox"+id].value)
-          for (var i = 0; i < array.length; i++) {
-            if(array[i].id==this.refs["checkbox"+id].value){
-              array.splice(i, 1);
-            }
-          }
-
-          this.setState({checkedItem: array });
-        }
-    }
 
     getChildItem(){
       let items = this.state.childItem
       let result = items.map((i, index)=>{
-        let genArg = (arr,id)=>{
+        let genArg = (arr,id) => {
           //return as object filmType:val brandType:val
           let result = {}
-          for (var i=0; i<arr.length; i++) {
+          for (var i=0; i<arr.length; i++) {``
             result[arr[i]] = this.refs[arr[i]+id].value;
           }
           return result
         }
+
         let indexNo = (i) => {
           let str = '0000'
           var index = 4-((i+'').length);
@@ -712,91 +591,88 @@ class GoodReceipt extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'thickNess', i.id)}>
+                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'width', i.id)}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <input type='number' ref = {'width'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate({},'width', i.id)}/>
+                <select ref = {'widthType'+i.id} value = {this.state.eWidth[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType', 'widthType'], i.id), 'thickNess', i.id)}>
+                    {this.getWidthTypeOption(i.id)}
+                </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','thickNess'], i.id), 'length', i.id)}>
-                    }>
+                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType', 'brandType', 'gradeType', 'widthType', 'thickNess'], i.id), 'length', i.id)}>
                     {this.getThickNessOption(i.id)}
                 </select>
+                </td>
+                <td>
+                    <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
+                        {this.getLengthOption(i.id)}
+                    </select>
             </td>
-            <td>
-                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate({},'last', i.id)}>
-                    {this.getLengthOption(i.id)}
-                </select>
-            </td>
-            <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
-            <td><input onChange = {() => this.onChangeUpdate({},'weight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
-            <td>0</td>
-            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
-            <td><input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/></td>
-            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'orderqty', i.id)} value = {this.state.eOrderqty[i.id]} type='number' ref = {'order_qty'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'thisweight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'pending', i.id)} value = {this.state.ePending[i.id]} type='number' ref = {'pending'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'receive', i.id)} value = {this.state.eReceive[i.id]} type='number' ref = {'receive'+i.id}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} value = {this.state.eRemark[i.id]} type='text' ref = {'remark'+i.id}  /></td>
+
         </tr>)
       })
       return result
     }
 
+
     addChild(){
+      let currentChild = this.state.currentChild
       let items = this.state.childItem
-      let idNo = ''+(items.length+1)+''
+      let idNo = ''+(currentChild+1)+''
       if(idNo.length<4){
-        for (var i = 0; i < 6-idNo.length; i++) {;
+        for (var i = 0; i < 6-idNo.length; i++) {
           idNo = "0" + idNo
         }
       }
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
       this.setState({childItem:newArr})
+      this.setState({currentChild:currentChild+1})
     }
 
-    getCustomerOption(){
-      let result = this.state.customerList.map(i=>{
-        return (<option key = {i.id} value = {i.id}>{i.name}</option>)
-      })
-      return result
-    }
-
-    updateSelectedCustomer(newVal) {
-      this.getCustomerAsync(newVal.value).then((customer) => {
-        console.log(customer);
-        this.setState({state_contact: customer[0].contact_person})
-        this.setState({state_tel: customer[0].telephone})
-        this.setState({state_fax: customer[0].fax})
-        this.setState({state_email: customer[0].email})
-        this.setState({selectedCustomer:newVal.value})
-      })
-    }
-
-    getCustomerAsync(customer_id) {
-      console.log(customer_id);
-      return new Promise((resolve,reject)=>{
-        post('/api/customer/id', {customer_id: customer_id})
-          .then((response)=>{
-            if (response.status >= 400) {
-              throw new Error("Bad response from server");
-            }
-            resolve(response)
-          })
-          .catch(err=>reject())
-        })
-    }
+    // updateSelectedCustomer(newVal) {
+    //   this.getCustomerAsync(newVal.value).then((customer) => {
+    //     this.setState({state_contact: customer[0].contact_person})
+    //     this.setState({state_tel: customer[0].telephone})
+    //     this.setState({state_fax: customer[0].fax})
+    //     this.setState({state_email: customer[0].email})
+    //     this.setState({selectedCustomer:newVal.value})
+    //   })
+    // }
+    //
+    // getCustomerAsync(customer_id) {
+    //   return new Promise((resolve,reject)=>{
+    //     post('/api/customer/id', {customer_id: customer_id})
+    //       .then((response)=>{
+    //         if (response.status >= 400) {
+    //           throw new Error("Bad response from server");
+    //         }
+    //         resolve(response)
+    //       })
+    //       .catch(err=>reject())
+    //     })
+    // }
 
     updateParam(item){
       let obj ={}
       obj['state_'+item] = this.refs[item].value
       this.setState(obj)
+
     }
 
     getGeneralContent(){
-      return (  <div className="flex flex-row ">
+      return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
-                  <label>Customer :</label>
+                  <label>Supplier :</label>
+                  {console.log('//(GoodRec)###supplier selector now is customer###')}
                   <Select
                       name="customer"
                       ref = 'customer'
@@ -807,137 +683,69 @@ class GoodReceipt extends React.Component {
                       autosize = {true}
                   />
               </div>
-
               <div className='input-box flex'>
-                  <label>Order Date :</label>
-                  <input className='flex' type="date" ref='orderdate' value = {this.state.state_orderdate} onChange={()=>this.updateParam('orderdate')}/>
-              </div>
-
-              <div className='input-box flex'>
-                  <label>P/O Number:</label>
-                  <input className='flex' type="text" ref='ponumber' value = {this.state.state_ponumber} onChange={()=>this.updateParam('ponumber')}/>
-              </div>
-
-          </div>
-          <div className="flex flex-1 flex-col">
-              <div className='input-box flex'>
-                  <label>Payment Term :</label>
-                  <input className='flex' type="text" ref='payterm' value = {this.state.state_payterm} onChange={()=>this.updateParam('payterm')}/>
+                  <label>Invoice :</label>
+                  <input className='flex' type="text" ref='invoice' value = {this.state.state_date} onChange={()=>this.updateParam('invoice')}/>
               </div>
               <div className='input-box flex'>
-                  <label>Invoice To :</label>
-                  <input className='flex' type="text" ref='invoice' value = {this.state.state_invoice} onChange={()=>this.updateParam('invoice')}/>
+                  <label>L/C :</label>
+                  <input className='flex' type="text" ref='lc' value = {this.state.state_lc} onChange={()=>this.updateParam('lc')}/>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
-                  <label>Status :</label>
-                  <select ref = 'status' value = {this.state.state_status} onChange={()=>this.updateParam('status')}>
-                      {this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}
-                  </select>
+                  <label>Reference:</label>
+                  <input className='flex' type="text" ref='reference' value = {this.state.state_reference} onChange={()=>this.updateParam('reference')}/>
               </div>
               <div className='input-box flex'>
-                  <label>Saleperson :</label>
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>
-                      {this.state.saleList.map(i=> {
-                          return <option value={i.value}>{i.label}</option>})}
-                  </select>
+                  <label>ETD:</label>
+                  {/* <input className='flex' type="text" ref='ponumber' value = {this.state.state_ponumber} onChange={()=>this.updateParam('ponumber')}/> */}
+                  <input className='flex' type="date" ref='etd' value = {this.state.state_etd} onChange={()=>this.updateParam('eta')}/>
               </div>
               <div className='input-box flex'>
-                  <label>Price list :</label>
-                  <select ref = 'priceListId' value = {this.state.state_priceListId} onChange={()=>this.updateParam('priceListId')}>
-                      {this.state.priceList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
-                  </select>
+                  <label>ETA:</label>
+                  {/* <input className='flex' type="text" ref='shipto' value = {this.state.state_shipto} onChange={()=>this.updateParam('shipto')}/> */}
+                  <input className='flex' type="date" ref='eta' value = {this.state.state_eta} onChange={()=>this.updateParam('eta')}/>
+              </div>
+          </div>
+
+          <div className="flex flex-1 flex-col">
+              <div className='input-box flex'>
+                  <label>Actual Time Arrival(ATA):</label>
+                  <input className='flex' type="date" ref='ataDate' value = {this.state.state_ataDate} onChange={()=>this.updateParam('ataDate')}/>
+              </div>
+              <div className='input-box flex'>
+                  <label>Buyer :</label>
+                  {console.log('//(GoodRec)###Pls put buyer selector###')}
+                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>
+                  {/*<select ref = 'buyer' value = {this.state.state_buyer} onChange={()=>this.updateParam('buyer')}>{this.state.saleList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>*/}
               </div>
           </div>
       </div>)
     }
 
-    getShipment(){
-      return (  <div className="flex flex-row">
-          <div className='flex flex-1 flex-col'>
-              <div className='input-box flex'>
-                  <label>Deliver Terms:</label>
-                  <input className='flex' type="text" ref='deliverterm' value = {this.state.state_deliverterm} onChange={()=>this.updateParam('deliverterm')}/>
-              </div>
-
-              <div className='input-box flex'>
-                  <label>Ship To:</label>
-                  <input className='flex' type="text" ref='shipto' value = {this.state.state_shipto} onChange={()=>this.updateParam('shipto')}/>
-              </div>
-
-              <div className='input-box flex'>
-                  <label>Request Deliver Date :</label>
-                  <input className='flex' type="date" ref='requestdeliverdate' value = {this.state.state_requestdeliverdate} onChange={()=>this.updateParam('requestdeliverdate')}/>
-              </div>
-
-          </div>
-          <div className="flex flex-1 flex-col">
-              <div className='input-box flex'>
-                  <label>Actual Deliver Date :</label>
-                  <input className='flex' type="date" ref='actualdeliverdate' value = {this.state.state_actualdeliverdate} onChange={()=>this.updateParam('actualdeliverdate')}/>
-              </div>
-              <div className='input-box flex'>
-                  <label>Actual Deliver Time :</label>
-                  <input className='flex' type="time" ref='actualdelivertime' value = {this.state.state_actualdelivertime} onChange={()=>this.updateParam('actualdelivertime')}/>
-              </div>
-          </div>
-
-      </div>)
-    }
-
-    setContent(item){
-      this.setState({selectedTab:item})
-    }
-
-    getContactContent(){
-      return (  <div className="flex flex-row">
-          <div className='flex flex-1 flex-col'>
-              <div className='input-box flex'>
-                  <label>Contact Person :</label>
-                  <input className='flex' type="text" ref='contact' value={this.state.state_contact} onChange={()=>this.updateParam('contact')}/>
-              </div>
-              <div className='input-box flex'>
-                  <label>Tel :</label>
-                  <input className='flex' type="text" ref='tel'  value={this.state.state_tel} onChange={()=>this.updateParam('tel')}/>
-              </div>
-              <div className='input-box flex'>
-                  <label>Fax :</label>
-                  <input className='flex' type="text" ref='fax' value={this.state.state_fax} onChange={()=>this.updateParam('fax')}/>
-              </div>
-
-          </div>
-          <div className="flex flex-1 flex-col">
-              <div className='input-box flex'>
-                  <label>Email :</label>
-                  <input className='flex' type="text" ref='email' value={this.state.state_email} onChange={()=>this.updateParam('email')}/>
-              </div>
-          </div>
-          <div className="flex flex-1 flex-col">
-
-          </div>
-      </div>)
-    }
-
-    getContentFromTab(tab){
-      switch (tab) {
-        case 'General':
-          return this.getGeneralContent()
-          break;
-        case 'Contact':
-          return this.getContactContent()
-          break;
-        case 'Ship':
-          return this.getShipment()
-          break;
-        case 'Attachment':
-
-          break;
-        default:
-
+    ifChecked(id){
+      if(this.refs["checkbox"+id].checked){
+        if(this.state.checkedItem.find((i) => i==this.refs["checkbox"+id].value)==undefined){
+          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])})
+        }
       }
-    }
+      else{
+          var array = this.state.checkedItem;
+          var index = array.indexOf(this.refs["checkbox"+id].value)
+          for (var i = 0; i < array.length; i++) {
+            if(array[i].id==this.refs["checkbox"+id].value){
+              array.splice(i, 1);
+            }
+          }
 
+          this.setState({checkedItem: array });
+        }
+    }
+    deleteSelectedContent(){
+      console.log('childList::', this.state.childItem)
+      console.log('checkedLL::', this.state.checkedItem);
+    }
     render() {
         return(
           <div className='page-style'>
@@ -946,89 +754,51 @@ class GoodReceipt extends React.Component {
                   <div className='action-group-btn'>
                       <button><img src={emailIcon}/><p>Email</p></button>
                       <button><img src={printIcon}/><p>Print</p></button>
-                      <button onClick={()=>this.props.getContent('Sales Order')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick={()=>this.props.getContent('Quotation')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.save()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
               <div>
                   <div className='flex flex-row'>
-                      <div className={this.state.selectedTab === 'General'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('General')}>
+                      <div className={'tab-quo active'} onClick={()=>this.setContent('General')}>
                           General
                       </div>
-                      <div className={this.state.selectedTab === 'Contact'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Contact')}>
-                          Customers Contact
-                      </div>
-                      <div className={this.state.selectedTab === 'Ship'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Ship')}>
-                          Shipment
-                      </div>
-                      {/*
-                          <div className={this.state.selectedTab === 'Attach'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attach')}>
-                          Attachment
-                          </div>
-                      */}
                   </div>
                   <hr style={{margin : 0}}/>
                   <div className = 'top-content'>
-                      {this.getContentFromTab(this.state.selectedTab)}
+                      {this.getGeneralContent()}
                   </div>
-
-                  {/* {this.state.selectedTab=='Gen'? this.getGeneralContent():this.getContactContent()} */}
-
               </div>
               <hr style={{margin : 0}}/>
               <div className="flex flex-row space-bet" >
                   <div className='tab-quo active'>Content</div>
                   <div className='action-group-btn-content'>
-                      <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
-                      <button><img src={deleteIcon}/></button>
+                      <button onClick = {()=> this.addChild()}><img src={createIcon}/></button>
+                      <button onClick = {()=> this.deleteSelectedContent()}><img src={deleteIcon}/></button>
                   </div>
               </div>
               <div className = 'content-quo-table'>
                   <table>
                       <thead>
                           <tr>
-                              <td><input type='checkbox'/>Line No.</td>
+                              <td><input type='checkbox' />Line No.</td>
                               <td>Film Type</td>
                               <td>Brand</td>
                               <td>Grade</td>
                               <td>Width</td>
                               <td>Thickness</td>
                               <td>Length</td>
-                              <td>Order Qty. (Roll)</td>
+                              <td>Order Quantity(Roll)</td>
                               <td>Total Weight(Kg)</td>
-                              <td>Based Price</td>
-                              <td>Unit Price(THB/Kg)</td>
-                              <td>Subtotal(THB)</td>
-                              <td>Remarks</td>
+                              <td>Pending Quantity</td>
+                              <td>Receive Quantity</td>
+                              <td>Remark</td>
                           </tr>
                       </thead>
                       <tbody>
                           {this.getChildItem()}
                       </tbody>
                   </table>
-              </div>
-              <div className = 'flex create-quo-btm'>
-                  <div className = 'flex-1'>
-                      <p>Remarks</p>
-                      <textarea rows="5" cols="40" ref = 'remark' />
-                  </div>
-                  <div className = 'flex-1'>
-                      <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
-                          <span>{this.state.total_before_discount}</span></div>
-                      <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
-                      <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Taxes
-                              <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                          <span>{this.state.taxes}</span></div>
-                      <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
-                              <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
-                          <span>{this.state.wotaxes}</span></div>
-                      <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
-                  </div>
               </div>
           </div>)
         }

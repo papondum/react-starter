@@ -43,11 +43,13 @@ class ActionMenu extends React.Component {
             showModal:{
               show:false
             },
+            showCreateModal:{
+              show:false
+            },
         };
     }
 
     showDeleteModal(){
-      console.log(this.props.activePage);
       this.setState({
         showModal:{
           show:true,
@@ -64,6 +66,28 @@ class ActionMenu extends React.Component {
             this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
             this.props.getContent(this.props.activePage)
             this.setState({showModal:{show:false}})
+          },
+          submitTxt:'SUMMIT'
+        }
+      })
+    }
+
+    showCreateGoodReceipt(){
+      this.setState({
+        showCreateModal:{
+          show:true,
+          header:'Please select',
+          close:()=>{
+            this.setState({
+              showCreateModal:{
+                show:false
+              }
+            })
+          },
+          confirm:()=>{
+            this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
+            this.props.getContent(this.props.activePage)
+            this.setState({showCreateModal:{show:false}})
           },
           submitTxt:'SUMMIT'
         }
@@ -244,8 +268,11 @@ class ActionMenu extends React.Component {
             })
             break;
           case 'Good Receipt':
+          // content form :: create >> slect type ::>> track on content-form
+          // create dialog modal selector then set content to good Receipt with selected value
             this.setState({
-              createAction:()=>this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              // createAction:()=>this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              createAction:()=> this.showCreateGoodReceipt(),
               editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
               copyAction:'',
               deleteAction:()=>this.showDeleteModal(),
@@ -267,6 +294,18 @@ class ActionMenu extends React.Component {
       })
     }
 
+    createGoodReceiptSelect(type){
+      if(type=='withRef'){
+
+      }
+      else if(type=='withoutRef'){
+        this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>))
+      }
+      else{
+        console.log(type);
+      }
+    }
+
     render() {
         return(
           <div className='flex action-bar' >
@@ -283,21 +322,36 @@ class ActionMenu extends React.Component {
               </div>
 
               <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
-          </div>)
+              <Modal show = {this.state.showCreateModal.show} options = {this.state.showCreateModal}>
+                  <div>
+                      <div className = 'modal-content-body'>
+                          <div className = 'top-content modal-selector'>
+                              <select ref = {'createType'} value = {this.state.eFilmType}  >
+                                  {/*<option  value = {'withRef'}>{'Create with reference'}</option>*/}
+                                  <option  value = {'withoutRef'}>{'Create without reference'}</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div className = 'modal-content-bot actions button'>
+                          <button className = 'material-btn confirm-style' onClick ={()=>this.createGoodReceiptSelect(this.refs['createType'].value)}>Next ></button>
+                      </div>
+                  </div>
+              </Modal>
+              </div>)
+}
               }
-}
 
-const mapStateToProps = (state) => {
-    return {
-        tab: state.tab,
-        deleteCall: state.deleteCall
-    };
-};
+              const mapStateToProps = (state) => {
+                  return {
+                      tab: state.tab,
+                      deleteCall: state.deleteCall
+                  };
+              };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
-}
+              function mapDispatchToProps(dispatch) {
+                  return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
+              }
 
-export default connect(
-    mapStateToProps,mapDispatchToProps
-)(ActionMenu);
+              export default connect(
+              mapStateToProps,mapDispatchToProps
+              )(ActionMenu);
