@@ -307,55 +307,57 @@ class ActionMenu extends React.Component {
   }
 
   render() {
+    console.log(this.props.selected)
     return(
       <div className='flex action-bar' >
         <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
         <div className='action-group-btn'>
           <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
+          <button
+            onClick={() => this.state.editAction()}
+            disabled={this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status))}
+            >
+            <img src={editIcon}/> <p>Edit</p>
+          </button>
+          <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
+          <button onClick={() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
+          <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
+          <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
+          <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
+          <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
+        </div>
 
-          <button onClick={() =>this.state.editAction()} disabled={
-              this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status) )
-            }><img src={editIcon}/> <p>Edit</p></button>
-            
-            <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
-            <button onClick={() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
-            <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
-            <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
-            <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
-            <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
-          </div>
-
-          <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
-          <Modal show = {this.state.showCreateModal.show} options = {this.state.showCreateModal}>
-            <div>
-              <div className = 'modal-content-body'>
-                <div className = 'top-content modal-selector'>
-                  <select ref = {'createType'} value = {this.state.eFilmType}  >
-                    {/*<option  value = {'withRef'}>{'Create with reference'}</option>*/}
-                    <option  value = {'withoutRef'}>{'Create without reference'}</option>
-                  </select>
-                </div>
-              </div>
-              <div className = 'modal-content-bot actions button'>
-                <button className = 'material-btn confirm-style' onClick ={()=>this.createGoodReceiptSelect(this.refs['createType'].value)}>Next ></button>
+        <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
+        <Modal show = {this.state.showCreateModal.show} options = {this.state.showCreateModal}>
+          <div>
+            <div className = 'modal-content-body'>
+              <div className = 'top-content modal-selector'>
+                <select ref = {'createType'} value = {this.state.eFilmType}  >
+                  {/*<option  value = {'withRef'}>{'Create with reference'}</option>*/}
+                  <option  value = {'withoutRef'}>{'Create without reference'}</option>
+                </select>
               </div>
             </div>
-          </Modal>
-        </div>)
-      }
+            <div className = 'modal-content-bot actions button'>
+              <button className = 'material-btn confirm-style' onClick ={()=>this.createGoodReceiptSelect(this.refs['createType'].value)}>Next ></button>
+            </div>
+          </div>
+        </Modal>
+      </div>)
     }
+  }
 
-    const mapStateToProps = (state) => {
-      return {
-        tab: state.tab,
-        deleteCall: state.deleteCall
-      };
+  const mapStateToProps = (state) => {
+    return {
+      tab: state.tab,
+      deleteCall: state.deleteCall
     };
+  };
 
-    function mapDispatchToProps(dispatch) {
-      return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
-    }
+  function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
+  }
 
-    export default connect(
-      mapStateToProps,mapDispatchToProps
-    )(ActionMenu);
+  export default connect(
+    mapStateToProps,mapDispatchToProps
+  )(ActionMenu);

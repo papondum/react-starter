@@ -10,10 +10,16 @@ class Content extends React.Component {
       content: [],
       subContent: '',
       selected: [],
+      activePage: '',
     }
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ selected: [] })
+    if(nextProps.activePage !== this.state.activePage) {
+      this.setState({
+        selected: [],
+        activePage: nextProps.activePage,
+      })
+    }
   }
   pageChecker(){
     if(this.props.mainContent.length != undefined){

@@ -208,9 +208,7 @@ class CustomTable extends React.Component {
       render: (t, record) => index === 0 ? (
         <div key={t}>
           <input
-            onClick={() => {
-              this.props.toggleItem(record)
-            }}
+            onClick={() => this.props.toggleItem(record)}
             type='checkbox'
             checked={this.props.selected.includes(record.id)}
             />

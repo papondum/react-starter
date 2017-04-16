@@ -72,17 +72,20 @@ class ContentForm extends React.Component {
     }
   }
   toggleItem(item) {
-    if (this.state.selected.includes(item)) {
-      return this.setState({
-        editItem: null,
-        selected: this.state.selected.filter(s => s.id !== item.id),
-      }, () => this.props.setSelected(this.state.selected))
+    const stateSelected = this.state.selected
+    let selected
+    if (stateSelected.includes(item)) {
+      selected = stateSelected.filter(s => s.id !== item.id)
+    } else {
+      selected = stateSelected.concat(item).reduce(getUnique, [])
     }
-    this.props.checkedSingleItem(item.id)
-    return this.setState({
-      editItem: item,
-      selected: this.state.selected.concat(item).reduce(getUnique, []),
-    }, () => this.props.setSelected(this.state.selected))
+    this.setState({
+      selected,
+    }, () => {
+      console.log(this.state.selected)
+      this.props.setSelected(this.state.selected)
+      this.props.checkedSingleItem(this.state.selected[0].id || null)
+    })
   }
   rowClicked(id) {
     switch (this.props.type) {
