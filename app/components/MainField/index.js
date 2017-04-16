@@ -218,7 +218,7 @@ class MainField extends React.Component {
               <Content
                   contentHeader = {this.state.openedTab}
                   mainContent={this.state.mainContent}
-                  checkedSingleItem = {(item)=>this.checkedSingleItem(item)}
+                  checkedSingleItem={(item)=>this.checkedSingleItem(item)}
                   activePage={this.props.tab.activeTabs}
                   getContent={(item)=>this._getContent(item)}
                   setContent={(item)=>this.setContent(item)}
