@@ -201,7 +201,8 @@ class MainField extends React.Component {
             getContent={(item)=>this._getContent(item)}
             setContent={(item)=>this.setContent(item)}
             showModal={()=>this.showModal()}
-            editItem = {this.state.editItem}/>
+            editItem = {this.state.editItem}
+            get = {(url)=>get(url)}/>
       }
     }
 
@@ -223,7 +224,9 @@ class MainField extends React.Component {
                   getContent={(item)=>this._getContent(item)}
                   setContent={(item)=>this.setContent(item)}
                   showModal={()=>this.showModal()}
-                  editItem = {this.state.editItem}/>
+                  editItem = {this.state.editItem}
+                  get = {(url)=>get(url)}
+              />
               <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
               <Modal show = {this.state.showModal.show} options = {this.state.showModal.show}/>
           </div>)

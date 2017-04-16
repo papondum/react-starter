@@ -257,7 +257,7 @@ class CustomTable extends React.Component {
                           />
                       </div>
                   }
-            </div>
+              </div>
           </LocaleProvider>
         )
       }

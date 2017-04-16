@@ -6,7 +6,8 @@ import {LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS} from '../ac
 // we would also want a util to check if the token is expired.
 function auth(state = {
     isFetching: false,
-    isAuthenticated: localStorage.getItem('id_token') ? true : false
+    isAuthenticated: localStorage.getItem('id_token') ? true : false,
+    user: localStorage.getItem('id_user') ? localStorage.getItem('id_user') : false,
   }, action) {
   switch (action.type) {
     case LOGIN_REQUEST:

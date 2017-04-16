@@ -477,10 +477,16 @@ class SalesOrder extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
-      this.props.type=='edit'? this._getEditItem():''
+      this.props.type=='edit'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
+    }
+
+    setDefaultSalePerson(){
+      this.setState({
+        state_salePerson: this.props.username
+      })
     }
 
     _getEditItem(){

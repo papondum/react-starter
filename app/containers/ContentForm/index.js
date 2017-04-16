@@ -108,14 +108,14 @@ class ContentForm extends React.Component {
       return <div></div>
     }
     return (<div>
-      <Table
-        header={this.subContentHeader}
-        checkedSingleItem={this.props.checkedSingleItem}
-        rowClicked={id => this.rowClicked(id)}
-        content={this.props.content || []}
-        columns={this.columns}
-        subContent={this.state.subContent}
-        type={this.props.type}
+        <Table
+            header={this.subContentHeader}
+            checkedSingleItem={this.props.checkedSingleItem}
+            rowClicked={id => this.rowClicked(id)}
+            content={this.props.content || []}
+            columns={this.columns}
+            subContent={this.state.subContent}
+            type={this.props.type}
         />
     </div>)
   }
