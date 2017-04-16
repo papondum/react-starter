@@ -209,8 +209,7 @@ class CustomTable extends React.Component {
         <div key={t}>
           <input
             onClick={() => {
-              this.props.toggleItem(record.id)
-              this.props.checkedSingleItem(record.id)
+              this.props.toggleItem(record)
             }}
             type='checkbox'
             checked={this.props.selected.includes(record.id)}
