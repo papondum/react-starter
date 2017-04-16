@@ -38,7 +38,8 @@ class Purchase extends React.Component {
             { value : 'WNP Group Co.,Ltd.', label : 'WNP Group Co.,Ltd.', address:'Lumirror Pet Co.,Ltd. WNP Group Co.,Ltd. 106/26 Phahon yothin Road Klong Thanon, Sai mai Bangkok, Thailand '}
           ],
           selectedSupplier : '',
-          statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
+            statusList: [{value: 'In Process '},{value: 'Ready to submit '}, {value: 'Summitted'}, {value: 'Confirmed'}, {value: 'Completed'}, {value: 'Cancelled'}],
+
           selectedTab: 'General',
           filmType: '',
           filmList:[],

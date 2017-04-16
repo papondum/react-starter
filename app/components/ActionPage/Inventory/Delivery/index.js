@@ -330,18 +330,22 @@ class Delivery extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
-      this.props.type=='edit'? this._getEditItem():''
+      this.props.type=='edit'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
+    }
+
+    setDefaultSalePerson(){
+      this.setState({
+        state_salePerson: this.props.username
+      })
     }
 
     _getEditItem(){
       post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
-        console.log(response);
-        console.log(this.props.editItem);
       })
 
     }
@@ -717,6 +721,7 @@ class Delivery extends React.Component {
       console.log('checkedLL::', this.state.checkedItem);
     }
     render() {
+      console.log(this.state.state_salePerson);
         return(
           <div className='page-style'>
               <div className='page-head'>

@@ -39,10 +39,11 @@ export function loginUser(creds) {
     .then(response=>{
       if(!response.ok){
         localStorage.setItem('id_token', response.id_token)
+        localStorage.setItem('id_user', response.user.firstname)
         dispatch(receiveLogin(response.id_token))
       }
       else {
-
+        console.log(response,'else::::');
         dispatch(loginError(response))
       }
       })
@@ -79,6 +80,7 @@ export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout())
     localStorage.removeItem('id_token')
+    localStorage.removeItem('id_user')
     dispatch(receiveLogout())
   }
 }
