@@ -325,6 +325,7 @@ class ActionMenu extends React.Component {
     }
 
     render() {
+      console.log('Test::::', this.props);
         return(
           <div className='flex action-bar' >
               <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>

@@ -27,7 +27,7 @@ class Quotation extends React.Component {
                 { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
                 { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
             ],
-          statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
+          statusList: [{value: 'In Process '}, {value: 'Released'}, {value: 'Completed'}, {value: 'Cancelled'}],
           selectedCustomer: '',
           selectedTab: 'General',
           eFilmType: {},

@@ -34,7 +34,7 @@ class SalesOrder extends React.Component {
                 { value: 'ก่อนเที่ยง', label: 'ก่อนเที่ยง' },
                 { value: 'ก่อนบ่าย 3', label: 'ก่อนบ่าย 3' },
             ],
-          statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
+          statusList: [{value: 'In Process '},{value: 'Booked '}, {value: 'Released'}, {value: 'Completed'}, {value: 'Cancelled'}],
           selectedCustomer: '',
           selectedTab: 'General',
           filmType: '',
