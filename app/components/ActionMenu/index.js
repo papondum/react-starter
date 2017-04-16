@@ -46,6 +46,7 @@ class ActionMenu extends React.Component {
             showCreateModal:{
               show:false
             },
+            userId: '',
         };
     }
 
@@ -96,6 +97,7 @@ class ActionMenu extends React.Component {
 
     componentDidMount(){
       this._setActionCategory()
+      this.getUserId()
     }
 
     componentWillReceiveProps(nextProps){
@@ -221,7 +223,7 @@ class ActionMenu extends React.Component {
             break;
           case 'Quotation':
             this.setState({
-              createAction:()=>this.props.setContent((<Quotation type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              createAction:()=>this.props.setContent((<Quotation type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
               editAction:()=>this.props.setContent((<Quotation type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
               copyAction:'',
               deleteAction:()=>this.showDeleteModal(),
@@ -233,7 +235,7 @@ class ActionMenu extends React.Component {
             break;
           case 'Sales Order':
             this.setState({
-              createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
               editAction:()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
               copyAction:'',
               deleteAction:()=>this.showDeleteModal(),
@@ -257,7 +259,7 @@ class ActionMenu extends React.Component {
             break;
           case 'Delivery Order':
             this.setState({
-              createAction:()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+              createAction:()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
               editAction:()=>this.props.setContent((<Delivery type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
               copyAction:'',
               deleteAction:()=>this.showDeleteModal(),
@@ -292,6 +294,22 @@ class ActionMenu extends React.Component {
         message: event+' ' + 'item was deleted',
         level: type
       })
+    }
+
+    getUserId(){
+      let url = '/api/user/all'
+      this.props.get(url)
+      .then((response)=> {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        let userId = response.find(i => i.Firstname==this.props.username)
+        if(userId){
+          this.setState({userId: userId.id})
+        }
+
+      })
+      .catch(err=>console.log(err))
     }
 
     createGoodReceiptSelect(type){
@@ -337,21 +355,22 @@ class ActionMenu extends React.Component {
                       </div>
                   </div>
               </Modal>
-              </div>)
+          </div>)
 }
               }
 
-              const mapStateToProps = (state) => {
-                  return {
-                      tab: state.tab,
-                      deleteCall: state.deleteCall
-                  };
-              };
+const mapStateToProps = (state) => {
+    return {
+        tab: state.tab,
+        deleteCall: state.deleteCall,
+        username: state.login.auth.user,
+    };
+};
 
-              function mapDispatchToProps(dispatch) {
-                  return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
-              }
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
+}
 
-              export default connect(
-              mapStateToProps,mapDispatchToProps
-              )(ActionMenu);
+export default connect(
+mapStateToProps,mapDispatchToProps
+)(ActionMenu);

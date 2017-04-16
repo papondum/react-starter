@@ -185,20 +185,20 @@ class CustomTable extends React.Component {
     return columns.map((column, index) => ({
       title: (
         <div key = {index}>
-          <div>
-            {this.renderColumn(column)}
-          </div>
-          <div style={{ padding: '5px 5px',
+            <div>
+                {this.renderColumn(column)}
+            </div>
+            <div style={{ padding: '5px 5px',
             border: '0.5px #ccc solid' }}>
-            <Dropdown
-              placement="bottomLeft"
-              overlay={<OverlayMenu
-                onClick={e => this.sortingMenu(column, e)}
-                columns={this.state.columns}
-                unselected={this.state.bodyFilters.columns} />}
+                <Dropdown
+                    placement="bottomLeft"
+                    overlay={<OverlayMenu
+                        onClick={e => this.sortingMenu(column, e)}
+                        columns={this.state.columns}
+                        unselected={this.state.bodyFilters.columns} />}
                 ><a className="ant-dropdown-link" href="#">{column}</a>
-            </Dropdown>
-          </div>
+                </Dropdown>
+            </div>
         </div>
       ),
       dataIndex: column,
@@ -259,6 +259,7 @@ class CustomTable extends React.Component {
     )
   }
 }
+
 
 const getUnique = (p, c) => {
   if (p.includes(c)) return p;

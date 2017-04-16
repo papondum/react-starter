@@ -313,10 +313,16 @@ class Quotation extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
-      this.props.type=='edit'? this._getEditItem():''
+      this.props.type=='edit'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
+    }
+
+    setDefaultSalePerson(){
+      this.setState({
+        state_salePerson: this.props.username
+      })
     }
 
     _getEditItem(){
@@ -733,7 +739,6 @@ class Quotation extends React.Component {
     }
 
     getGeneralContent(){
-      console.log(this.state.state_status, 'status::::');
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>

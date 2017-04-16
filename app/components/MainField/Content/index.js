@@ -13,12 +13,14 @@ class Content extends React.Component {
     pageChecker(){
       if(this.props.mainContent.length!=undefined){
         return <div>
-          <ActionMenu
-              activePage={this.props.activePage}
-              getContent={(item)=>this.props.getContent(item)}
-              setContent={(item)=>this.props.setContent(item)}
-              showModal={()=>this.props.showModal()}
-              editItem = {this.props.editItem}/>
+            <ActionMenu
+                activePage={this.props.activePage}
+                getContent={(item)=>this.props.getContent(item)}
+                setContent={(item)=>this.props.setContent(item)}
+                showModal={()=>this.props.showModal()}
+                editItem = {this.props.editItem}
+                get = {(url)=>this.props.get(url)}
+            />
           <ContentForm type = {this.props.contentHeader} content = {this.props.mainContent} checkedSingleItem = {(item)=>this.props.checkedSingleItem(item)}/>
         </div>
       }
@@ -26,7 +28,7 @@ class Content extends React.Component {
         // <ActionSubMenu type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} activePage={this.props.activePage}/>
         // * sub menu + content
         return  <div>
-          {this.props.mainContent}
+            {this.props.mainContent}
         </div>
       }
     }
