@@ -55,6 +55,7 @@ class Delivery extends React.Component {
           state_salePerson: '',
           total: 0,
           checkedItem: [],
+          soShowState: 'display-none'
         }
     }
 
@@ -317,7 +318,6 @@ class Delivery extends React.Component {
 
     _setInitialEditContent(){
       let childList = this.state.childItem
-      console.log(this.state.childItem);
       let objFilm = {}
       let objBrand = {}
       let objGrade = {}
@@ -391,6 +391,7 @@ class Delivery extends React.Component {
       })
       //this.refs['discount'].value = item.discount ||0
       this._setInitialEditContent()
+      this._checkPoValue(item)
     }
 
     save(){
@@ -623,12 +624,12 @@ class Delivery extends React.Component {
 
     }
 
-    _checkPoValue(){
-      if (true) {
-        return 'input-box flex'
+    _checkPoValue(res){
+      if (res.sales_order_id) {
+        this.setState({soShowState: 'input-box flex'})
       }
       else{
-        return 'display-none'
+        this.setState({soShowState: 'display-none'})
       }
     }
 
@@ -657,7 +658,7 @@ class Delivery extends React.Component {
               </div>
           </div>
           <div className="flex flex-1 flex-col">
-              <div className={this._checkPoValue()}>
+              <div className = {this.state.soShowState}>
                   <label>S/O Number:</label>
                   <input className='flex' type="text" ref='sonumber' value = {this.state.state_sonumber} onChange={()=>this.updateParam('sonumber')}/>
               </div>
