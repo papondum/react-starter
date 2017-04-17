@@ -25,7 +25,7 @@ class Delivery extends React.Component {
           widthList: [],
           length: [],
           weight: [],
-          statusList: [{value: 'Open'}, {value: 'In Process'}, {value: 'Released'}, {value: 'Completed'}],
+          statusList: [{value: 'Not yet delivered'}, {value: 'Ready to Deliver'}, {value: 'Delivered'}],
           selectedCustomer: '',
           eFilmType: {},
           eBrandType: {},
