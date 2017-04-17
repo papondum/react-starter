@@ -177,7 +177,7 @@ class Delivery extends React.Component {
           break;
         case  'eWidth':
           var stateWi = this.state[state];
-          stateWi[id] =  this.refs['width'+id].value
+          stateWi[id] =  this.refs['widthType'+id].value
           this.setState({eWidth:stateWi})
           break;
         case  'eOrderqty':
@@ -185,8 +185,11 @@ class Delivery extends React.Component {
           var stateW = this.state.eWeight
           stateOr[id] =  this.refs['order_qty'+id].value
           let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
-          stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
-          this.setState({eOrderqty:stateOr,eWeight:stateW})
+          console.log(this.state.weight);
+          if(getWeight){
+            stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
+            this.setState({eOrderqty:stateOr,eWeight:stateW})
+          }
           break;
         case  'eStock':
           var stateSt = this.state[state];
@@ -275,6 +278,7 @@ class Delivery extends React.Component {
     }
 
     getWeight(item, type, id){
+      console.log('invoked');
       post('/api/sales/quotation/weight',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType, "length": item.length })
       .then((response)=>{
         this.updateStateItemSet('weight', response, type+id)
@@ -313,6 +317,7 @@ class Delivery extends React.Component {
 
     _setInitialEditContent(){
       let childList = this.state.childItem
+      console.log(this.state.childItem);
       let objFilm = {}
       let objBrand = {}
       let objGrade = {}
@@ -353,9 +358,10 @@ class Delivery extends React.Component {
           let item = childList[k]
           this.getBrandType({filmType: item.filmtype_id}, 'brandType', item.id)
           this.getGradeType({filmType: item.filmtype_id, brandType: item.brand_id}, 'gradeType', item.id)
-          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width}, 'thickNess', item.id)
-          this.getWidth({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'width', item.id)
-          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width, thickNess: item.thickness}, 'length', item.id)
+          this.getWidth({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'widthType', item.id)
+          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, widthType: item.width}, 'thickNess', item.id)
+          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, widthType: item.width, thickNess: item.thickness}, 'length', item.id)
+          this.getWeight({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, widthType: item.width, thickNess: item.thickness,  length: item.product_length}, 'weight', item.id )
       }
 
     }
@@ -383,7 +389,7 @@ class Delivery extends React.Component {
         childItem: item.contents,
         selectedCustomer: item.customer_id,
       })
-      this.refs['discount'].value = item.discount ||0
+      //this.refs['discount'].value = item.discount ||0
       this._setInitialEditContent()
     }
 
@@ -437,7 +443,7 @@ class Delivery extends React.Component {
       })
 
       if(this.props.type=='edit'){
-        obj.quotation_id = parseInt(this.props.editItem)
+        obj.inventory_id = parseInt(this.props.editItem)
       }
       console.log('obj',obj);
       let url = this.props.type=='create'? '/api/inventory/do/create':'/api/inventory/do/update'
@@ -475,7 +481,7 @@ class Delivery extends React.Component {
     }
 
     getWidthTypeOption(id){
-      let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
+      let getWidth = this.state.widthList.find(i=>i.id==('widthType'+id))
       if(getWidth){
         let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
         result.unshift(<option key='select'>Select Item</option>)
@@ -617,6 +623,15 @@ class Delivery extends React.Component {
 
     }
 
+    _checkPoValue(){
+      if (true) {
+        return 'input-box flex'
+      }
+      else{
+        return 'display-none'
+      }
+    }
+
     getGeneralContent(){
       return (  <div className="flex flex-row">
           <div className='flex flex-1 flex-col'>
@@ -642,7 +657,7 @@ class Delivery extends React.Component {
               </div>
           </div>
           <div className="flex flex-1 flex-col">
-              <div className='input-box flex'>
+              <div className={this._checkPoValue()}>
                   <label>S/O Number:</label>
                   <input className='flex' type="text" ref='sonumber' value = {this.state.state_sonumber} onChange={()=>this.updateParam('sonumber')}/>
               </div>
@@ -692,7 +707,6 @@ class Delivery extends React.Component {
       console.log('checkedLL::', this.state.checkedItem);
     }
     render() {
-      console.log(this.state.state_salePerson);
         return(
           <div className='page-style'>
               <div className='page-head'>
