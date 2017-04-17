@@ -145,7 +145,7 @@ class Purchase extends React.Component {
           var stateOr = this.state[state];
           var stateW = this.state.eWeight
           stateOr[id] =  this.refs['order_qty'+id].value
-          let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
+          let getWeight = this.state.eWeight.find(i=>i.id=='weight'+id)
           stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
           this.setState({eOrderqty:stateOr,eWeight:stateW})
           break;
@@ -1016,18 +1016,6 @@ class Purchase extends React.Component {
           let start = newArrayChildItem.findIndex((element) => element === -1 )
           console.log(start);
           newArrayChildItem.splice(start,1)
-          console.log("Before",newArrayChildItem);
-          for (let index = start;index < newArrayChildItem.length;index++){
-            if(newArrayChildItem[index] !== -1){
-              console.log("VOLK",newArrayChildItem[index]);
-              newArrayChildItem[index].id = (parseInt(newArrayChildItem[index].id) - 1)+''
-              if(newArrayChildItem[index].id.length<4){
-                for (var zero = 0; zero < 6-newArrayChildItem[index].id.length; zero++) {
-                  newArrayChildItem[index].id = "0" + newArrayChildItem[index].id
-                }
-              }
-            }
-          }
           console.log("newArrayChildItem",newArrayChildItem);
         }
         this.setState({

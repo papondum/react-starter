@@ -627,7 +627,7 @@ class Delivery extends React.Component {
                       ref = 'customer'
                       value={this.state.selectedCustomer}
                       options={this.state.customerList}
-                      onChange={this.updateSelectedCustomer}
+                      onChange={(value) => this.updateSelectedCustomer(value)}
                       className = 'selector-class'
                       autosize = {true}
                   />
