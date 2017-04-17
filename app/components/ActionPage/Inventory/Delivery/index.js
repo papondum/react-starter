@@ -471,12 +471,12 @@ class Delivery extends React.Component {
         obj.quotation_id = parseInt(this.props.editItem)
       }
       console.log('obj',obj);
-      let url = this.props.type=='create'? '/api/sales/quotation/create':'/api/sales/quotation/update'
+      let url = this.props.type=='create'? '/api/inventory/do/create':'/api/inventory/do/update'
       post(url, obj)
       .then(response => {
         console.log(response);
 
-        this.props.getContent('Quotation')
+        this.props.getContent('Delivery Order')
       })
       .catch(err=>console.log(err))
     }
@@ -729,7 +729,7 @@ class Delivery extends React.Component {
                   <div className='action-group-btn'>
                       <button><img src={emailIcon}/><p>Email</p></button>
                       <button><img src={printIcon}/><p>Print</p></button>
-                      <button onClick={()=>this.props.getContent('Quotation')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick={()=>this.props.getContent('Delivery Order')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.save()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
