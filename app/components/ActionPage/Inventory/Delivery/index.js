@@ -304,7 +304,7 @@ class Delivery extends React.Component {
     }
 
     _getEditItem(){
-      post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
+      post('/api/inventory/do/id', {id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
       })
@@ -370,15 +370,15 @@ class Delivery extends React.Component {
         // state_tel: item.customer ? item.customer.tel:item.tel ,
         // state_fax: item.customer ? item.customer.fax:item.fax,
         // state_email: item.customer? item.customer.email:item.email,
-        state_date: item.quotation_date||'',
-        state_time: item.quotation_time||'',
+        state_date: item.deliver_date||'',
+        state_time: item.deliver_time||'',
         state_sonumber: item.so_number||'',
         state_ponumber: item.po_number||'',
-        state_shipto: item.shipto||'',
+        state_shipto: item.ship_to||'',
         // state_payterm: item.payment_term,
         // state_deliver: item.delivery_term,
         state_status: item.status,
-        state_salePerson: saleperson,
+        state_salePerson: item.saleperson_id,
         // total: item.total,
         childItem: item.contents,
         selectedCustomer: item.customer_id,
