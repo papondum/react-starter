@@ -278,7 +278,7 @@ class Quotation extends React.Component {
     }
 
     getThickNess(item, type, id){
-      post('/api/sales/quotation/thickness',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
+      post('/api/sales/quotation/thickness_no_width',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
           this.updateStateItemSet('thickList', response, type+id)
       })
@@ -286,7 +286,7 @@ class Quotation extends React.Component {
     }
 
     getLength(item , type, id){
-      post('/api/sales/quotation/length',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
+      post('/api/sales/quotation/length_no_width',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess })
       .then((response)=>{
         this.updateStateItemSet('length', response, type+id)
       })
