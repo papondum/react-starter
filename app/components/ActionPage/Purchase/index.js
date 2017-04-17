@@ -138,14 +138,14 @@ class Purchase extends React.Component {
           break;
         case  'eWidth':
           var stateWi = this.state[state];
-          stateWi[id] =  this.refs['width'+id].value
+          stateWi[id] =  this.refs['widthType'+id].value
           this.setState({eWidth:stateWi})
           break;
         case  'eOrderqty':
           var stateOr = this.state[state];
           var stateW = this.state.eWeight
           stateOr[id] =  this.refs['order_qty'+id].value
-          let getWeight = this.state.eWeight.find(i=>i.id=='weight'+id)
+          let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
           stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
           this.setState({eOrderqty:stateOr,eWeight:stateW})
           break;
