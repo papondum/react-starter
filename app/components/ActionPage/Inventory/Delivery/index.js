@@ -10,6 +10,7 @@ import Select from 'react-select';
 import { indexOf, find } from 'lodash'
 import 'react-select/dist/react-select.css';
 import './style.scss'
+
 class Delivery extends React.Component {
     constructor(props) {
         super(props);
@@ -66,32 +67,6 @@ class Delivery extends React.Component {
       }
     }
 
-
-    updateUser(){
-      let firstname = this.refs.firstname.value
-      let lastname = this.refs.lastname.value
-      let username = this.refs.username.value
-      let password = this.refs.password.value
-      let email = this.refs.email.value
-      let role = this.refs.role.value
-      let url = this.props.type=='create'? '/api/user/create':'/api/user/update'
-
-      if(firstname&&lastname&&password&&email&&role){
-        post(url,{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
-        .then((response)=> {
-          if (response.status >= 400) {
-            throw new Error("Bad response from server");
-          }
-          //Notify fn value added
-          this.props.getContent('User account')
-        })
-        .catch(err=>console.log(err))
-      }
-      else{
-        console.log('invalid Input');
-      }
-    }
-
     getCustomerList(){
       let url = '/api/customer/raw'
       get(url)
@@ -114,19 +89,6 @@ class Delivery extends React.Component {
           throw new Error("Bad response from server");
         }
         this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
-
-      })
-      .catch(err=>console.log(err))
-    }
-
-    getPriceList(){
-      let url = '/api/price_list/all'
-      get(url)
-      .then((response)=> {
-        if (response.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-        this.setState({priceList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Name})})})
 
       })
       .catch(err=>console.log(err))
@@ -332,7 +294,6 @@ class Delivery extends React.Component {
       this.getCustomerList()
       this.props.type=='edit'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
-      this.getPriceList()
       this.getFilmType()
     }
 
@@ -427,19 +388,28 @@ class Delivery extends React.Component {
     }
 
     save(){
-      //send Quatations
+      //send DO
+      /*
+      customer_id: req.body.customer_id,
+      deliver_date: req.body.deliver_date,
+      deliver_time: req.body.deliver_time,
+      po_number: req.body.po_number,
+      ship_to: req.body.ship_to,
+      status: req.body.status,
+      salesperson_id: req.body.contact_person,
+      */
       let obj = Object.assign({},
       {
-        customer: this.state.selectedCustomer || this.refs['customer'].value,
-        date: this.state.state_date || this.refs['date'].value,
-        time: this.state.state_time || this.refs['time'].value,
+        customer_id: this.state.selectedCustomer || this.refs['customer'].value,
+        deliver_date: this.state.state_date || this.refs['date'].value,
+        deliver_time: this.state.state_time || this.refs['time'].value,
         // payterm: this.state.state_payterm || this.refs['payterm'].value,
         // deliver: this.state.state_deliver|| this.refs['deliver'].value,
         so_number: this.state.state_sonumber || this.refs['sonumber'].value,
         po_number: this.state.state_ponumber || this.refs['ponumber'].value,
-        shipto: this.state.state_shipto || this.refs['shipto'].value,
+        ship_to: this.state.state_shipto || this.refs['shipto'].value,
         status:   this.state.state_status|| this.refs['status'].value,
-        sale_person: this.state.state_salePerson|| this.refs['salePerson'].value,
+        salesperson_id: this.state.state_salePerson|| this.refs['salePerson'].value,
         // customer_contact: this.state.state_contact,
         // customer_tel: this.state.state_tel,
         // customer_fax: this.state.state_fax,
@@ -457,9 +427,8 @@ class Delivery extends React.Component {
                 width: this.refs['widthType'+i.id].value,
                 thickness: this.refs['thickNess'+i.id].value,
                 length: this.refs['length'+i.id].value,
-                order_qty: this.refs['order_qty'+i.id].value,
+                quantity: this.refs['order_qty'+i.id].value,
                 weight: this.refs['weight'+i.id].value,
-                stock: this.refs['stock'+i.id].value,
                 remark: this.refs['remark'+i.id].value,
                 // subtotal: this.refs['subTotal'+i.id].value,
               }
@@ -617,6 +586,8 @@ class Delivery extends React.Component {
     }
 
     updateSelectedCustomer(newVal) {
+      console.log("Select Customer")
+      console.log(newVal)
       this.getCustomerAsync(newVal.value).then((customer) => {
         // this.setState({state_contact: customer[0].contact_person})
         // this.setState({state_tel: customer[0].telephone})
@@ -765,7 +736,7 @@ class Delivery extends React.Component {
                               <td>Length</td>
                               <td>Order Quantity(Roll)</td>
                               <td>Total Weight(Kg)</td>
-                              <td>Stock on hand(ROll)</td>
+                              <td>Stock on hand(Roll)</td>
                               <td>Remark</td>
                           </tr>
                       </thead>
