@@ -279,7 +279,6 @@ class Delivery extends React.Component {
     }
 
     getWeight(item, type, id){
-      console.log('invoked');
       post('/api/sales/quotation/weight',{ "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType, "thickness": item.thickNess, "width": item.widthType, "length": item.length })
       .then((response)=>{
         this.updateStateItemSet('weight', response, type+id)
@@ -482,7 +481,7 @@ class Delivery extends React.Component {
     }
 
     getWidthTypeOption(id){
-      let getWidth = this.state.widthList.find(i=>i.id==('widthType'+id))
+      let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
       if(getWidth){
         let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
         result.unshift(<option key='select'>Select Item</option>)
