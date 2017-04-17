@@ -717,6 +717,7 @@ class Purchase extends React.Component {
 
     getChildItem(){
       let items = this.state.childItem
+      console.log(this.state.childItem);
       let result = items.map((i, index)=>{
         let genArg = (arr,id)=>{
           //return as object filmType:val brandType:val
@@ -783,7 +784,13 @@ class Purchase extends React.Component {
     addChild(){
       let items = this.state.childItem
       console.log("items",items);
-      let idNo = ''+(items.length+1)+''
+        let idNo;
+      if(this.state.childItem.length == 0){
+        idNo = ''+(items.length+1)+''
+      }
+      else{
+        idNo = ''+(parseInt(items[items.length -1].id)+ 1)+''
+      }
       console.log("idNo",idNo);
       if(idNo.length<4){
         for (var i = 0; i < 6-idNo.length; i++) {
@@ -997,7 +1004,7 @@ class Purchase extends React.Component {
     deleteSelectedChild(){
       console.log("Check Item",this.state.checkedItem);
       console.log("childItem",this.state.childItem);
-      this.setUncheckContent()
+      this.clearValueInContent(this.state.checkedItem)
       if(this.state.checkedItem.length != 0){
         let arrCheckedItem = this.state.checkedItem.map((element)=>{
           return element.id
@@ -1025,10 +1032,18 @@ class Purchase extends React.Component {
       }
     }
 
-    setUncheckContent(){
-      for (let i = 0; i< this.state.childItem.length ;i++){
-        console.log(this.refs["checkbox"+this.state.childItem[i].id].checked);
-        this.refs["checkbox"+this.state.childItem[i].id].checked == false;
+    clearValueInContent(arrCheckedItem){
+      for (let i = 0;i < arrCheckedItem.length ; i++){
+        let {eBrandType,eGradeType,eThick,eLength,eRemark,eWeight,eUnitprice,eWidth,eOrderqty}  = this.state;
+        delete eBrandType[arrCheckedItem[i].id]
+        delete eGradeType[arrCheckedItem[i].id]
+        delete eThick[arrCheckedItem[i].id]
+        delete eLength[arrCheckedItem[i].id]
+        delete eRemark[arrCheckedItem[i].id]
+        delete eWeight[arrCheckedItem[i].id]
+        delete eUnitprice[arrCheckedItem[i].id]
+        delete eWidth[arrCheckedItem[i].id]
+        delete eOrderqty[arrCheckedItem[i].id]
       }
     }
 
