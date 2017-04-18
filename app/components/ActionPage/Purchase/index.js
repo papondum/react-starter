@@ -564,9 +564,9 @@ class Purchase extends React.Component {
           let item = childList[k]
           this.getBrandType({filmType: item.filmtype_id}, 'brandType', item.id)
           this.getGradeType({filmType: item.filmtype_id, brandType: item.brand_id}, 'gradeType', item.id)
-          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width}, 'thickNess', item.id)
           this.getWidth({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id}, 'width', item.id)
-          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, width: item.width, thickNess: item.thickness}, 'length', item.id)
+          this.getThickNess({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, widthType: item.width}, 'thickNess', item.id)
+          this.getLength({filmType: item.filmtype_id, brandType: item.brand_id, gradeType: item.grade_id, widthType: item.width, thickNess: item.thickness}, 'length', item.id)
       }
 
     }
@@ -641,7 +641,6 @@ class Purchase extends React.Component {
     }
 
     getBrandTypeOption(id){
-      console.log(this.state.brandList);
       let getBrand = this.state.brandList.find(i=>i.id==('brandType'+id))
       if(getBrand){
         let result =  getBrand.content.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
@@ -660,7 +659,6 @@ class Purchase extends React.Component {
     }
 
     getWidthTypeOption(id){
-      console.log('widthItem', this.state.widthList);
       let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
       if(getWidth){
         let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
@@ -679,6 +677,7 @@ class Purchase extends React.Component {
     }
 
     getWidth(item, type, id){
+      console.log(id);
       post ('/api/sales/quotation/width', { "filmtype_id": item.filmType,  "brand_id": item.brandType, "grade_id": item.gradeType })
       .then((response)=>{
         this.updateStateItemSet('widthList', response, type+id)
@@ -878,8 +877,8 @@ class Purchase extends React.Component {
               </div>
 
               <div className='input-box flex'>
-                <label>Order Date:</label>
-                <input className='flex' type="date" ref='orderdate' value = {this.state.state_orderdate} onChange={()=>this.updateParam('orderdate')}/>
+                  <label>Order Date:</label>
+                  <input className='flex' type="date" ref='orderdate' value = {this.state.state_orderdate} onChange={()=>this.updateParam('orderdate')}/>
               </div>
 
           </div>
@@ -908,7 +907,6 @@ class Purchase extends React.Component {
                   <label>Buyer :</label>
                   <select ref = 'buyer' value = {this.state.state_buyer} onChange={()=>this.updateParam('buyer')}>
                       {this.state.saleList.map(i=> {
-                        console.log(i);
                           return <option value={i.value}>{i.label}</option>})}
                   </select>
               </div>
