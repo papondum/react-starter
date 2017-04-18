@@ -159,6 +159,9 @@ class MainField extends React.Component {
         case 'Delivery Order':
           this.getJson('/api/inventory/do/all')
           break;
+        case 'Good Receipt':
+          this.getJson('/api/inventory/gr/all')
+          break;
         //case 'Good Receipt':
           //this.getJson('/api/inventory/good/all')
           //break;

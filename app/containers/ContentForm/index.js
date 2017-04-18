@@ -105,6 +105,10 @@ class ContentForm extends React.Component {
         return post('/api/inventory/do/line', {'inventory_id':id})
         .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
       }
+      case 'Good Receipt': {
+        return post('/api/inventory/gr/line', {'good_receipt_id':id})
+        .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
+      }
       default: return this.setState({ subContent: [] })
     }
   }
@@ -115,6 +119,7 @@ class ContentForm extends React.Component {
       case 'Sales Order': return 'Sales Order Line(s)'
       case 'Purchase Order': return 'Purchase Order Line(s)'
       case 'Delivery Order': return 'Delivery Order Line(s)'
+      case 'Good Receipt': return 'Delivery Order Line(s)'
       default: return ''
     }
   }
