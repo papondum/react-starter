@@ -590,7 +590,7 @@ class Purchase extends React.Component {
             film_type:  this.refs['filmType'+i.id].value,
             brand_type: this.refs['brandType'+i.id].value,
             grade_type: this.refs['gradeType'+i.id].value,
-            width:  this.refs['width'+i.id].value,
+            width:  this.refs['widthType'+i.id].value,
             thickness: this.refs['thickNess'+i.id].value,
             length: this.refs['length'+i.id].value,
             quantity: this.refs['order_qty'+i.id].value ,
