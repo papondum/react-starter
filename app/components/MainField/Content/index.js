@@ -24,15 +24,15 @@ class Content extends React.Component {
   pageChecker(){
     if(this.props.mainContent.length != undefined){
       return <div>
-        <ActionMenu
-          setSelected={selected => this.setState({ selected })}
-          selected={this.state.selected}
-          activePage={this.props.activePage}
-          getContent={item => this.props.getContent(item)}
-          setContent={item => this.props.setContent(item)}
-          showModal={()=>this.props.showModal()}
-          editItem = {this.props.editItem}/>
-        <ContentForm
+          <ActionMenu
+              setSelected={selected => this.setState({ selected })}
+              selected={this.state.selected}
+              activePage={this.props.activePage}
+              getContent={item => this.props.getContent(item)}
+              setContent={item => this.props.setContent(item)}
+              showModal={()=>this.props.showModal()}
+              editItem = {this.props.editItem}/>
+          <ContentForm
           setSelected={selected => this.setState({ selected })}
           type={this.props.contentHeader}
           content={this.props.mainContent}

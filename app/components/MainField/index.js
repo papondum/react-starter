@@ -3,7 +3,7 @@ import TabList from './TabList';
 import { connect } from 'react-redux';
 import { openTab ,closeTab} from '../../actions/tab';
 import Content from './Content';
-import ActionMenu from '../ActionMenu'
+// import ActionMenu from '../ActionMenu'
 import Modal from '../Modal/Confirm'
 import ModalCustom from '../Modal/Custom'
 import {get } from '../../../utils'
@@ -194,20 +194,20 @@ class MainField extends React.Component {
       })
     }
 
-    showActionMenu(){
-      if(this.state.mainContent.length==undefined){
-        return ''
-      }
-      else{
-        return <ActionMenu
-            activePage={this.props.tab.activeTabs}
-            getContent={(item)=>this._getContent(item)}
-            setContent={(item)=>this.setContent(item)}
-            showModal={()=>this.showModal()}
-            editItem = {this.state.editItem}
-            get = {(url)=>get(url)}/>
-      }
-    }
+    // showActionMenu(){
+    //   if(this.state.mainContent.length==undefined){
+    //     return ''
+    //   }
+    //   else{
+    //     return <ActionMenu
+    //         activePage={this.props.tab.activeTabs}
+    //         getContent={(item)=>this._getContent(item)}
+    //         setContent={(item)=>this.setContent(item)}
+    //         showModal={()=>this.showModal()}
+    //         editItem = {this.state.editItem}
+    //         get = {(url)=>get(url)}/>
+    //   }
+    // }
 
     render() {
       //mainContent is raw data from api return as array object
