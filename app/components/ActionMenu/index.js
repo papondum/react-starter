@@ -287,13 +287,14 @@ class ActionMenu extends React.Component {
         this.setState({
           createAction:()=>this.props.setContent((<Content
               contentHeader = {this.state.openedTab}
+              isChooser= {true}
               mainContent={this.state.mainContent}
               activePage={this.props.tab.activeTabs}
               getContent={(item)=>this._getContent(item)}
               setContent={(item)=>this.setContent(item)}
               editItem = {this.state.editItem}
               get = {(url)=>get(url)}
-                                                                />)),
+                                                  />)),
           // createAction:()=> this.showCreateGoodReceipt(),
           editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           copyAction:'',
