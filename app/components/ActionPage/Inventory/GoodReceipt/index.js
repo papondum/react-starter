@@ -700,7 +700,7 @@ class GoodReceipt extends React.Component {
               <div className='input-box flex'>
                   <label>ETD:</label>
                   {/* <input className='flex' type="text" ref='ponumber' value = {this.state.state_ponumber} onChange={()=>this.updateParam('ponumber')}/> */}
-                  <input className='flex' type="date" ref='etd' value = {this.state.state_etd} onChange={()=>this.updateParam('eta')}/>
+                  <input className='flex' type="date" ref='etd' value = {this.state.state_etd} onChange={()=>this.updateParam('etd')}/>
               </div>
               <div className='input-box flex'>
                   <label>ETA:</label>
