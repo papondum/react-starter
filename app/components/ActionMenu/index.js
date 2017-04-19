@@ -13,6 +13,7 @@ import refreshIcon from '../../resource/Icon/button_create.png'
 import * as DeleteAction from '../../actions/deleteCall'
 import Modal from '../Modal/Custom'
 import ModalC from '../Modal/Confirm'
+import Content from '../MainField/Content';
 import UserAccount from '../ActionPage/MasterFile/UserAccount'
 import Customer from '../ActionPage/MasterFile/Customer'
 import Userrole from '../ActionPage/MasterFile/UserRole'
@@ -27,6 +28,7 @@ import Salesorder from '../ActionPage/Sales/SalesOrder'
 import Purchase from '../ActionPage/Purchase'
 import Delivery from '../ActionPage/Inventory/Delivery'
 import GoodReceipt from '../ActionPage/Inventory/GoodReceipt'
+import {get } from '../../../utils'
 class ActionMenu extends React.Component {
   constructor(props) {
     super(props);
@@ -43,10 +45,21 @@ class ActionMenu extends React.Component {
       showModal:{
         show:false
       },
-      showCreateModal:{
-        show:false
-      },
+      mainContent:''
+      // showCreateModal:{
+      //   show:false
+      // },
     };
+  }
+  getConfirm(){
+    get('/api/inventory/gr/list_confirmed_po')
+    .then((response)=> {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      this.setState({'mainContent': response})
+    })
+    .catch(err=>console.log(err))
   }
 
   showDeleteModal(){
@@ -72,30 +85,31 @@ class ActionMenu extends React.Component {
     })
   }
 
-  showCreateGoodReceipt(){
-    this.setState({
-      showCreateModal:{
-        show:true,
-        header:'Please select',
-        close:()=>{
-          this.setState({
-            showCreateModal:{
-              show:false
-            }
-          })
-        },
-        confirm:()=>{
-          this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
-          this.props.getContent(this.props.activePage)
-          this.setState({showCreateModal:{show:false}})
-        },
-        submitTxt:'SUMMIT'
-      }
-    })
-  }
+  // showCreateGoodReceipt(){
+  //   this.setState({
+  //     showCreateModal:{
+  //       show:true,
+  //       header:'Please select',
+  //       close:()=>{
+  //         this.setState({
+  //           showCreateModal:{
+  //             show:false
+  //           }
+  //         })
+  //       },
+  //       confirm:()=>{
+  //         this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
+  //         this.props.getContent(this.props.activePage)
+  //         this.setState({showCreateModal:{show:false}})
+  //       },
+  //       submitTxt:'SUMMIT'
+  //     }
+  //   })
+  // }
 
   componentDidMount(){
     this._setActionCategory()
+    this.getConfirm()
   }
 
   componentWillReceiveProps(nextProps){
@@ -271,8 +285,17 @@ class ActionMenu extends React.Component {
         // content form :: create >> slect type ::>> track on content-form
         // create dialog modal selector then set content to good Receipt with selected value
         this.setState({
-          // createAction:()=>this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          createAction:()=> this.showCreateGoodReceipt(),
+          createAction:()=>this.props.setContent((<Content
+              contentHeader = {this.state.openedTab}
+              isChooser= {true}
+              mainContent={this.state.mainContent}
+              activePage={this.props.tab.activeTabs}
+              getContent={(item)=>this._getContent(item)}
+              setContent={(item)=>this.setContent(item)}
+              editItem = {this.state.editItem}
+              get = {(url)=>get(url)}
+                                                  />)),
+          // createAction:()=> this.showCreateGoodReceipt(),
           editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           copyAction:'',
           deleteAction:()=>this.showDeleteModal(),
@@ -294,55 +317,54 @@ class ActionMenu extends React.Component {
     })
   }
 
-  createGoodReceiptSelect(type){
-    if(type=='withRef'){
-
-    }
-    else if(type=='withoutRef'){
-      this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>))
-    }
-    else{
-      console.log(type);
-    }
-  }
+  // createGoodReceiptSelect(type){
+  //   if(type=='withRef'){
+  //
+  //   }
+  //   else if(type=='withoutRef'){
+  //     this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>))
+  //   }
+  //   else{
+  //     console.log(type);
+  //   }
+  // }
 
   render() {
     console.log(this.props.selected)
     return(
       <div className='flex action-bar' >
-        <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
-        <div className='action-group-btn'>
-          <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
-          <button
-            onClick={() => this.state.editAction()}
-            disabled={this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status))}
-            >
-            <img src={editIcon}/> <p>Edit</p>
-          </button>
-          <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
-          <button onClick={() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
-          <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
-          <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
-          <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
-          <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
-        </div>
-
-        <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
-        <Modal show = {this.state.showCreateModal.show} options = {this.state.showCreateModal}>
-          <div>
-            <div className = 'modal-content-body'>
-              <div className = 'top-content modal-selector'>
-                <select ref = {'createType'} value = {this.state.eFilmType}  >
-                  {/*<option  value = {'withRef'}>{'Create with reference'}</option>*/}
-                  <option  value = {'withoutRef'}>{'Create without reference'}</option>
-                </select>
-              </div>
-            </div>
-            <div className = 'modal-content-bot actions button'>
-              <button className = 'material-btn confirm-style' onClick ={()=>this.createGoodReceiptSelect(this.refs['createType'].value)}>Next ></button>
-            </div>
+          <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
+          <div className='action-group-btn'>
+              <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
+              <button
+                  onClick={() => this.state.editAction()}
+                  disabled={this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status))}
+              >
+                  <img src={editIcon}/> <p>Edit</p>
+              </button>
+              <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
+              <button onClick={() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
+              <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
+              <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
+              <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
+              <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
           </div>
-        </Modal>
+
+          <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
+          {/* <Modal show = {this.state.showCreateModal.show} options = {this.state.showCreateModal}>
+              <div>
+              <div className = 'modal-content-body'>
+              <div className = 'top-content modal-selector'>
+              <select ref = {'createType'} value = {this.state.eFilmType}  >
+              <option  value = {'withoutRef'}>{'Create without reference'}</option>
+              </select>
+              </div>
+              </div>
+              <div className = 'modal-content-bot actions button'>
+              <button className = 'material-btn confirm-style' onClick ={()=>this.createGoodReceiptSelect(this.refs['createType'].value)}>Next ></button>
+              </div>
+              </div>
+          </Modal> */}
       </div>)
     }
   }
