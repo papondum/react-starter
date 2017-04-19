@@ -153,7 +153,7 @@ class CustomTable extends React.Component {
     }
   }
   renderColumn(column) {
-    if (column.includes('Date')) {
+    if (column.includes('Date') || column.includes('ETA') || column.includes('ETD')) {
       return <DatePicker
         value={this.state.filters[column] && moment(this.state.filters[column], 'YYYY-MM-DD')}
         format="DD/MM/YYYY"

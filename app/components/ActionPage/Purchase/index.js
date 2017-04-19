@@ -836,6 +836,7 @@ class Purchase extends React.Component {
 
     setSupplierSelected(obj){
       if(obj){
+        this.updateSelectedSupplier(obj)
         this.setState({
           selectedSupplier : obj
         })
@@ -845,6 +846,15 @@ class Purchase extends React.Component {
           selectedSupplier : ''
         })
       }
+    }
+
+    updateSelectedSupplier(newVal) {
+      console.log("newVal")
+      console.log(newVal)
+      this.setState({state_contactPerson: newVal.contact})
+      this.setState({state_tel: newVal.tel})
+      this.setState({state_fax: newVal.fax})
+      this.setState({state_email: newVal.email})
     }
 
     getGeneralContent(){
@@ -1109,7 +1119,7 @@ class Purchase extends React.Component {
               <div className = 'flex create-quo-btm'>
                   <div className = 'flex-1'>
                       <p>Remarks</p>
-                      <textarea rows="5" cols="40" ref = 'remark' value= {this.state.remark} />
+                      <textarea rows="5" cols="40" ref = 'remark'/>
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
