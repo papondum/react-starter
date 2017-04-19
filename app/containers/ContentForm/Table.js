@@ -12,23 +12,23 @@ const MenuItemGroup = Menu.ItemGroup;
 
 const OverlayMenu = ({ onClick, columns, unselected }) => (
   <Menu onClick={onClick}>
-    <Menu.Item key="asc"><Icon type="arrow-up" /> Sort Ascending</Menu.Item>
-    <Menu.Item key="desc"><Icon type="arrow-down" /> Sort Descending</Menu.Item>
-    <SubMenu key="filter" title={[<Icon type="filter" />, <span>Filter using</span>]}>
-      <MenuItemGroup>
-        <Menu.Item key="equal">Equal</Menu.Item>
-        <Menu.Item key="not equal">Not equal</Menu.Item>
-        <Menu.Item key="less than">Less than</Menu.Item>
-        <Menu.Item key="greater than">Greater than</Menu.Item>
-        <Menu.Item key="less than or">Less than or equal to</Menu.Item>
-        <Menu.Item key="greater than or">Greater than or equal to</Menu.Item>
-      </MenuItemGroup>
-    </SubMenu>
-    <SubMenu key="columns" title={[<Icon type="layout" />, <span>Column</span>]}>
-      <MenuItemGroup>
-        {columns.map(column => {
-          return <Menu.Item key={column}><input type="checkbox" checked={!unselected.includes(column)} /> {column}</Menu.Item>
-        })}
+      <Menu.Item key="asc"><Icon type="arrow-up" /> Sort Ascending</Menu.Item>
+      <Menu.Item key="desc"><Icon type="arrow-down" /> Sort Descending</Menu.Item>
+      <SubMenu key="filter" title={[<Icon type="filter" />, <span>Filter using</span>]}>
+          <MenuItemGroup>
+              <Menu.Item key="equal">Equal</Menu.Item>
+              <Menu.Item key="not equal">Not equal</Menu.Item>
+              <Menu.Item key="less than">Less than</Menu.Item>
+              <Menu.Item key="greater than">Greater than</Menu.Item>
+              <Menu.Item key="less than or">Less than or equal to</Menu.Item>
+              <Menu.Item key="greater than or">Greater than or equal to</Menu.Item>
+          </MenuItemGroup>
+      </SubMenu>
+      <SubMenu key="columns" title={[<Icon type="layout" />, <span>Column</span>]}>
+          <MenuItemGroup>
+              {columns.map(column => {
+                  return <Menu.Item key={column}><input type="checkbox" checked={!unselected.includes(column)} /> {column}</Menu.Item>
+              })}
       </MenuItemGroup>
     </SubMenu>
   </Menu>
@@ -207,10 +207,10 @@ class CustomTable extends React.Component {
       onCellClick: record => this.props.rowClicked(record.id),
       render: (t, record) => index === 0 ? (
         <div key={t}>
-          <input
-            onClick={() => this.props.toggleItem(record)}
-            type='checkbox'
-            checked={this.props.selected.includes(record.id)}
+            <input
+                onClick={() => this.props.toggleItem(record)}
+                type='checkbox'
+                checked={this.props.selected.includes(record.id)}
             />
           <span style={{ marginLeft: 10 }}>{t}</span>
         </div>
@@ -224,31 +224,31 @@ class CustomTable extends React.Component {
   render () {
     return (
       <LocaleProvider locale={enUS}>
-        <div>
-          <Table
-            pagination={false}
-            scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
-            columns={this.columns()}
-            dataSource={this.filterBody}
-            />
-          {this.props.subContent.length > 0 &&
-            <div className="subcontent-table">
-              <div className='action-bar' style={{ paddingBottom: 10 }}>
-                <h2>{this.props.header}</h2>
-              </div>
+          <div>
               <Table
-                pagination={false}
-                scroll={{ x: 120, y: '20vh' }}
-                columns={Object.keys(this.props.subContent[0]).map(key => ({
-                  title: <div style={{ padding: '5px 5px',
-                    border: '0.5px #ccc solid',
-                  }}>{key}</div>,
-                  key,
-                  dataIndex: key,
-                  width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
-                }))}
-                dataSource={this.props.subContent}
-                />
+                  pagination={false}
+                  scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
+                  columns={this.columns()}
+                  dataSource={this.filterBody}
+              />
+              {this.props.subContent.length > 0 &&
+                  <div className="subcontent-table">
+                      <div className='action-bar' style={{ paddingBottom: 10 }}>
+                          <h2>{this.props.header}</h2>
+                      </div>
+                      <Table
+                          pagination={false}
+                          scroll={{ x: 120, y: '20vh' }}
+                          columns={Object.keys(this.props.subContent[0]).map(key => ({
+                              title: <div style={{ padding: '5px 5px',
+                                  border: '0.5px #ccc solid',
+                              }}>{key}</div>,
+                              key,
+                              dataIndex: key,
+                              width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
+                          }))}
+                          dataSource={this.props.subContent}
+                      />
             </div>
           }
         </div>

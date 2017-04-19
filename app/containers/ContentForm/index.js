@@ -88,6 +88,7 @@ class ContentForm extends React.Component {
     })
   }
   rowClicked(id) {
+    console.log(this.props.type);
     switch (this.props.type) {
       case 'Quotation': {
         return post('/api/sales/quotation/line', {'quotation_id': id })
@@ -106,7 +107,12 @@ class ContentForm extends React.Component {
         .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
       }
       case 'Good Receipt': {
-        return post('/api/inventory/gr/line', {'good_receipt_id':id})
+        //post('/api/purchase/line', {'purchase_id':id})
+        return post('/api/inventory/gr/line', {'inventory_id':id})
+        .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
+      }
+      case 'Choose GoodReceipt': {
+        return post('/api/purchase/line', {'purchase_id':id})
         .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
       }
       default: return this.setState({ subContent: [] })
@@ -119,7 +125,8 @@ class ContentForm extends React.Component {
       case 'Sales Order': return 'Sales Order Line(s)'
       case 'Purchase Order': return 'Purchase Order Line(s)'
       case 'Delivery Order': return 'Delivery Order Line(s)'
-      case 'Good Receipt': return 'Delivery Order Line(s)'
+      case 'Good Receipt': return 'Good Receipt Line(s)'
+      case 'Choose GoodReceipt': return 'Purchase Line(s)'
       default: return ''
     }
   }
@@ -134,15 +141,16 @@ class ContentForm extends React.Component {
       return <div></div>
     }
     return (<div>
-      <Table
-        toggleItem={item => this.toggleItem(item)}
-        selected={this.selectedId}
-        header={this.subContentHeader}
-        rowClicked={id => this.rowClicked(id)}
-        content={this.props.content || []}
-        columns={this.columns}
-        subContent={this.state.subContent}
-        type={this.props.type}
+        <Table
+            toggleItem={item => this.toggleItem(item)}
+            selected={this.selectedId}
+            header={this.subContentHeader}
+            rowClicked={id => this.rowClicked(id)}
+            content={this.props.content || []}
+            columns={this.columns}
+            subContent={this.state.subContent}
+            type={this.props.type}
+            isFromCreate= {this.props.isFromCreate}
         />
     </div>)
   }

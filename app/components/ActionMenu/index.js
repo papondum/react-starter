@@ -288,14 +288,14 @@ class ActionMenu extends React.Component {
           createAction:()=>this.props.setContent((<Content
               contentHeader = {this.state.openedTab}
               isChooser= {true}
+              checkedSingleItem={(item)=>this.props.checkedSingleItem(item)}
               mainContent={this.state.mainContent}
               activePage={this.props.tab.activeTabs}
-              getContent={(item)=>this._getContent(item)}
+              getContent={(item)=>this.props.getContent(item)}
               setContent={(item)=>this.setContent(item)}
               editItem = {this.state.editItem}
               get = {(url)=>get(url)}
                                                   />)),
-          // createAction:()=> this.showCreateGoodReceipt(),
           editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           copyAction:'',
           deleteAction:()=>this.showDeleteModal(),
@@ -316,21 +316,7 @@ class ActionMenu extends React.Component {
       level: type
     })
   }
-
-  // createGoodReceiptSelect(type){
-  //   if(type=='withRef'){
-  //
-  //   }
-  //   else if(type=='withoutRef'){
-  //     this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)}/>))
-  //   }
-  //   else{
-  //     console.log(type);
-  //   }
-  // }
-
   render() {
-    console.log(this.props.selected)
     return(
       <div className='flex action-bar' >
           <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
@@ -351,20 +337,7 @@ class ActionMenu extends React.Component {
           </div>
 
           <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
-          {/* <Modal show = {this.state.showCreateModal.show} options = {this.state.showCreateModal}>
-              <div>
-              <div className = 'modal-content-body'>
-              <div className = 'top-content modal-selector'>
-              <select ref = {'createType'} value = {this.state.eFilmType}  >
-              <option  value = {'withoutRef'}>{'Create without reference'}</option>
-              </select>
-              </div>
-              </div>
-              <div className = 'modal-content-bot actions button'>
-              <button className = 'material-btn confirm-style' onClick ={()=>this.createGoodReceiptSelect(this.refs['createType'].value)}>Next ></button>
-              </div>
-              </div>
-          </Modal> */}
+
       </div>)
     }
   }
