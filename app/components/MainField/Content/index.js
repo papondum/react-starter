@@ -5,6 +5,7 @@ import ActionMenu from '../../ActionMenu'
 import cancelIcon from '../../../resource/Icon/button_cancel.png'
 import nextIcon from '../../../resource/Icon/button_next.png'
 import ActionSubMenu from '../../ActionSubMenu'
+import GoodReceipt from '../../ActionPage/Inventory/GoodReceipt'
 import './style.scss'
 class Content extends React.Component {
   constructor(props) {
@@ -29,12 +30,13 @@ class Content extends React.Component {
   pageChecker(){
     if(this.props.mainContent.length != undefined){
       if(this.props.isChooser){
+
         return <div>
             <div className='page-head'>
                 <h2>Create - Good Reciept - Choose Purchase Order</h2>
                 <div className='action-group-btn'>
                     <button  onClick = {()=>this.props.getContent('Good Receipt')}><img src={cancelIcon}/><p>Cancel</p></button>
-                    <button ><img src={nextIcon}/><p>Next</p></button>
+                    <button onClick ={()=>this.props.setContent((<GoodReceipt type='create' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>))}><img src={nextIcon}/><p>Next</p></button>
                 </div>
             </div>
             <ContentForm

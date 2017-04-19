@@ -46,6 +46,7 @@ class GoodReceipt extends React.Component {
           // state_email:'',
           // state_ponumber: '',
           // state_shipto: '',
+          state_supplier: '',
           state_invoice: '',
           state_lc: '',
           state_reference: '',
@@ -342,7 +343,7 @@ class GoodReceipt extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
-      this.props.type=='edit'? this._getEditItem():''
+      this.props.type=='edit'? this._getEditItem():this._getCreateItem()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
@@ -352,11 +353,16 @@ class GoodReceipt extends React.Component {
       post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
-        console.log(response);
-        console.log(this.props.editItem);
       })
 
     }
+     _getCreateItem(){
+          post('/api/inventory/gr/pre_create', {purchase_id: +this.props.editItem})
+          .then((response)=>{
+            this._setInitialVal(response)
+          })
+
+      }
 
     _setInitialEditContent(){
       let childList = this.state.childItem
@@ -415,13 +421,14 @@ class GoodReceipt extends React.Component {
       let item = res[0]
       let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
       //let pricelist = this.state.priceList.find((i) => i.value==item.pricelist_id)
-      console.log('//(GoodRec)###pls put iniatial for unset###');
+      console.log(item);
       this.setState({
         // state_contact:item.customer ? item.customer.contact:item.contact,
         // state_tel: item.customer ? item.customer.tel:item.tel ,
         // state_fax: item.customer ? item.customer.fax:item.fax,
         // state_email: item.customer? item.customer.email:item.email,
         // state_time: '',
+        state_supplier: item.supplier_name,
         state_invoice: item.invoice || '',
         state_lc: item.lc || '',
         state_reference: item.reference || '',
@@ -439,7 +446,6 @@ class GoodReceipt extends React.Component {
         childItem: item.contents,
         selectedCustomer: item.customer_id,
       })
-      this.refs['discount'].value = item.discount ||0
       this._setInitialEditContent()
     }
 
@@ -672,16 +678,7 @@ class GoodReceipt extends React.Component {
           <div className='flex flex-1 flex-col'>
               <div className='input-box flex'>
                   <label>Supplier :</label>
-                  {console.log('//(GoodRec)###supplier selector now is customer###')}
-                  <Select
-                      name="customer"
-                      ref = 'customer'
-                      value={this.state.selectedCustomer}
-                      options={this.state.customerList}
-                      onChange={this.updateSelectedCustomer}
-                      className = 'selector-class'
-                      autosize = {true}
-                  />
+                  <input className='flex' type="text" ref='supplier' disabled value = {this.state.state_supplier} onChange={()=>this.updateParam('supplier')}/>
               </div>
               <div className='input-box flex'>
                   <label>Invoice :</label>
@@ -700,12 +697,12 @@ class GoodReceipt extends React.Component {
               <div className='input-box flex'>
                   <label>ETD:</label>
                   {/* <input className='flex' type="text" ref='ponumber' value = {this.state.state_ponumber} onChange={()=>this.updateParam('ponumber')}/> */}
-                  <input className='flex' type="date" ref='etd' value = {this.state.state_etd} onChange={()=>this.updateParam('etd')}/>
+                  <input className='flex' type="date" ref='etd' disabled value = {this.state.state_etd} />
               </div>
               <div className='input-box flex'>
                   <label>ETA:</label>
                   {/* <input className='flex' type="text" ref='shipto' value = {this.state.state_shipto} onChange={()=>this.updateParam('shipto')}/> */}
-                  <input className='flex' type="date" ref='eta' value = {this.state.state_eta} onChange={()=>this.updateParam('eta')}/>
+                  <input className='flex' type="date" ref='eta' disabled value = {this.state.state_eta} />
               </div>
           </div>
 
@@ -716,8 +713,7 @@ class GoodReceipt extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Buyer :</label>
-                  {console.log('//(GoodRec)###Pls put buyer selector###')}
-                  <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>{this.state.saleList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>
+                  <input className='flex' type="text" ref='buyer' disabled value = {this.state.state_buyer}/>
                   {/*<select ref = 'buyer' value = {this.state.state_buyer} onChange={()=>this.updateParam('buyer')}>{this.state.saleList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>*/}
               </div>
           </div>

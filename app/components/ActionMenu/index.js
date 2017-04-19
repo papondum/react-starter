@@ -292,8 +292,8 @@ class ActionMenu extends React.Component {
               mainContent={this.state.mainContent}
               activePage={this.props.tab.activeTabs}
               getContent={(item)=>this.props.getContent(item)}
-              setContent={(item)=>this.setContent(item)}
-              editItem = {this.state.editItem}
+              setContent={(item)=>this.props.setContent(item)}
+              editItem = {this.props.editItem}
               get = {(url)=>get(url)}
                                                   />)),
           editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),

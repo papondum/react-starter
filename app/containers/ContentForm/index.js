@@ -88,7 +88,6 @@ class ContentForm extends React.Component {
     })
   }
   rowClicked(id) {
-    console.log(this.props.type);
     switch (this.props.type) {
       case 'Quotation': {
         return post('/api/sales/quotation/line', {'quotation_id': id })
