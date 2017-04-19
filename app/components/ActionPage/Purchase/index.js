@@ -1109,7 +1109,7 @@ class Purchase extends React.Component {
               <div className = 'flex create-quo-btm'>
                   <div className = 'flex-1'>
                       <p>Remarks</p>
-                      <textarea rows="5" cols="40" ref = 'remark' value= {this.state.remark} />
+                      <textarea rows="5" cols="40" ref = 'remark'/>
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
