@@ -227,14 +227,14 @@ class CustomTable extends React.Component {
           <div>
               <Table
                   pagination
-                  scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
+                  scroll={{ x: 120, y: this.props.subContent.length > 0 ? '25vh' : '60vh' }}
                   columns={this.columns()}
                   dataSource={this.filterBody.concat(this.filterBody).concat(this.filterBody)}
               />
               {this.props.subContent.length > 0 &&
                   <div className="subcontent-table">
                       <div className='action-bar' style={{ paddingBottom: 10 }}>
-                          <h2>{this.props.header}</h2>
+                          <h2 style={{ marginTop: 0 }}>{this.props.header}</h2>
                       </div>
                       <Table
                           pagination={false}
