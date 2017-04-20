@@ -838,19 +838,21 @@ class Quotation extends React.Component {
     ifChecked(id){
       if(this.refs["checkbox"+id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs["checkbox"+id].value)==undefined){
-          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])})
+          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])},()=>{console.log(this.state.checkedItem)})
         }
       }
       else{
           var array = this.state.checkedItem;
-          var index = array.indexOf(this.refs["checkbox"+id].value)
+          var elementPos = array.map((x) => x.id ).indexOf(id);
+          var objectFound = array[elementPos];
+          // var index = array.indexOf(this.refs["checkbox"+id].value)
           for (var i = 0; i < array.length; i++) {
-            if(array[i].id==this.refs["checkbox"+id].value){
+            if(array[i].id==objectFound.id){
               array.splice(i, 1);
             }
           }
 
-          this.setState({checkedItem: array });
+          this.setState({checkedItem: array },()=>console.log(this.state.checkedItem));
         }
     }
     deleteSelectedChild(){

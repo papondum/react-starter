@@ -430,23 +430,6 @@ class Purchase extends React.Component {
       this.setState({total: total})
     }
 
-    getBasedPrice(id){
-      if(this.state.basedPrice){
-      post('/api/sales/quotation/based_price',{
-        "filmtype_id": this.refs['filmType'+id].value||'',
-        "brand_id": this.refs['brandType'+id].value,
-        "grade_id": this.refs['gradeType'+id].value,
-        "thickness": this.refs['thickNess'+id].value,
-        "length": this.refs['length'+id].value,
-        "pricelist_id": this.refs['priceListId'].value })
-        .then((response)=>{
-          this.setState({basedPrice:response})
-        })
-        .catch(err=>console.log(err))
-        return this.state.basedPrice
-      }
-    }
-
     componentDidMount(){
       this.getSupplierList()
       this.getCustomerList()
@@ -1041,7 +1024,8 @@ class Purchase extends React.Component {
 
     clearValueInContent(arrCheckedItem){
       for (let i = 0;i < arrCheckedItem.length ; i++){
-        let {eBrandType,eGradeType,eThick,eLength,eRemark,eWeight,eUnitprice,eWidth,eOrderqty}  = this.state;
+        let {eFilmType,eBrandType,eGradeType,eThick,eLength,eRemark,eWeight,eUnitprice,eWidth,eOrderqty}  = this.state;
+        delete eFilmType[arrCheckedItem[i].id]
         delete eBrandType[arrCheckedItem[i].id]
         delete eGradeType[arrCheckedItem[i].id]
         delete eThick[arrCheckedItem[i].id]

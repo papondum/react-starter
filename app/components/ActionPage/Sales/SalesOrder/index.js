@@ -39,7 +39,7 @@ class SalesOrder extends React.Component {
           selectedTab: 'General',
           filmType: '',
           filmList:[],
-          childItem: [{id:'0001'}],
+          childItem: [], //{id:'0001'}
           state_contact: '',
           state_tel: '',
           state_fax: '',
@@ -716,19 +716,21 @@ class SalesOrder extends React.Component {
     ifChecked(id){
       if(this.refs["checkbox"+id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs["checkbox"+id].value)==undefined){
-          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])})
+          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])},()=>{console.log(this.state.checkedItem)})
         }
       }
       else{
           var array = this.state.checkedItem;
-          var index = array.indexOf(this.refs["checkbox"+id].value)
+          var elementPos = array.map((x) => x.id ).indexOf(id);
+          var objectFound = array[elementPos];
+          // var index = array.indexOf(this.refs["checkbox"+id].value)
           for (var i = 0; i < array.length; i++) {
-            if(array[i].id==this.refs["checkbox"+id].value){
+            if(array[i].id==objectFound.id){
               array.splice(i, 1);
             }
           }
 
-          this.setState({checkedItem: array });
+          this.setState({checkedItem: array },()=>console.log(this.state.checkedItem));
         }
     }
 
@@ -782,33 +784,43 @@ class SalesOrder extends React.Component {
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
-                    {this.getLengthOption(i.id)}
-                </select>
-                    </td>
-                        <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
-                            <td><input onChange = {() => this.onChangeUpdate({},'thisweight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
-                            <td>0</td>
-                            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
-                            <td>
-                                <input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/>
-                            </td>
-                            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
-                    </tr>)
-                    })
-                    return result
-                }
+              <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
+                  {this.getLengthOption(i.id)}
+              </select>
+            </td>
+            <td><input type='number' ref = {'order_qty'+i.id}  value = {this.state.eOrderqty[i.id]} onChange = {() => this.onChangeUpdate({},'orderqty', i.id)}/></td>
+            <td><input onChange = {() => this.onChangeUpdate({},'thisweight', i.id)} value = {this.state.eWeight[i.id]} type='number' ref = {'weight'+i.id}/></td>
+            <td>0</td>
+            <td><input onChange = {() => this.onChangeUpdate({},'unitprice', i.id)} value = {this.state.eUnitprice[i.id]}  type='number' ref = {'unitPrice'+i.id}/></td>
+            <td>
+                <input disabled type='number' value = {getSubtotal(this.state.eWeight[i.id], this.state.eUnitprice[i.id])} ref = {'subTotal'+i.id}/>
+            </td>
+            <td><input onChange = {() => this.onChangeUpdate({},'remark', i.id)} type='text' ref = {'remark'+i.id}value = {this.state.eRemark[i.id]} /></td>
+        </tr>)
+        })
+        return result
+    }
 
-                    addChild(){
-                        let items = this.state.childItem
-                        let idNo = ''+(items.length+1)+''
-                        if(idNo.length<4){
-                            for (var i = 0; i < 6-idNo.length; i++) {;
-                                idNo = "0" + idNo
-                            }
-                        }
+    addChild(){
+      let items = this.state.childItem
+      console.log("items",items);
+        let idNo;
+      if(this.state.childItem.length == 0){
+        idNo = ''+(items.length+1)+''
+      }
+      else{
+        idNo = ''+(parseInt(items[items.length -1].id)+ 1)+''
+      }
+      console.log("idNo",idNo);
+      if(idNo.length<4){
+        for (var i = 0; i < 6-idNo.length; i++) {
+          idNo = "0" + idNo
+        }
+      }
       let newObj = {'id':idNo}
+      console.log("newObj",newObj);
       let newArr = items.concat(newObj)
+      console.log("newArr",newArr);
       this.setState({childItem:newArr})
     }
 
@@ -998,6 +1010,53 @@ class SalesOrder extends React.Component {
       }
     }
 
+    deleteSelectedChild(){
+      console.log("Check Item",this.state.checkedItem);
+      console.log("childItem",this.state.childItem);
+      this.clearValueInContent(this.state.checkedItem)
+      if(this.state.checkedItem.length != 0){
+        let arrCheckedItem = this.state.checkedItem.map((element)=>{
+          return element.id
+        })
+        let arrChildItem = this.state.childItem
+        let newArrayChildItem = this.state.childItem.slice()
+        newArrayChildItem = newArrayChildItem.map((element,index)=>{
+          if(arrCheckedItem.find((checked)=> element.id == checked)){
+            return -1
+          }
+          else{
+            return element
+          }
+        })
+        for (let i = 0;i < arrCheckedItem.length; i++){
+          let start = newArrayChildItem.findIndex((element) => element === -1 )
+          console.log(start);
+          newArrayChildItem.splice(start,1)
+          console.log("newArrayChildItem",newArrayChildItem);
+        }
+        this.setState({
+          childItem : newArrayChildItem,
+          checkedItem : []
+        })
+      }
+    }
+
+    clearValueInContent(arrCheckedItem){
+      for (let i = 0;i < arrCheckedItem.length ; i++){
+        let {eFilmType, eBrandType,eGradeType,eThick,eLength,eRemark,eWeight,eUnitprice,eWidth,eOrderqty}  = this.state;
+        delete eFilmType[arrCheckedItem[i].id]
+        delete eBrandType[arrCheckedItem[i].id]
+        delete eGradeType[arrCheckedItem[i].id]
+        delete eThick[arrCheckedItem[i].id]
+        delete eLength[arrCheckedItem[i].id]
+        delete eRemark[arrCheckedItem[i].id]
+        delete eWeight[arrCheckedItem[i].id]
+        delete eUnitprice[arrCheckedItem[i].id]
+        delete eWidth[arrCheckedItem[i].id]
+        delete eOrderqty[arrCheckedItem[i].id]
+      }
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -1040,7 +1099,7 @@ class SalesOrder extends React.Component {
                   <div className='tab-quo active'>Content</div>
                   <div className='action-group-btn-content'>
                       <button onClick = {()=>this.addChild()}><img src={createIcon}/></button>
-                      <button><img src={deleteIcon}/></button>
+                      <button onClick={() => this.deleteSelectedChild()}><img src={deleteIcon}/></button>
                   </div>
               </div>
               <div className = 'content-quo-table'>
