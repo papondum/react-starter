@@ -716,7 +716,6 @@ class Purchase extends React.Component {
 
     getChildItem(){
       let items = this.state.childItem
-      console.log(this.state.childItem);
       let result = items.map((i, index)=>{
         let genArg = (arr,id)=>{
           //return as object filmType:val brandType:val
