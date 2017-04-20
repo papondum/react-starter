@@ -4,30 +4,6 @@
   overflow: auto;
   height: calc(100% - 115px);
 }
-// table {
-//   border-collapse: collapse;
-//   tbody {
-//     tr:nth-child(odd){background-color: #eeeff7}
-//     tr:nth-child(even){background-color: #ffffff}
-//   }
-//
-//   tr{
-//     td{
-//       padding: 3px 8px;
-//       font-size: 14px;
-//       color:#5e5e5e;
-//     }
-//   }
-//   thead{
-//     border-bottom: 2px solid #e0e0e0;
-//     padding: 3px 8px;
-//     td{
-//       font-weight: 600;
-//       font-size:14px;
-//       color:#454545;
-//     }
-//   }
-// }
 
 .clickable-item {
   cursor:pointer;
@@ -206,4 +182,9 @@ table.scroll {
 th {
   white-space: nowrap;
   overflow: hidden;
+}
+.ant-pagination {
+  li {
+    line-height: 25px !important;
+  }
 }
