@@ -229,7 +229,7 @@ class CustomTable extends React.Component {
                   pagination
                   scroll={{ x: 120, y: this.props.subContent.length > 0 ? '25vh' : '60vh' }}
                   columns={this.columns()}
-                  dataSource={this.filterBody.concat(this.filterBody).concat(this.filterBody)}
+                  dataSource={this.filterBody}
               />
               {this.props.subContent.length > 0 &&
                   <div className="subcontent-table">

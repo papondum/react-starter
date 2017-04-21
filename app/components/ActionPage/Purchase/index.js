@@ -703,7 +703,6 @@ class Purchase extends React.Component {
           var array = this.state.checkedItem;
           var elementPos = array.map((x) => x.id ).indexOf(id);
           var objectFound = array[elementPos];
-          // var index = array.indexOf(this.refs["checkbox"+id].value)
           for (var i = 0; i < array.length; i++) {
             if(array[i].id==objectFound.id){
               array.splice(i, 1);
@@ -716,7 +715,6 @@ class Purchase extends React.Component {
 
     getChildItem(){
       let items = this.state.childItem
-      console.log(this.state.childItem);
       let result = items.map((i, index)=>{
         let genArg = (arr,id)=>{
           //return as object filmType:val brandType:val
