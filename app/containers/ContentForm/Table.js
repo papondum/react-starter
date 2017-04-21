@@ -247,33 +247,33 @@ class CustomTable extends React.Component {
   render () {
     return (
       <LocaleProvider locale={enUS}>
-        <div>
-          <Table
-            pagination={false}
-            scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
-            columns={this.columns}
-            dataSource={this.filterBody}
-            />
-          {this.props.subContent.length > 0 &&
-            <div className="subcontent-table">
-              <div className='action-bar' style={{ paddingBottom: 10 }}>
-                <h2 style={{ marginTop: 0 }}>{this.props.header}</h2>
-              </div>
+          <div>
               <Table
-                pagination={false}
-                scroll={{ x: 120, y: '20vh' }}
-                columns={Object.keys(this.props.subContent[0]).map(key => ({
-                  title: <div style={{ padding: '5px 5px',
-                    border: '0.5px #ccc solid',
-                  }}>{key}</div>,
-                  key,
-                  dataIndex: key,
-                  width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
-                }))}
-                dataSource={this.props.subContent}
-                />
-            </div>
-          }
+                  pagination={true}
+                  scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
+                  columns={this.columns}
+                  dataSource={this.filterBody}
+              />
+              {this.props.subContent.length > 0 &&
+                  <div className="subcontent-table">
+                      <div className='action-bar' style={{ paddingBottom: 10 }}>
+                          <h2 style={{ marginTop: 0 }}>{this.props.header}</h2>
+                      </div>
+                      <Table
+                          pagination={true}
+                          scroll={{ x: 120, y: '20vh' }}
+                          columns={Object.keys(this.props.subContent[0]).map(key => ({
+                              title: <div style={{ padding: '5px 5px',
+                                  border: '0.5px #ccc solid',
+                              }}>{key}</div>,
+                              key,
+                              dataIndex: key,
+                              width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
+                          }))}
+                          dataSource={this.props.subContent}
+                      />
+                  </div>
+              }
         </div>
       </LocaleProvider>
     )
