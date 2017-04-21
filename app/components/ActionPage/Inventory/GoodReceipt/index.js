@@ -77,7 +77,7 @@ class GoodReceipt extends React.Component {
           break;
         case  'eReceive':
           var stateRe = this.state[state];
-          stateRe[id] =  this.refs['recieve'+id].value
+          stateRe[id] =  this.refs['receive'+id].value
           this.setState({eRemark:stateRe})
           break;
 
@@ -92,7 +92,7 @@ class GoodReceipt extends React.Component {
         case 'remark':
           this._updateStateSelector(id, 'eRemark')
           break;
-        case 'recieve':
+        case 'receive':
           this._updateStateSelector(id, 'eReceive')
           break;
         default:
@@ -192,7 +192,7 @@ class GoodReceipt extends React.Component {
             return Object.assign({},{
               po_line_id:i.id,
               content:{
-                receive_quantity: this.refs['recieve'+i.id].value,
+                receive_quantity: this.refs['receive'+i.id].value,
                 remark: this.refs['remark'+i.id].value,
               }
           })

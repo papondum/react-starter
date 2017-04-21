@@ -430,23 +430,6 @@ class Purchase extends React.Component {
       this.setState({total: total})
     }
 
-    getBasedPrice(id){
-      if(this.state.basedPrice){
-      post('/api/sales/quotation/based_price',{
-        "filmtype_id": this.refs['filmType'+id].value||'',
-        "brand_id": this.refs['brandType'+id].value,
-        "grade_id": this.refs['gradeType'+id].value,
-        "thickness": this.refs['thickNess'+id].value,
-        "length": this.refs['length'+id].value,
-        "pricelist_id": this.refs['priceListId'].value })
-        .then((response)=>{
-          this.setState({basedPrice:response})
-        })
-        .catch(err=>console.log(err))
-        return this.state.basedPrice
-      }
-    }
-
     componentDidMount(){
       this.getSupplierList()
       this.getCustomerList()
@@ -696,7 +679,7 @@ class Purchase extends React.Component {
     ifChecked(id){
       if(this.refs["checkbox"+id].checked){
         if(this.state.checkedItem.find((i) => i==this.refs["checkbox"+id].value)==undefined){
-          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])},()=>{console.log(this.state.checkedItem)})
+          this.setState({checkedItem: this.state.checkedItem.concat([{id:id}])})
         }
       }
       else{
@@ -709,7 +692,7 @@ class Purchase extends React.Component {
             }
           }
 
-          this.setState({checkedItem: array },()=>console.log(this.state.checkedItem));
+          this.setState({checkedItem: array });
         }
     }
 
@@ -780,24 +763,20 @@ class Purchase extends React.Component {
 
     addChild(){
       let items = this.state.childItem
-      console.log("items",items);
-        let idNo;
+      let idNo;
       if(this.state.childItem.length == 0){
         idNo = ''+(items.length+1)+''
       }
       else{
         idNo = ''+(parseInt(items[items.length -1].id)+ 1)+''
       }
-      console.log("idNo",idNo);
       if(idNo.length<4){
         for (var i = 0; i < 6-idNo.length; i++) {
           idNo = "0" + idNo
         }
       }
       let newObj = {'id':idNo}
-      console.log("newObj",newObj);
       let newArr = items.concat(newObj)
-      console.log("newArr",newArr);
       this.setState({childItem:newArr})
     }
 
@@ -1008,8 +987,6 @@ class Purchase extends React.Component {
     }
 
     deleteSelectedChild(){
-      console.log("Check Item",this.state.checkedItem);
-      console.log("childItem",this.state.childItem);
       this.clearValueInContent(this.state.checkedItem)
       if(this.state.checkedItem.length != 0){
         let arrCheckedItem = this.state.checkedItem.map((element)=>{
@@ -1027,9 +1004,7 @@ class Purchase extends React.Component {
         })
         for (let i = 0;i < arrCheckedItem.length; i++){
           let start = newArrayChildItem.findIndex((element) => element === -1 )
-          console.log(start);
           newArrayChildItem.splice(start,1)
-          console.log("newArrayChildItem",newArrayChildItem);
         }
         this.setState({
           childItem : newArrayChildItem,
@@ -1040,7 +1015,8 @@ class Purchase extends React.Component {
 
     clearValueInContent(arrCheckedItem){
       for (let i = 0;i < arrCheckedItem.length ; i++){
-        let {eBrandType,eGradeType,eThick,eLength,eRemark,eWeight,eUnitprice,eWidth,eOrderqty}  = this.state;
+        let {eFilmType,eBrandType,eGradeType,eThick,eLength,eRemark,eWeight,eUnitprice,eWidth,eOrderqty}  = this.state;
+        delete eFilmType[arrCheckedItem[i].id]
         delete eBrandType[arrCheckedItem[i].id]
         delete eGradeType[arrCheckedItem[i].id]
         delete eThick[arrCheckedItem[i].id]

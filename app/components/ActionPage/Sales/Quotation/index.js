@@ -39,7 +39,7 @@ class Quotation extends React.Component {
           eRemark: {},
           eUnitprice: {},
           filmList:[],
-          childItem: [{id:'0001'}],
+          childItem: [], //{id:'0001'}
           currentChild: 1,
           state_contact:'',
           state_tel:'',
@@ -694,9 +694,14 @@ class Quotation extends React.Component {
 
 
     addChild(){
-      let currentChild = this.state.currentChild
       let items = this.state.childItem
-      let idNo = ''+(currentChild+1)+''
+      let idNo;
+      if(this.state.childItem.length == 0){
+        idNo = ''+(items.length+1)+''
+      }
+      else{
+        idNo = ''+(parseInt(items[items.length -1].id)+ 1)+''
+      }
       if(idNo.length<4){
         for (var i = 0; i < 6-idNo.length; i++) {
           idNo = "0" + idNo
@@ -705,7 +710,6 @@ class Quotation extends React.Component {
       let newObj = {'id':idNo}
       let newArr = items.concat(newObj)
       this.setState({childItem:newArr})
-      this.setState({currentChild:currentChild+1})
     }
 
     updateSelectedCustomer(newVal) {
@@ -835,9 +839,11 @@ class Quotation extends React.Component {
       }
       else{
           var array = this.state.checkedItem;
-          var index = array.indexOf(this.refs["checkbox"+id].value)
+          var elementPos = array.map((x) => x.id ).indexOf(id);
+          var objectFound = array[elementPos];
+          // var index = array.indexOf(this.refs["checkbox"+id].value)
           for (var i = 0; i < array.length; i++) {
-            if(array[i].id==this.refs["checkbox"+id].value){
+            if(array[i].id==objectFound.id){
               array.splice(i, 1);
             }
           }
@@ -845,10 +851,47 @@ class Quotation extends React.Component {
           this.setState({checkedItem: array });
         }
     }
-    deleteSelectedContent(){
-      console.log('childList::', this.state.childItem)
-      console.log('checkedLL::', this.state.checkedItem);
+    deleteSelectedChild(){
+      this.clearValueInContent(this.state.checkedItem)
+      if(this.state.checkedItem.length != 0){
+        let arrCheckedItem = this.state.checkedItem.map((element)=>{
+          return element.id
+        })
+        let arrChildItem = this.state.childItem
+        let newArrayChildItem = this.state.childItem.slice()
+        newArrayChildItem = newArrayChildItem.map((element,index)=>{
+          if(arrCheckedItem.find((checked)=> element.id == checked)){
+            return -1
+          }
+          else{
+            return element
+          }
+        })
+        for (let i = 0;i < arrCheckedItem.length; i++){
+          let start = newArrayChildItem.findIndex((element) => element === -1 )
+          newArrayChildItem.splice(start,1)
+        }
+        this.setState({
+          childItem : newArrayChildItem,
+          checkedItem : []
+        })
+      }
     }
+
+    clearValueInContent(arrCheckedItem){
+      for (let i = 0;i < arrCheckedItem.length ; i++){
+        let {eFilmType, eBrandType,eGradeType,eThick,eLength,eRemark,eWeight,eUnitprice}  = this.state;
+        delete eFilmType[arrCheckedItem[i].id]
+        delete eBrandType[arrCheckedItem[i].id]
+        delete eGradeType[arrCheckedItem[i].id]
+        delete eThick[arrCheckedItem[i].id]
+        delete eLength[arrCheckedItem[i].id]
+        delete eRemark[arrCheckedItem[i].id]
+        delete eWeight[arrCheckedItem[i].id]
+        delete eUnitprice[arrCheckedItem[i].id]
+      }
+    }
+
     render() {
         return(
           <div className='page-style'>
@@ -880,7 +923,7 @@ class Quotation extends React.Component {
                   <div className='tab-quo active'>Content</div>
                   <div className='action-group-btn-content'>
                       <button onClick = {()=> this.addChild()}><img src={createIcon}/></button>
-                      <button onClick = {()=> this.deleteSelectedContent()}><img src={deleteIcon}/></button>
+                      <button onClick = {()=> this.deleteSelectedChild()}><img src={deleteIcon}/></button>
                   </div>
               </div>
               <div className = 'content-quo-table'>
