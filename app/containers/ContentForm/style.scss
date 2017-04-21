@@ -207,3 +207,32 @@ th {
   white-space: nowrap;
   overflow: hidden;
 }
+
+.column-title {
+  padding: 5px;
+  position: relative;
+  border: 0.5px #ccc solid;
+  .column-icon {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: -1px;
+    top: -1px;
+    bottom: 0px;
+  }
+  .icon {
+    color: #EFEFF7;
+    width: 20px;
+    padding: 10px 7px;
+    font-size: 8px;
+    background: #85B3E4;
+  }
+}
+.active {
+  display: block !important;
+}
+.column-title:hover {
+  .column-icon {
+    display: block;
+  }
+}

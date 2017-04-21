@@ -10,25 +10,26 @@ const Option = Select.Option;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
-const OverlayMenu = ({ onClick, columns, unselected }) => (
-  <Menu onClick={onClick}>
-      <Menu.Item key="asc"><Icon type="arrow-up" /> Sort Ascending</Menu.Item>
-      <Menu.Item key="desc"><Icon type="arrow-down" /> Sort Descending</Menu.Item>
-      <SubMenu key="filter" title={[<Icon type="filter" />, <span>Filter using</span>]}>
-          <MenuItemGroup>
-              <Menu.Item key="equal">Equal</Menu.Item>
-              <Menu.Item key="not equal">Not equal</Menu.Item>
-              <Menu.Item key="less than">Less than</Menu.Item>
-              <Menu.Item key="greater than">Greater than</Menu.Item>
-              <Menu.Item key="less than or">Less than or equal to</Menu.Item>
-              <Menu.Item key="greater than or">Greater than or equal to</Menu.Item>
-          </MenuItemGroup>
-      </SubMenu>
-      <SubMenu key="columns" title={[<Icon type="layout" />, <span>Column</span>]}>
-          <MenuItemGroup>
-              {columns.map(column => {
-                  return <Menu.Item key={column}><input type="checkbox" checked={!unselected.includes(column)} /> {column}</Menu.Item>
-              })}
+const OverlayMenu = ({ onClick, columns, unselected, isSorting }) => (
+  <Menu key="menu" onClick={onClick} selectedKeys={[]}>
+    <Menu.Item key="asc"><Icon type="arrow-up" /> Sort Ascending</Menu.Item>
+    <Menu.Item key="desc"><Icon type="arrow-down" /> Sort Descending</Menu.Item>
+    {isSorting && <Menu.Item key="clear"><Icon /> Clear Sort</Menu.Item>}
+    <SubMenu key="filter" title={[<Icon type="filter" />, <span>Filter using</span>]}>
+      <MenuItemGroup key="sub">
+        <Menu.Item key="equal">Equal</Menu.Item>
+        <Menu.Item key="not equal">Not equal</Menu.Item>
+        <Menu.Item key="less than">Less than</Menu.Item>
+        <Menu.Item key="greater than">Greater than</Menu.Item>
+        <Menu.Item key="less than or">Less than or equal to</Menu.Item>
+        <Menu.Item key="greater than or">Greater than or equal to</Menu.Item>
+      </MenuItemGroup>
+    </SubMenu>
+    <SubMenu key="columns" title={[<Icon type="layout" />, <span>Column</span>]}>
+      <MenuItemGroup>
+        {columns.map(column => {
+          return <Menu.Item key={column}><input type="checkbox" checked={!unselected.includes(column)} /> {column}</Menu.Item>
+        })}
       </MenuItemGroup>
     </SubMenu>
   </Menu>
@@ -41,6 +42,7 @@ class CustomTable extends React.Component {
       filters: {},
       selected: [],
       columns: props.columns,
+      columnActive: null,
       bodyFilters: {
         sorting: {
           key: '',
@@ -80,39 +82,54 @@ class CustomTable extends React.Component {
       filters: {},
     })
   }
-  sortingMenu(key, value) {
+  sortingMenu(column, value) {
+    if (value.key === 'clear') {
+      return this.setState({
+        columnActive: null,
+        bodyFilters: Object.assign(this.state.bodyFilters, { sorting: { key: '', sort: 'asc'} })
+      })
+    }
     if (value.keyPath.includes('filter')) {
-      this.setState({
-        bodyFilters: Object.assign(this.state.bodyFilters, { filters: { ...this.state.bodyFilters.filters, [key]: value.key} })
+      const { filters } = this.state.bodyFilters
+      if (filters[column] === value.key) {
+        const newFilters = Object.keys(filters).filter(key => key !== column).reduce((p, c) => Object.assign(p, c) , {})
+        return this.setState({
+          columnActive: null,
+          bodyFilters: Object.assign(this.state.bodyFilters, { filters: newFilters })
+        })
+      }
+      return this.setState({
+        columnActive: null,
+        bodyFilters: Object.assign(this.state.bodyFilters, { filters: { ...this.state.bodyFilters.filters, [column]: value.key} })
       })
     } else if (value.keyPath.includes('columns')) {
       const { columns } = this.state.bodyFilters;
       if (columns.includes(value.key)) {
-        this.setState({
+        return this.setState({
+          columnActive: null,
           bodyFilters: Object.assign(this.state.bodyFilters, { columns: columns.filter(c => c !== value.key) })
         })
-      } else {
-        this.setState({
-          bodyFilters: Object.assign(this.state.bodyFilters, { columns: columns.concat(value.key).reduce(getUnique, []) })
-        })
       }
-    } else {
-      this.setState({
-        bodyFilters: Object.assign(this.state.bodyFilters, { sorting: { key, sort: value.key } })
+      return this.setState({
+        columnActive: null,
+        bodyFilters: Object.assign(this.state.bodyFilters, { columns: columns.concat(value.key).reduce(getUnique, []) })
       })
     }
+    return this.setState({
+      columnActive: null,
+      bodyFilters: Object.assign(this.state.bodyFilters, { sorting: { key: column, sort: value.key } })
+    })
   }
 
   get filterBody() {
     return this.props.content
     .filter(this.filterRow.bind(this))
+    .map(row => ({ ...row, key: row.id }))
     .sort(this.sorting.bind(this));
   }
   filterRow(row) {
-    // const result = Object.keys(row).map(key => fuzzysearch((this.state.filters[key] || '').toString(), (row[key] || '').toString()));
     const result = Object.keys(row).map(key => this.filterColumn(row, key))
     return result.every(r => r === true);
-    // return true;
   }
   filterColumn(row, key) {
     const { filters } = this.state.bodyFilters;
@@ -147,9 +164,9 @@ class CustomTable extends React.Component {
     }
     const { key, sort } = sorting;
     if (sort === 'asc') {
-      return a[key].localeCompare(b[key]);
+      return a[key].toString().localeCompare(b[key].toString());
     } else {
-      return b[key].localeCompare(a[key]);
+      return b[key].toString().localeCompare(a[key].toString());
     }
   }
   renderColumn(column) {
@@ -165,7 +182,6 @@ class CustomTable extends React.Component {
         style={{ width: 300 }}
         value={this.state.filters[column]}
         onChange={v => this.setFilterState([column], v || '')}
-        allowClear
         >
         {this.props.content.reduce((p, c) => p.includes(c[column]) ? p : p.concat(c[column]), []).map(c => <Option key = {c} value={c}>{c}</Option>)}
       </Select>
@@ -179,26 +195,33 @@ class CustomTable extends React.Component {
       }}
       className="filter-input" />
   }
-  columns() {
+  get columns() {
     const filterColumns = this.state.bodyFilters.columns
     const columns = this.props.columns.filter(column => !filterColumns.includes(column))
     return columns.map((column, index) => ({
       title: (
         <div key = {index}>
-            <div>
-                {this.renderColumn(column)}
+          <div>
+            {this.renderColumn(column)}
+          </div>
+          <div className="column-title">
+            {column}
+            {this.state.bodyFilters.sorting.key === column && <Icon type={this.state.bodyFilters.sorting.sort === 'asc' ? 'arrow-up' : 'arrow-down'} />}
+            <div className={this.state.columnActive === column ? "column-icon active" : "column-icon"}>
+              <Dropdown
+                trigger={['click']}
+                placement="bottomLeft"
+                onVisibleChange={isVisible => this.setState({ columnActive: isVisible ? column : null })}
+                overlay={<OverlayMenu
+                  key={column}
+                  isSorting={this.state.bodyFilters.sorting.key === column }
+                  onClick={e => this.sortingMenu(column, e)}
+                  columns={this.state.columns}
+                  unselected={this.state.bodyFilters.columns} />}
+                  ><div className="icon"><Icon type="caret-down" /></div>
+              </Dropdown>
             </div>
-            <div style={{ padding: '5px 5px',
-            border: '0.5px #ccc solid' }}>
-                <Dropdown
-                    placement="bottomLeft"
-                    overlay={<OverlayMenu
-                        onClick={e => this.sortingMenu(column, e)}
-                        columns={this.state.columns}
-                        unselected={this.state.bodyFilters.columns} />}
-                ><a className="ant-dropdown-link" href="#">{column}</a>
-                </Dropdown>
-            </div>
+          </div>
         </div>
       ),
       dataIndex: column,
@@ -207,10 +230,10 @@ class CustomTable extends React.Component {
       onCellClick: record => this.props.rowClicked(record.id),
       render: (t, record) => index === 0 ? (
         <div key={t}>
-            <input
-                onClick={() => this.props.toggleItem(record)}
-                type='checkbox'
-                checked={this.props.selected.includes(record.id)}
+          <input
+            onClick={() => this.props.toggleItem(record)}
+            type='checkbox'
+            checked={this.props.selected.includes(record.id)}
             />
           <span style={{ marginLeft: 10 }}>{t}</span>
         </div>
@@ -224,31 +247,31 @@ class CustomTable extends React.Component {
   render () {
     return (
       <LocaleProvider locale={enUS}>
-          <div>
+        <div>
+          <Table
+            pagination={false}
+            scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
+            columns={this.columns}
+            dataSource={this.filterBody}
+            />
+          {this.props.subContent.length > 0 &&
+            <div className="subcontent-table">
+              <div className='action-bar' style={{ paddingBottom: 10 }}>
+                <h2>{this.props.header}</h2>
+              </div>
               <Table
-                  pagination={false}
-                  scroll={{ x: 120, y: this.props.subContent.length > 0 ? '40vh' : '73vh' }}
-                  columns={this.columns()}
-                  dataSource={this.filterBody}
-              />
-              {this.props.subContent.length > 0 &&
-                  <div className="subcontent-table">
-                      <div className='action-bar' style={{ paddingBottom: 10 }}>
-                          <h2>{this.props.header}</h2>
-                      </div>
-                      <Table
-                          pagination={false}
-                          scroll={{ x: 120, y: '20vh' }}
-                          columns={Object.keys(this.props.subContent[0]).map(key => ({
-                              title: <div style={{ padding: '5px 5px',
-                                  border: '0.5px #ccc solid',
-                              }}>{key}</div>,
-                              key,
-                              dataIndex: key,
-                              width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
-                          }))}
-                          dataSource={this.props.subContent}
-                      />
+                pagination={false}
+                scroll={{ x: 120, y: '20vh' }}
+                columns={Object.keys(this.props.subContent[0]).map(key => ({
+                  title: <div style={{ padding: '5px 5px',
+                    border: '0.5px #ccc solid',
+                  }}>{key}</div>,
+                  key,
+                  dataIndex: key,
+                  width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
+                }))}
+                dataSource={this.props.subContent.map(row => ({ ...row, key: row.id }))}
+                />
             </div>
           }
         </div>
