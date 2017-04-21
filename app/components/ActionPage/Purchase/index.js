@@ -686,7 +686,6 @@ class Purchase extends React.Component {
           var array = this.state.checkedItem;
           var elementPos = array.map((x) => x.id ).indexOf(id);
           var objectFound = array[elementPos];
-          // var index = array.indexOf(this.refs["checkbox"+id].value)
           for (var i = 0; i < array.length; i++) {
             if(array[i].id==objectFound.id){
               array.splice(i, 1);

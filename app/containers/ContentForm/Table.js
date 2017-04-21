@@ -257,7 +257,7 @@ class CustomTable extends React.Component {
           {this.props.subContent.length > 0 &&
             <div className="subcontent-table">
               <div className='action-bar' style={{ paddingBottom: 10 }}>
-                <h2>{this.props.header}</h2>
+                <h2 style={{ marginTop: 0 }}>{this.props.header}</h2>
               </div>
               <Table
                 pagination={false}
@@ -270,7 +270,7 @@ class CustomTable extends React.Component {
                   dataIndex: key,
                   width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
                 }))}
-                dataSource={this.props.subContent.map(row => ({ ...row, key: row.id }))}
+                dataSource={this.props.subContent}
                 />
             </div>
           }
