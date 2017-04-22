@@ -107,7 +107,7 @@ class ContentForm extends React.Component {
       }
       case 'Good Receipt': {
         //post('/api/purchase/line', {'purchase_id':id})
-        return post('/api/inventory/gr/line', {'inventory_id':id})
+        return post('/api/inventory/gr/line', {'good_receipt_id':id})
         .then(subContent => this.setState({ subContent: [] }, () => this.setState({ subContent })))
       }
       case 'Choose GoodReceipt': {
