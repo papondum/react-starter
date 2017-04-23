@@ -102,7 +102,7 @@ class ActionMenu extends React.Component {
     this._setActionCategory()
     this._getConfirm()
     this._getUserId()
-    this.disabledDeleteCheck('e')
+    this.disabledDeleteCheck('init')
     this.disabledEditCheck('e')
     this._permissionBlock()
   }
@@ -323,6 +323,9 @@ class ActionMenu extends React.Component {
     if(this.props.tab.activeTabs=='Delivery Order'){
       this.setState({disableDelete:true})
     }
+    else if(next=='init'){
+      this.setState({disableDelete:true})
+    }
     else{
       if(next.editItem){
         this.setState({disableDelete:false})
@@ -380,11 +383,11 @@ class ActionMenu extends React.Component {
                   <img src={editIcon}/> <p>Edit</p>
               </button>
               <button className = {this.props.selected.length !== 1? 'disabled':''} onClick={() =>this.state.copyAction() } disabled={this.props.selected.length !== 1}><img src={copyIcon}/> <p>Copy</p></button>
-              <button className = {this.state.disableDelete? 'disabled':''} onClick={() =>this.state.deleteAction()} disabled = {this.state.disableDelete}><img src={deleteIcon}/> <p>Delete</p></button>
+              <button className = {this.state.disableDelete? 'disabledbutton':''} onClick={() =>this.state.deleteAction()}><img src={deleteIcon}/> <p>Delete</p></button>
               <button className = {this._blockChecker('email')} onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
               <button className = {this._blockChecker('print')} onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
               <button className = {this._blockChecker('export')} onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
-                  <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
+              <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
           </div>
 
           <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
