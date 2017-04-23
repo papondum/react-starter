@@ -145,6 +145,7 @@ class MainField extends React.Component {
                   showModal={()=>this.showModal()}
                   editItem = {this.state.editItem}
                   get = {(url)=>get(url)}
+                  blockBtn = {this.props.blockBtn}
               />
               <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
               <Modal show = {this.state.showModal.show} options = {this.state.showModal.show}/>

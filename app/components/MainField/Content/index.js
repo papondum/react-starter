@@ -58,6 +58,7 @@ class Content extends React.Component {
                 setContent={item => this.props.setContent(item)}
                 checkedSingleItem={(item)=>this.props.checkedSingleItem(item)}
                 showModal={()=>this.props.showModal()}
+                blockBtn = {this.props.blockBtn}
                 editItem = {this.props.editItem}/>
             <ContentForm
                 setSelected={selected => this.setState({ selected })}

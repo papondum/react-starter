@@ -104,7 +104,11 @@ class ActionMenu extends React.Component {
     this._getUserId()
     this.disabledDeleteCheck('e')
     this.disabledEditCheck('e')
+    this._permissionBlock()
+  }
 
+  _permissionBlock(){
+    console.log(this.props.blockBtn);
   }
 
   componentWillReceiveProps(nextProps){
@@ -119,6 +123,9 @@ class ActionMenu extends React.Component {
       })
     }
   }
+
+
+
   _setActionCategory(){
     setTimeout(() => {
       switch (this.props.activePage) {
@@ -329,24 +336,55 @@ class ActionMenu extends React.Component {
   disabledEditCheck(){
 
   }
+
+  _blockChecker(name){
+    switch (name) {
+      case 'email':
+      if(this.props.blockBtn.emailList){
+        let res = this.props.blockBtn.emailList.find(i=>i==this.props.activePage)
+        return res? 'disabledbutton':''}
+        break;
+      case 'edit':
+      if(this.props.blockBtn.editList){
+        let res0 = this.props.blockBtn.editList.find(i=>i==this.props.activePage)
+        return res0? true:false}
+        break;
+      case 'export':
+      if(this.props.blockBtn.exportList){
+        let res1 = this.props.blockBtn.exportList.find(i=>i==this.props.activePage)
+          return res1? 'disabledbutton':''}
+        break;
+      case 'print':
+      if(this.props.blockBtn.printList){
+        let res2 = this.props.blockBtn.printList.find(i=>i==this.props.activePage)
+          return res2? 'disabledbutton':''
+        }
+        break;
+      default:
+
+    }
+
+  }
+
+
   render() {
+    //edit email export print
     return(
       <div className='flex action-bar' >
           <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
           <div className='action-group-btn'>
               <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
-              <button className = {(this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status)))? 'disabled':''}
+              <button className = {(this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status))||this._blockChecker('edit'))? 'disabledbutton':''}
                   onClick={() => this.state.editAction()}
-                  disabled={this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status))}
               >
                   <img src={editIcon}/> <p>Edit</p>
               </button>
               <button className = {this.props.selected.length !== 1? 'disabled':''} onClick={() =>this.state.copyAction() } disabled={this.props.selected.length !== 1}><img src={copyIcon}/> <p>Copy</p></button>
               <button className = {this.state.disableDelete? 'disabled':''} onClick={() =>this.state.deleteAction()} disabled = {this.state.disableDelete}><img src={deleteIcon}/> <p>Delete</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
+              <button className = {this._blockChecker('email')} onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
+              <button className = {this._blockChecker('print')} onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
+              <button className = {this._blockChecker('export')} onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
+                  <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
           </div>
 
           <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>

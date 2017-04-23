@@ -52,7 +52,8 @@ class Menu extends React.Component {
               {'name': 'Sales Amount of each Film Type', 'type': 'Purchase'},
             ]},
           ],
-          blockViewList:[],
+          blockViewList: [],
+          blockBtn: {},
         };
     }
 
@@ -63,19 +64,41 @@ class Menu extends React.Component {
             throw new Error("Bad response from server");
           }
           var myobj = JSON.parse(response[0].role_detail)
+          this._getBlockBtn(myobj)
           this._getBlockViewPage(myobj)
         })
         .catch(err=>console.log(err))
     }
 
-    _getBlockViewPage(item){
-      let result = []
-      for(let i in item){
-        if(item[i].view==false){
-          result.push(i)
+    _getBlockBtn(items){
+      let emailList = []
+      let editList = []
+      let exportList = []
+      let printList = []
+      for(let i in items){
+        if(items[i].email==false){
+           emailList.push(i)
+        }
+        if(items[i].edit==false){
+           editList.push(i)
+        }
+        if(items[i].export==false){
+           exportList.push(i)
+        }
+        if(items[i].print==false){
+           printList.push(i)
         }
       }
-      let transform = result.map(i=>{
+      emailList= this.transformData(emailList)
+      editList= this.transformData(editList)
+      exportList= this.transformData(exportList)
+      printList= this.transformData(printList)
+      let result = Object.assign({},{emailList: emailList}, {editList: editList}, {exportList: exportList}, {printList: printList})
+      this.setState({blockBtn: result})
+    }
+
+    transformData(items){
+      let result = items.map(i=>{
         switch (i) {
           case 'customer':
             return 'Customer'
@@ -105,6 +128,17 @@ class Menu extends React.Component {
 
         }
       })
+      return result
+    }
+
+    _getBlockViewPage(item){
+      let result = []
+      for(let i in item){
+        if(item[i].view==false){
+          result.push(i)
+        }
+      }
+      let transform = this.transformData(result)
       this.setState({blockViewList:transform})
     }
 
@@ -121,7 +155,7 @@ class Menu extends React.Component {
     <div className="box">
         <div className="row content">
             <LeftMenu menu={this.state.menu} blockViewList= {this.state.blockViewList}/>
-            <MainField/>
+            <MainField blockBtn = {this.state.blockBtn}/>
             <NotificationContainer notification={this.props.notification} removeNotification={this.props.removeNotification}/>
         </div>
     </div>);}
