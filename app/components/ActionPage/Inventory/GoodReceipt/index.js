@@ -140,7 +140,8 @@ class GoodReceipt extends React.Component {
         objThick[childList[i]['id']] = childList[i]['Thickness']
         objLength[childList[i]['id']] = childList[i]['Length']
         objWeight[childList[i]['id']] = childList[i]['Total Weight (KG)']
-        objRemark[childList[i]['id']] = childList[i]['Remark']
+        objRemark[childList[i]['id']] = childList[i]['remark']
+        objReceive[childList[i]['id']] = childList[i]['receive_quantity']
         objWidth[childList[i]['id']] = childList[i]['Width']
         objOrderqty[childList[i]['id']] = childList[i]['Order Quantity (Roll)']
       }
@@ -163,6 +164,7 @@ class GoodReceipt extends React.Component {
     _setInitialVal(res){
 
       let item = res[0]
+      console.log('editItem:',item);
       this.setState({
         state_supplier: item.supplier_name,
         state_invoice: item.invoice || '',
@@ -171,7 +173,7 @@ class GoodReceipt extends React.Component {
         state_etd: item.etd || '',
         state_eta: item.eta || '',
         state_status: item.status ||'',
-        state_ataDate: item.ata_date || '',
+        state_ataDate: item.ata || '',
         state_buyer: item.buyer|| '',
         childItem: item.contents,
       })
