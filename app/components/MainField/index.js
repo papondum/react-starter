@@ -127,24 +127,7 @@ class MainField extends React.Component {
       })
     }
 
-    // showActionMenu(){
-    //   if(this.state.mainContent.length==undefined){
-    //     return ''
-    //   }
-    //   else{
-    //     return <ActionMenu
-    //         activePage={this.props.tab.activeTabs}
-    //         getContent={(item)=>this._getContent(item)}
-    //         setContent={(item)=>this.setContent(item)}
-    //         showModal={()=>this.showModal()}
-    //         editItem = {this.state.editItem}
-    //         get = {(url)=>get(url)}/>
-    //   }
-    // }
-
     render() {
-      //mainContent is raw data from api return as array object
-        // {this.showActionMenu()}
         return(
 
           <div className="mainContent">
@@ -171,7 +154,7 @@ class MainField extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        tab: state.tab
+        tab: state.tab,
     };
 };
 const mapDispatchToProps = (dispatch) => {

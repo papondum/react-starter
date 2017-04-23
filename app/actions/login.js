@@ -38,8 +38,10 @@ export function loginUser(creds) {
     } )
     .then(response=>{
       if(!response.ok){
+        console.log(response.user.role_id);
         localStorage.setItem('id_token', response.id_token)
         localStorage.setItem('id_user', response.user.firstname)
+        localStorage.setItem('role_id', response.user.role_id)
         dispatch(receiveLogin(response.id_token))
       }
       else {
@@ -81,6 +83,7 @@ export function logoutUser() {
     dispatch(requestLogout())
     localStorage.removeItem('id_token')
     localStorage.removeItem('id_user')
+    localStorage.removeItem('role_id')
     dispatch(receiveLogout())
   }
 }

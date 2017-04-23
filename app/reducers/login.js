@@ -8,19 +8,23 @@ function auth(state = {
     isFetching: false,
     isAuthenticated: localStorage.getItem('id_token') ? true : false,
     user: localStorage.getItem('id_user') ? localStorage.getItem('id_user') : false,
+    role_id: localStorage.getItem('role_id') ? localStorage.getItem('role_id') : false,
   }, action) {
   switch (action.type) {
     case LOGIN_REQUEST:
       return Object.assign({}, state, {
         isFetching: true,
         isAuthenticated: false,
-        user: action.creds
+        user: localStorage.getItem('id_user') ? localStorage.getItem('id_user') : false,
+        role_id: localStorage.getItem('role_id') ? localStorage.getItem('role_id') : false,
       })
     case LOGIN_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
         isAuthenticated: true,
-        errorMessage: ''
+        errorMessage: '',
+        user: localStorage.getItem('id_user') ? localStorage.getItem('id_user') : false,
+        role_id: localStorage.getItem('role_id') ? localStorage.getItem('role_id') : false,
       })
     case LOGIN_FAILURE:
       return Object.assign({}, state, {

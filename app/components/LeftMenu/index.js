@@ -12,7 +12,7 @@ import './style.scss';
 class LeftMenu extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {'submenu': [],',menuActive':''};
+        this.state = {'submenu': [], 'menuActive':'', blockViewList:[]};
     }
 
     openSubmenu(item) {
@@ -21,9 +21,27 @@ class LeftMenu extends React.Component {
         this.setState({'menuActive':item.name})
     }
 
+    componentDidMount(){
+      this.setState({blockViewList: this.props.blockViewList})
+    }
+
+    componentWillReceiveProps(nextProps){
+      this.setState({blockViewList: nextProps.blockViewList})
+    }
+
+    _checkDisable(name){
+      if(this.state.blockViewList.find(i=>i==name)){
+        return "submenu-item disabledbutton"
+      }
+      else{
+        return "submenu-item"
+      }
+    }
+
     _getSubItemMenuFromName(item) {
+
         const subMenu = item.submenu.map((i) => {
-          return (<div className="submenu-item" key={i.name} onClick={()=>this.openTab(i.name)} value={i.type}>
+          return (<div className={this._checkDisable(i.name)} key={i.name} onClick={()=>this.openTab(i.name)} value={i.type}>
               <img src={submenuIcon}/>
               <div><p>{i.name}</p></div>
           </div>)});

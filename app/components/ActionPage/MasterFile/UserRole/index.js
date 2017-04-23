@@ -153,6 +153,7 @@ class UserRole extends React.Component {
       })
       .catch(err=>console.log(err))
     }
+
     componentDidMount(){
       this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''
     }
