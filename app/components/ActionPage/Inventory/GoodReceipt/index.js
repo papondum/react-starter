@@ -192,7 +192,7 @@ class GoodReceipt extends React.Component {
         content:// list of content
           this.state.childItem.map(i=>{
             return Object.assign({},{
-              po_line_id:i.id,
+              po_line_id:i.po_line_id,
               content:{
                 receive_quantity: this.refs['receive'+i.id].value,
                 remark: this.refs['remark'+i.id].value,
