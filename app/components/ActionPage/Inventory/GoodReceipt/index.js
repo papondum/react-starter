@@ -37,6 +37,7 @@ class GoodReceipt extends React.Component {
           state_reference: '',
           state_etd: '',
           state_eta: '',
+          state_status: '',
           state_ataDate: '',
           state_buyer: '',
           checkedItem: [],
@@ -105,7 +106,7 @@ class GoodReceipt extends React.Component {
     }
 
     _getEditItem(){
-      post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
+      post('/api/inventory/gr/id', {good_receipt_id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
       })
@@ -162,7 +163,6 @@ class GoodReceipt extends React.Component {
     _setInitialVal(res){
 
       let item = res[0]
-      console.log(item);
       this.setState({
         state_supplier: item.supplier_name,
         state_invoice: item.invoice || '',
@@ -170,6 +170,7 @@ class GoodReceipt extends React.Component {
         state_reference: item.reference || '',
         state_etd: item.etd || '',
         state_eta: item.eta || '',
+        state_status: item.status ||'',
         state_ataDate: item.ata_date || '',
         state_buyer: item.buyer|| '',
         childItem: item.contents,
@@ -183,6 +184,7 @@ class GoodReceipt extends React.Component {
       {
         supplier: this.state.state_supplier || this.refs['supplier'].value,
         invoice: this.state.state_invoice || this.refs['invoice'].value,
+        status: this.state.state_status || this.refs['status'].value,
         lc: this.state.state_lc || this.refs['lc'].value,
         reference: this.state.state_reference || this.refs['reference'].value,
         ata: this.state.state_ataDate || this.refs['ataDate'].value,
@@ -198,11 +200,16 @@ class GoodReceipt extends React.Component {
           })
         })
       })
-
-      obj.purchase_id = parseInt(this.props.editItem)
-
+      let url = ''
+      if(this.props.type=='create'){
+        url = '/api/inventory/gr/create'
+        obj.purchase_id = parseInt(this.props.editItem)
+      }
+      else if (this.props.type=='edit'){
+        url = '/api/inventory/gr/update'
+        obj.good_receipt_id = parseInt(this.props.editItem)
+      }
       console.log('obj',obj);
-      let url = this.props.type=='create'? '/api/inventory/gr/create':'/api/inventory/gr/update'
       post(url, obj)
       .then(response => {
         console.log(response);
@@ -313,6 +320,13 @@ class GoodReceipt extends React.Component {
 
           <div className="flex flex-1 flex-col">
               <div className='input-box flex'>
+                  <label>Status:</label>
+                  <select ref = 'status' value = {this.state.state_status} onChange={()=>this.updateParam('status')}>
+                      <option value={'Not yet recived'} style={{color:'red'}}>Not yet recived</option>
+                      <option value={'Received'} style={{color:'green'}}>Received</option>
+                  </select>
+              </div>
+              <div className='input-box flex'>
                   <label>Actual Time Arrival(ATA):</label>
                   <input className='flex' type="date" ref='ataDate' value = {this.state.state_ataDate} onChange={()=>this.updateParam('ataDate')}/>
               </div>
@@ -351,7 +365,7 @@ class GoodReceipt extends React.Component {
                   <div className='action-group-btn'>
                       <button><img src={emailIcon}/><p>Email</p></button>
                       <button><img src={printIcon}/><p>Print</p></button>
-                      <button onClick={()=>this.props.getContent('Quotation')}><img src={cancelIcon}/><p>Cancel</p></button>
+                      <button onClick={()=>this.props.getContent('Good Receipt')}><img src={cancelIcon}/><p>Cancel</p></button>
                       <button onClick = {() => this.save()} ><img src={saveIcon}/><p>Save</p></button>
                   </div>
               </div>
