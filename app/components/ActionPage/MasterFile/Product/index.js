@@ -20,6 +20,9 @@ class Product extends React.Component {
       else if(type=='edit'){
         return 'Edit - Product'
       }
+      else if(type=='copy'){
+        return 'Copy - Product'
+      }
     }
 
     getGradeList(){
@@ -57,7 +60,6 @@ class Product extends React.Component {
     }
 
     getFilmList(){
-      console.log('triggered');
       let url = '/api/film/raw'
       get(url)
       .then((response)=> {
@@ -70,13 +72,12 @@ class Product extends React.Component {
     }
 
     filmListToElem(){
-      console.log(this.state.filmList);
       let result = this.state.filmList.map(i=><option key = {i.id} value = {i.id}>{i.film_name}</option>)
       return result
     }
 
     componentDidMount(){
-      this.props.type=='edit'? this.getInitialVal():''
+      this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''
       this.getGradeList()
       this.getBrandList()
         this.getFilmList()
@@ -92,7 +93,7 @@ class Product extends React.Component {
       let thickness = this.refs.thickness.value
       let rounding = this.refs.rounding.value
       let product_length = this.refs.product_length.value
-      let url = this.props.type =='create'? '/api/product/create':'/api/product/update'
+      let url = this.props.type =='create'||this.props.type =='copy'? '/api/product/create':'/api/product/update'
       if(width&&density&&decimal&&thickness&&rounding&&product_length){
         post(url,{
           "film":film,

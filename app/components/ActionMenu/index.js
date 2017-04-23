@@ -110,8 +110,8 @@ class ActionMenu extends React.Component {
         case 'User account':
         this.setState({
           createAction:()=>this.props.setContent((<UserAccount type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<UserAccount type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
-          copyAction:'',
+          editAction: ()=>this.props.setContent((<UserAccount type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
+          copyAction: ()=>this.props.setContent((<UserAccount type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -123,7 +123,7 @@ class ActionMenu extends React.Component {
         this.setState({
           createAction:()=>this.props.setContent((<Userrole type='create' getContent={(item)=>this.props.getContent(item)}/>)),
           editAction:()=>this.props.setContent((<Userrole type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          copyAction: ()=>this.props.setContent((<Userrole type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -135,7 +135,7 @@ class ActionMenu extends React.Component {
         this.setState({
           createAction:()=>this.props.setContent((<Customer type='create' getContent={(item)=>this.props.getContent(item)}/>)),   //set new content when click this menu
           editAction:()=>this.props.setContent((<Customer type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          copyAction: ()=>this.props.setContent((<Customer type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(), //no need change contnt just popup modal cover old
           emailAction:'',
           printAction:'',
@@ -146,8 +146,8 @@ class ActionMenu extends React.Component {
         case 'Supplier':
         this.setState({
           createAction:()=>this.props.setContent((<Supplier type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<Supplier type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          editAction: ()=>this.props.setContent((<Supplier type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+          copyAction: ()=>this.props.setContent((<Supplier type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -159,7 +159,7 @@ class ActionMenu extends React.Component {
         this.setState({
           createAction:()=>this.props.setContent((<PriceList type='create' getContent={(item)=>this.props.getContent(item)}/>)),
           editAction:()=>this.props.setContent((<PriceList type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          copyAction: ()=>this.props.setContent((<PriceList type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -170,8 +170,8 @@ class ActionMenu extends React.Component {
         case 'Product':
         this.setState({
           createAction:()=>this.props.setContent((<Product type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<Product type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          editAction: ()=>this.props.setContent((<Product type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+          copyAction: ()=>this.props.setContent((<Product type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -183,7 +183,7 @@ class ActionMenu extends React.Component {
         this.setState({
           createAction:()=>this.props.setContent((<Brand type='create' getContent={(item)=>this.props.getContent(item)}/>)),
           editAction:()=>this.props.setContent((<Brand type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          copyAction: ()=>this.props.setContent((<Brand type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -194,8 +194,8 @@ class ActionMenu extends React.Component {
         case 'Film Type':
         this.setState({
           createAction:()=>this.props.setContent((<FilmType type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<FilmType type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          editAction: ()=>this.props.setContent((<FilmType type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+          copyAction: ()=>this.props.setContent((<FilmType type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -206,8 +206,8 @@ class ActionMenu extends React.Component {
         case 'Grade':
         this.setState({
           createAction:()=>this.props.setContent((<Grade type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<Grade type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          editAction: ()=>this.props.setContent((<Grade type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+          copyAction: ()=>this.props.setContent((<Grade type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -219,7 +219,7 @@ class ActionMenu extends React.Component {
         this.setState({
           createAction:()=>this.props.setContent((<Quotation type='create' getContent={(item)=>this.props.getContent(item)}/>)),
           editAction:()=>this.props.setContent((<Quotation type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          copyAction: ()=>this.props.setContent((<Quotation type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -230,8 +230,8 @@ class ActionMenu extends React.Component {
         case 'Sales Order':
         this.setState({
           createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction:'',
+          editAction: ()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
+          copyAction: ()=>this.props.setContent((<Salesorder type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -243,7 +243,7 @@ class ActionMenu extends React.Component {
         this.setState({
           createAction:()=>this.props.setContent((<Purchase type='create' getContent={(item)=>this.props.getContent(item)}/>)),
           editAction:()=>this.props.setContent((<Purchase type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
-          copyAction:'',
+          copyAction: ()=>this.props.setContent((<Purchase type= 'copy' getContent= {(item)=>this.props.getContent(item)} editItem= {this.props.editItem} objFromFetch= {this.props}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -253,9 +253,9 @@ class ActionMenu extends React.Component {
         break;
         case 'Delivery Order':
         this.setState({
-          createAction:()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<Delivery type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
-          copyAction:'',
+          createAction: ()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+          editAction: ()=>this.props.setContent((<Delivery type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
+          copyAction: ()=>this.props.setContent((<Delivery type= 'copy' getContent={(item)=> this.props.getContent(item)} editItem= {this.props.editItem} objFromFetch= {this.props}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -277,7 +277,7 @@ class ActionMenu extends React.Component {
               get = {(url)=>get(url)}
                                                   />)),
           editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
-          copyAction:'',
+          copyAction: ()=>this.props.setContent((<GoodReceipt type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           deleteAction:()=>this.showDeleteModal(),
           emailAction:'',
           printAction:'',
@@ -311,7 +311,7 @@ class ActionMenu extends React.Component {
   }
 
   disabledEditCheck(){
-    
+
   }
   render() {
     return(
@@ -319,13 +319,13 @@ class ActionMenu extends React.Component {
           <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
           <div className='action-group-btn'>
               <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
-              <button className = {this.state.disableEdit? 'disabled':''}
+              <button className = {(this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status)))? 'disabled':''}
                   onClick={() => this.state.editAction()}
                   disabled={this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status))}
               >
                   <img src={editIcon}/> <p>Edit</p>
               </button>
-              <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
+              <button className = {this.props.selected.length !== 1? 'disabled':''} onClick={() =>this.state.copyAction() } disabled={this.props.selected.length !== 1}><img src={copyIcon}/> <p>Copy</p></button>
               <button className = {this.state.disableDelete? 'disabled':''} onClick={() =>this.state.deleteAction()} disabled = {this.state.disableDelete}><img src={deleteIcon}/> <p>Delete</p></button>
               <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
               <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>

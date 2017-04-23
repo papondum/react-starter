@@ -57,6 +57,9 @@ class PriceList extends React.Component {
     else if(type=='edit'){
       return 'Edit - Price List'
     }
+    else if(type=='copy'){
+      return 'Copy - Price List'
+    }
   }
 
   _headerGen(content){
@@ -92,7 +95,7 @@ class PriceList extends React.Component {
   }
 
   componentDidMount(){
-    this.getProduct()
+    this.props.type == 'edit'||this.props.type=='copy' ? this.getProduct():''
   }
 
   getProduct(){
@@ -139,7 +142,6 @@ class PriceList extends React.Component {
           var newArray = this.state.pricetagItem    //check in array
           newArray.push(newItem)
           this.setState({pricetagItem:newArray})
-          console.log('after:',this.state.pricetagItem);
         }
       }
     }

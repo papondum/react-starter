@@ -15,16 +15,19 @@ class FilmType extends React.Component {
       else if(type=='edit'){
         return 'Edit - Film Type'
       }
+      else if(type=='copyIcon'){
+        return 'Copy - Film Type'
+      }
     }
 
     createFilmType(){
       let film_code = this.refs.film_code.value
       let film_name = this.refs.film_name.value
-      let url = this.props.type=='create'? '/api/film/create':'/api/film/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/film/create':'/api/film/update'
 
       let data = {}
 
-      if (this.props.type=='create') {
+      if (this.props.type=='create'||this.props.type=='copy') {
         data = {"film_code":film_code, "film_name":film_name}
       } else {
         let id = this.refs.id.value
@@ -61,7 +64,7 @@ class FilmType extends React.Component {
     }
 
     componentDidMount(){
-      this.props.type=='edit'? this.getInitialVal():''    //Edit    1
+      this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''    //Edit    1
     }
 
 

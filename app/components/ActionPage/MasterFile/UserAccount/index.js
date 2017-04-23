@@ -19,6 +19,9 @@ class UserAccount extends React.Component {
       else if(type=='edit'){
         return 'Edit - User account'
       }
+      else if(type=='copy'){
+        return 'Copy - User account'
+      }
     }
 
     //get this.props.editItem fetch api by item id doneee!!!
@@ -30,7 +33,7 @@ class UserAccount extends React.Component {
       let password = this.refs.password.value
       let email = this.refs.email.value
       let role = this.refs.role.value
-      let url = this.props.type=='create'? '/api/user/create':'/api/user/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/user/create':'/api/user/update'
       let data = {}
       if (this.props.type=='create') {
         data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role}
@@ -42,7 +45,6 @@ class UserAccount extends React.Component {
       if(firstname&&lastname&&password&&email&&role){
         post(url,data)
         .then((response)=> {
-          console.log(response)
           if (response.status >= 400) {
             throw new Error("Bad response from server");
           }
@@ -88,7 +90,7 @@ class UserAccount extends React.Component {
 
     componentDidMount(){
       this.getRoleList()
-      this.props.type=='edit'? this.getInitialVal():''    //Edit    1
+      this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''    //Edit    1
     }
 
 
@@ -116,7 +118,7 @@ class UserAccount extends React.Component {
                   </div>
               </div>
               <hr/>
-              
+
               <div className='flex'>
                   <input type="hidden" ref = 'user_id' />
                   <div className='input-box left flex'>

@@ -87,6 +87,9 @@ class Purchase extends React.Component {
       else if(type=='edit'){
         return 'Edit - Purchase Order'
       }
+      else if(type=='copy'){
+        return 'Copy - Purchase Order'
+      }
     }
 
     _updateStateSelector(id, state){
@@ -430,10 +433,17 @@ class Purchase extends React.Component {
       this.setState({total: total})
     }
 
+    setDefaultSalePerson(){
+      console.log(this.props.username);
+      this.setState({
+        state_buyer: this.props.username
+      })
+    }
+
     componentDidMount(){
       this.getSupplierList()
       this.getCustomerList()
-      this.props.type=='edit'? this._getEditItem():''
+      this.props.type=='edit'||this.props.type=='copy'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
@@ -603,11 +613,10 @@ class Purchase extends React.Component {
         arrival_date : this.state.state_estimatedtimearrival
       })
       if(this.props.type=='edit'){
-        console.log(this.state.edit_id);
         obj.purchase_id = parseInt(this.state.edit_id)
       }
       console.log(obj)
-      let url = this.props.type=='create'? '/api/purchase/create':'/api/purchase/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/purchase/create':'/api/purchase/update'
       post(url,obj)
       .then(response => {
         console.log(response);

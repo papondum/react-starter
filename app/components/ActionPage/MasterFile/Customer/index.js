@@ -15,6 +15,9 @@ class Customer extends React.Component {
       else if(type=='edit'){
         return 'Edit - Customer'
       }
+      else if(type=='copy'){
+        return 'Copy - Customer'
+      }
     }
 
     createCustomer(){
@@ -27,12 +30,10 @@ class Customer extends React.Component {
       let email = this.refs.email.value
       let contact_person = this.refs.contact_person.value
       let create_by = 1
-      let url = this.props.type=='create'? '/api/customer/create':'/api/customer/update'
-      console.log(url)
-
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/customer/create':'/api/customer/update'
       let data = {}
 
-      if (this.props.type=='create') {
+      if (this.props.type=='create'||this.props.type=='copy') {
         data = {
           "code":code,
           "name":name,
@@ -59,7 +60,6 @@ class Customer extends React.Component {
           "create_by":create_by
         }
       }
-      console.log(data)
       if(code&&name){
         post(url,data)
         .then((response)=> {
@@ -78,7 +78,6 @@ class Customer extends React.Component {
 
 
     getInitialVal(){        //Edit    2
-      console.log(this.props.editItem)
       post('/api/customer/id',{"customer_id":this.props.editItem})
       .then((response)=> {
         console.log(response)
@@ -89,11 +88,12 @@ class Customer extends React.Component {
       })
       .catch(err=>console.log(err))
     }
+
     componentDidMount(){
-      this.getInitialVal()    //Edit    1
+      this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''    //Edit    1
     }
+
     setEditItem(obj){         //Edit    3
-      console.log(obj);
       if(obj){
         this.refs['id'].value = obj[0].id
         this.refs['code'].value = obj[0].code

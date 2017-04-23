@@ -60,6 +60,9 @@ class UserRole extends React.Component {
       else if(type=='edit'){
         return 'Edit - User role'
       }
+      else if(type=='copy'){
+        return 'Copy - User role'
+      }
     }
 
     _genBodyRole(){
@@ -91,7 +94,7 @@ class UserRole extends React.Component {
       let name = this.refs.name.value
       let description = this.refs.description.value
       var result = {}
-      if (this.props.type=='create') {
+      if (this.props.type=='create'||this.props.type=='copy') {
         result  = {
           "name":name,
           "description":description,
@@ -123,8 +126,7 @@ class UserRole extends React.Component {
           }
       }
     }
-    console.log(result)
-    let url = this.props.type=='create'? '/api/role/create':'/api/role/update'
+    let url = this.props.type=='create'||this.props.type=='copy'? '/api/role/create':'/api/role/update'
       if(name&&description){
         post(url,result)
         .then((response)=> {
@@ -152,7 +154,7 @@ class UserRole extends React.Component {
       .catch(err=>console.log(err))
     }
     componentDidMount(){
-      this.props.type=='edit'? this.getInitialVal():''
+      this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''
     }
     setEditItem(obj){
       if(obj){
@@ -161,7 +163,6 @@ class UserRole extends React.Component {
         this.refs['description'].value = obj[0].description
         // Set existing role_detail
         var detail = JSON.parse(obj[0].role_detail);
-        console.log(detail)
         this.refs.sale_quo_view.checked = detail.sale_quo.view;
         this.refs.sale_quo_edit.checked = detail.sale_quo.edit;
         this.refs.sale_quo_email.checked = detail.sale_quo.email;

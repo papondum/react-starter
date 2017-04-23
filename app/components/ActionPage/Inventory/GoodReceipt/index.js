@@ -51,22 +51,9 @@ class GoodReceipt extends React.Component {
       else if(type=='edit'){
         return 'Edit - Good Receipt'
       }
-    }
-
-    updateStateItemSet(listType, response, id){
-      let result = this.state[listType]
-      let itemSet = this.state[listType].find(i=> i.id==id)
-      if(itemSet){
-        var index = indexOf(this.state[listType], itemSet);
-        result.splice(index, 1, {id:id, content:response});
+      else if(type=='copy'){
+        return 'Copy - Good Receipt'
       }
-      else{
-        result = result.concat([{id: id, content:response}])
-      }
-      var obj  = {}
-      obj[listType] = result
-      this.setState(obj)
-
     }
 
     _updateStateSelector(id, state){
@@ -102,7 +89,7 @@ class GoodReceipt extends React.Component {
     }
 
     componentDidMount(){
-      this.props.type=='edit'? this._getEditItem():this._getCreateItem()
+      this.props.type=='edit'||this.props.type=='copy'? this._getEditItem():this._getCreateItem()
     }
 
     _getEditItem(){
@@ -164,7 +151,6 @@ class GoodReceipt extends React.Component {
     _setInitialVal(res){
 
       let item = res[0]
-      console.log('editItem:',item);
       this.setState({
         state_supplier: item.supplier_name,
         state_invoice: item.invoice || '',
@@ -203,7 +189,7 @@ class GoodReceipt extends React.Component {
         })
       })
       let url = ''
-      if(this.props.type=='create'){
+      if(this.props.type=='create'||this.props.type=='copy'){
         url = '/api/inventory/gr/create'
         obj.purchase_id = parseInt(this.props.editItem)
       }

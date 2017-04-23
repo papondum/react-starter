@@ -15,16 +15,19 @@ class Brand extends React.Component {
       else if(type=='edit'){
         return 'Edit - Brand'
       }
+      else if(type=='copy'){
+        return 'Copy - Brand'
+      }
     }
 
     createBrand(){
       let brand_code = this.refs.brand_code.value
       let brand_name = this.refs.brand_name.value
-      let url = this.props.type=='create'? '/api/brand/create':'/api/brand/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/brand/create':'/api/brand/update'
 
       let data = {}
 
-      if (this.props.type=='create') {
+      if (this.props.type=='create'||this.props.type=='copy') {
         data = {"brand_code":brand_code, "brand_name":brand_name}
       } else {
         let id = this.refs.id.value
@@ -61,7 +64,7 @@ class Brand extends React.Component {
     }
 
     componentDidMount(){
-      this.props.type=='edit'? this.getInitialVal():''    //Edit    1
+      this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''    //Edit    1
     }
 
     setEditItem(obj){         //Edit    3

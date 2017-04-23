@@ -78,7 +78,7 @@ class Quotation extends React.Component {
       let password = this.refs.password.value
       let email = this.refs.email.value
       let role = this.refs.role.value
-      let url = this.props.type=='create'? '/api/user/create':'/api/user/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/user/create':'/api/user/update'
 
       if(firstname&&lastname&&password&&email&&role){
         post(url,{"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role})
@@ -313,7 +313,7 @@ class Quotation extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
-      this.props.type=='edit'? this._getEditItem():this.setDefaultSalePerson()
+      this.props.type=='edit'||this.props.type=='copy'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
@@ -329,8 +329,6 @@ class Quotation extends React.Component {
       post('/api/sales/quotation/id', {quotation_id: +this.props.editItem})
       .then((response)=>{
         this._setInitialVal(response)
-        console.log(response);
-        console.log(this.props.editItem);
       })
 
     }
@@ -464,7 +462,7 @@ class Quotation extends React.Component {
         obj.quotation_id = parseInt(this.props.editItem)
       }
       console.log('obj',obj);
-      let url = this.props.type=='create'? '/api/sales/quotation/create':'/api/sales/quotation/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/sales/quotation/create':'/api/sales/quotation/update'
       post(url, obj)
       .then(response => {
         console.log(response);

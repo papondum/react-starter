@@ -66,6 +66,9 @@ class Delivery extends React.Component {
       else if(type=='edit'){
         return 'Edit - Delivery Order'
       }
+      else if(type=='copy'){
+        return 'Copy - Delivery Order'
+      }
     }
 
     getCustomerList(){
@@ -186,7 +189,6 @@ class Delivery extends React.Component {
           var stateW = this.state.eWeight
           stateOr[id] =  this.refs['order_qty'+id].value
           let getWeight = this.state.weight.find(i=>i.id=='weight'+id)
-          console.log(this.state.weight);
           if(getWeight){
             stateW[id] = (getWeight.content[0]*this.refs['order_qty'+id].value).toFixed(2)
             this.setState({eOrderqty:stateOr,eWeight:stateW})
@@ -296,7 +298,7 @@ class Delivery extends React.Component {
 
     componentDidMount(){
       this.getCustomerList()
-      this.props.type=='edit'? this._getEditItem():this.setDefaultSalePerson()
+      this.props.type=='edit'||this.props.type=='copy'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
       this.getFilmType()
     }
@@ -446,7 +448,7 @@ class Delivery extends React.Component {
         obj.inventory_id = parseInt(this.props.editItem)
       }
       console.log('obj',obj);
-      let url = this.props.type=='create'? '/api/inventory/do/create':'/api/inventory/do/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/inventory/do/create':'/api/inventory/do/update'
       post(url, obj)
       .then(response => {
         console.log(response);

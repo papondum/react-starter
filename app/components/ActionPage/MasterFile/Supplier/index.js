@@ -15,18 +15,18 @@ class Supplier extends React.Component {
       else if(type=='edit'){
         return 'Edit - Supplier'
       }
+      else if(type=='copy'){
+        return 'Copy - Supplier'
+      }
     }
 
     getInitialVal(){        //Edit    2
       post('/api/supplier/id',{supplier_id:this.props.editItem})
       .then((response)=> {
-        console.log(response)
         if (response.status >= 400) {
           throw new Error("Bad response from server");
         }
-        //Notify fn value added
-        // this.setState({editItem:response})
-        console.log(response)
+
         this.setEditItem(response)
       })
       .catch(err=>console.log(err))
@@ -34,7 +34,7 @@ class Supplier extends React.Component {
 
 
     componentDidMount(){
-        this.props.type=='edit'? this.getInitialVal():''
+        this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''
     }
 
 
@@ -60,11 +60,11 @@ class Supplier extends React.Component {
       let fax = this.refs.fax.value
       let contact = this.refs.contact.value
 
-      let url = this.props.type=='create'? '/api/supplier/create':'/api/supplier/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/supplier/create':'/api/supplier/update'
 
       let data = {}
 
-      if (this.props.type=='create') {
+      if (this.props.type=='create'||this.props.type=='copy') {
         data = {"code":code,
         "name":name,
         "address":address,

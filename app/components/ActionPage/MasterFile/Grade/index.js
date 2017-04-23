@@ -15,15 +15,18 @@ class Grade extends React.Component {
       else if(type=='edit'){
         return 'Edit - Grade'
       }
+      else if(type=='copy'){
+        return 'Copy - Grade'
+      }
     }
 
     createGrade(){
       let grade_code = this.refs.grade_code.value
       let grade_name = this.refs.grade_name.value
-      let url = this.props.type=='create'? '/api/grade/create':'/api/grade/update'
+      let url = this.props.type=='create'||this.props.type=='copy'? '/api/grade/create':'/api/grade/update'
       let data = {}
 
-      if (this.props.type=='create') {
+      if (this.props.type=='create'||this.props.type=='copy') {
         data = {"grade_code":grade_code, "grade_name":grade_name}
       } else {
         let grade_id = this.refs.grade_id.value
@@ -57,7 +60,7 @@ class Grade extends React.Component {
     }
 
     componentDidMount(){
-      this.props.type=='edit'? this.getInitialVal():''
+      this.props.type=='edit'||this.props.type=='copy'? this.getInitialVal():''
     }
 
 
