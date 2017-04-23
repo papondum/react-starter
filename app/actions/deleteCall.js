@@ -24,6 +24,8 @@ export const DELETE_QUOTATION_IDLE = 'DELETE_QUOTATION_IDLE'
 export const DELETE_SALES_IDLE = 'DELETE_SALES_IDLE'
 export const DELETE_PURCHASE_IDLE = "DELETE_PURCHASE_IDLE"
 export const DELETE_PURCHASE_TRIGGER = "DELETE_PURCHASE_TRIGGER"
+export const DELETE_GOODRREC_IDLE = "DELETE_GOODRREC_IDLE"
+export const DELETE_GOODRREC_TRIGGER = "DELETE_GOODRREC_TRIGGER"
 export function deleteAcc(){
   return {type:DELETE_USERACC_TRIGGER}
 }
@@ -50,6 +52,9 @@ export function deleteFilm(){
 }
 export function deleteGrade(){
   return {type:DELETE_GRADE_TRIGGER}
+}
+export function deleteGoodReceipt(){
+  return {type:DELETE_GOODRREC_TRIGGER}
 }
 
 export function deleteAccToIdle(){
@@ -97,9 +102,11 @@ export function deletePurchase() {
 export function deletePurchaseToIdle() {
   return { type : DELETE_PURCHASE_IDLE}
 }
-
+export function deleteGoodReceiptToIdle() {
+  return { type : DELETE_GOODRREC_IDLE}
+}
 export function deleteTrig(item){           //Trigger state   do noti
-  console.log(item)
+  console.log('Deletetriggered:',item)
   switch (item) {
     case 'User account':
       return dispatch =>{
@@ -156,6 +163,10 @@ export function deleteTrig(item){           //Trigger state   do noti
     case 'Purchase Order':
       return dispatch => {
         dispatch(deletePurchase())
+      }
+    case 'Good Receipt':
+      return dispatch => {
+        dispatch(deleteGoodReceipt())
       }
     default:
       console.log(item);
@@ -277,6 +288,12 @@ export function deleteItem(item,type){
       return dispatch=>{
         dispatch(apiSelector(url11,item))
         dispatch(deletePurchaseToIdle())
+      }
+    case 'Good Receipt':
+      let url13 = '/api/inventory/gr/delete'
+      return dispatch=>{
+        dispatch(apiSelector(url13,item))
+        dispatch(deleteGoodReceiptToIdle())
       }
     default:
       break;

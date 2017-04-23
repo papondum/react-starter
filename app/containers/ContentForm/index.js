@@ -70,6 +70,10 @@ class ContentForm extends React.Component {
       let obj = { purchase_id: this.selectedId }
       this.props.deleteItem(obj, 'Purchase Order')
     }
+    if(nextProps.deleteCall.goodreceipt === 'active'){
+      let obj = { good_receipt_id: this.selectedId }
+      this.props.deleteItem(obj, 'Good Receipt')
+    }
   }
   toggleItem(item) {
     const stateSelected = this.state.selected

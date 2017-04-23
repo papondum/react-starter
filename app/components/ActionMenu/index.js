@@ -45,10 +45,9 @@ class ActionMenu extends React.Component {
       showModal:{
         show:false
       },
-      mainContent:''
-      // showCreateModal:{
-      //   show:false
-      // },
+      mainContent:'',
+      disableDelete:false,
+      disableEdit:false,
     };
   }
   getConfirm(){
@@ -85,34 +84,17 @@ class ActionMenu extends React.Component {
     })
   }
 
-  // showCreateGoodReceipt(){
-  //   this.setState({
-  //     showCreateModal:{
-  //       show:true,
-  //       header:'Please select',
-  //       close:()=>{
-  //         this.setState({
-  //           showCreateModal:{
-  //             show:false
-  //           }
-  //         })
-  //       },
-  //       confirm:()=>{
-  //         this.props.deleteTrig(this.props.activePage)  //state change to active delete  >> go to ContentForm
-  //         this.props.getContent(this.props.activePage)
-  //         this.setState({showCreateModal:{show:false}})
-  //       },
-  //       submitTxt:'SUMMIT'
-  //     }
-  //   })
-  // }
-
   componentDidMount(){
     this._setActionCategory()
     this.getConfirm()
+    this.disabledDeleteCheck('e')
+    this.disabledEditCheck('e')
+
   }
 
   componentWillReceiveProps(nextProps){
+    this.disabledDeleteCheck(nextProps)
+    this.disabledEditCheck(nextProps)
     this._setActionCategory()
     if(nextProps.userAcc=='idle'){
       this.setState({
@@ -282,8 +264,6 @@ class ActionMenu extends React.Component {
         })
         break;
         case 'Good Receipt':
-        // content form :: create >> slect type ::>> track on content-form
-        // create dialog modal selector then set content to good Receipt with selected value
         this.setState({
           createAction:()=>this.props.setContent((<Content
               contentHeader = {this.state.openedTab}
@@ -316,20 +296,37 @@ class ActionMenu extends React.Component {
       level: type
     })
   }
+  disabledDeleteCheck(next){
+    if(this.props.tab.activeTabs=='Delivery Order'){
+      this.setState({disableDelete:true})
+    }
+    else{
+      if(next.editItem){
+        this.setState({disableDelete:false})
+      }
+      else {
+        this.setState({disableDelete:true})
+      }
+    }
+  }
+
+  disabledEditCheck(){
+    
+  }
   render() {
     return(
       <div className='flex action-bar' >
           <h2>{typeof this.props.activePage!='object'? this.props.activePage:''}</h2>
           <div className='action-group-btn'>
               <button onClick={() =>this.state.createAction() }><img src={createIcon}/> <p>Create</p></button>
-              <button
+              <button className = {this.state.disableEdit? 'disabled':''}
                   onClick={() => this.state.editAction()}
                   disabled={this.props.selected.length !== 1 || (this.props.activePage === 'Quotation' && ['Complete', 'Canceled'].includes(this.props.selected[0].Status))}
               >
                   <img src={editIcon}/> <p>Edit</p>
               </button>
               <button onClick={() =>this.state.createAction() }><img src={copyIcon}/> <p>Copy</p></button>
-              <button onClick={() =>this.state.deleteAction()} disabled = {this.props.editItem? false:true}><img src={deleteIcon}/> <p>Delete</p></button>
+              <button className = {this.state.disableDelete? 'disabled':''} onClick={() =>this.state.deleteAction()} disabled = {this.state.disableDelete}><img src={deleteIcon}/> <p>Delete</p></button>
               <button onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
               <button onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
               <button onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>

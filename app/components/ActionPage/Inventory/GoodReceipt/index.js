@@ -79,7 +79,7 @@ class GoodReceipt extends React.Component {
         case  'eReceive':
           var stateRe = this.state[state];
           stateRe[id] =  this.refs['receive'+id].value
-          this.setState({eRemark:stateRe})
+          this.setState({eReceive:stateRe})
           break;
 
         default:

@@ -43,68 +43,6 @@ class MainField extends React.Component {
     }
 
     getJson(url){
-      console.log('getcontent');
-      if(url === 'Purchase Order'){
-        this.setState({
-          'mainContent': [
-            {
-              "P/O No." : "DEC5910/261",
-              "Order Date": "11/10/2017",
-              ETD: '',
-              ETA: '',
-              "Supplier Name" : 'TGCH Inc.',
-              Buyer : 'Admin',
-              "Total Amount (THB)" : "150,000.50",
-              "Document Status" : "Released",
-              "Receiving Status" : "0%",
-              id:'0001'
-            },
-            {
-              "P/O No." : "DEC5910/260",
-              "Order Date": "11/10/2017",
-              ETD: '',
-              ETA: '',
-              "Supplier Name" : 'TGCH Inc.',
-              Buyer : 'Admin',
-              "Total Amount (THB)" : "150,000.50",
-              "Document Status" : "Released",
-              "Receiving Status" : "0%",
-              id:'0002'
-            }
-          ]
-        })
-      }
-      else if (url === 'Sales Order') {
-        this.setState({
-          'mainContent': [
-            {
-              "Order No." : 'SQ0001',
-              "Order Date": new Date('2015-05-11').toString(),
-              "P/O No.": "SN59",
-              "Request Date": new Date('2015-05-11').toString(),
-              "Customer Name" : "TPBG Inc.",
-              Salesperson : 'Admin',
-              "Total Amount (THB)" : "150,000.50",
-              "Document Status" : "Released",
-              "Shipping Status" : "0%",
-              id:'1'
-            },
-            {
-              "Order No." : 'SQ0002',
-              "Order Date": new Date('2015-05-11').toString(),
-              "P/O No.": "SN59",
-              "Request Date": new Date('2015-05-11').toString(),
-              "Customer Name" : "TPBG Inc.",
-              Salesperson : 'Admin',
-              "Total Amount (THB)" : "150,000.50",
-              "Document Status" : "Released",
-              "Shipping Status" : "0%",
-              id:'2'
-            }
-          ]
-        })
-      }
-      else{
         get(url)
         .then((response)=> {
           if (response.status >= 400) {
@@ -113,7 +51,6 @@ class MainField extends React.Component {
           this.setState({'mainContent': response})
         })
         .catch(err=>console.log(err))
-      }
     }
 
     _getContent(category){
@@ -154,7 +91,6 @@ class MainField extends React.Component {
           break;
         case 'Purchase Order':
           this.getJson('/api/purchase/all')
-          // this.getJson('Purchase Order')
           break;
         case 'Delivery Order':
           this.getJson('/api/inventory/do/all')
@@ -162,9 +98,6 @@ class MainField extends React.Component {
         case 'Good Receipt':
           this.getJson('/api/inventory/gr/all')
           break;
-        //case 'Good Receipt':
-          //this.getJson('/api/inventory/good/all')
-          //break;
         default:
           this.setState({'mainContent':''})
           break;
