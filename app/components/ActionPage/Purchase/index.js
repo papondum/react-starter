@@ -237,7 +237,7 @@ class Purchase extends React.Component {
         })
         this.setState({
           saleList: saleList,
-          state_buyer : buyer_default
+          // state_buyer : buyer_default
         })
 
       })
@@ -434,7 +434,6 @@ class Purchase extends React.Component {
     }
 
     setDefaultSalePerson(){
-      console.log(this.props.username);
       this.setState({
         state_buyer: this.props.username
       })

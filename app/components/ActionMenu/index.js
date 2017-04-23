@@ -48,9 +48,10 @@ class ActionMenu extends React.Component {
       mainContent:'',
       disableDelete:false,
       disableEdit:false,
+      userId:'',
     };
   }
-  getConfirm(){
+  _getConfirm(){
     get('/api/inventory/gr/list_confirmed_po')
     .then((response)=> {
       if (response.status >= 400) {
@@ -84,9 +85,23 @@ class ActionMenu extends React.Component {
     })
   }
 
+  _getUserId(){
+    let url = '/api/user/all'
+    get(url)
+    .then((response)=> {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      let userId = response.find(i=>i.Firstname==this.props.username);
+      this.setState({userId:userId.id})
+    })
+    .catch(err=>console.log(err))
+  }
+
   componentDidMount(){
     this._setActionCategory()
-    this.getConfirm()
+    this._getConfirm()
+    this._getUserId()
     this.disabledDeleteCheck('e')
     this.disabledEditCheck('e')
 
@@ -217,7 +232,7 @@ class ActionMenu extends React.Component {
         break;
         case 'Quotation':
         this.setState({
-          createAction:()=>this.props.setContent((<Quotation type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+          createAction:()=>this.props.setContent((<Quotation type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
           editAction:()=>this.props.setContent((<Quotation type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           copyAction: ()=>this.props.setContent((<Quotation type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
@@ -229,7 +244,7 @@ class ActionMenu extends React.Component {
         break;
         case 'Sales Order':
         this.setState({
-          createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+          createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
           editAction: ()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           copyAction: ()=>this.props.setContent((<Salesorder type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
           deleteAction:()=>this.showDeleteModal(),
@@ -241,7 +256,7 @@ class ActionMenu extends React.Component {
         break;
         case 'Purchase Order':
         this.setState({
-          createAction:()=>this.props.setContent((<Purchase type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+          createAction:()=>this.props.setContent((<Purchase type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
           editAction:()=>this.props.setContent((<Purchase type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           copyAction: ()=>this.props.setContent((<Purchase type= 'copy' getContent= {(item)=>this.props.getContent(item)} editItem= {this.props.editItem} objFromFetch= {this.props}/>)),
           deleteAction:()=>this.showDeleteModal(),
@@ -253,7 +268,7 @@ class ActionMenu extends React.Component {
         break;
         case 'Delivery Order':
         this.setState({
-          createAction: ()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)}/>)),
+          createAction: ()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
           editAction: ()=>this.props.setContent((<Delivery type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           copyAction: ()=>this.props.setContent((<Delivery type= 'copy' getContent={(item)=> this.props.getContent(item)} editItem= {this.props.editItem} objFromFetch= {this.props}/>)),
           deleteAction:()=>this.showDeleteModal(),
@@ -275,6 +290,7 @@ class ActionMenu extends React.Component {
               setContent={(item)=>this.props.setContent(item)}
               editItem = {this.props.editItem}
               get = {(url)=>get(url)}
+              username = {this.state.userId}
                                                   />)),
           editAction:()=>this.props.setContent((<GoodReceipt type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
           copyAction: ()=>this.props.setContent((<GoodReceipt type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
@@ -342,7 +358,8 @@ class ActionMenu extends React.Component {
   const mapStateToProps = (state) => {
     return {
       tab: state.tab,
-      deleteCall: state.deleteCall
+      deleteCall: state.deleteCall,
+      username: state.login.auth.user
     };
   };
 
