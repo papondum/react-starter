@@ -78,7 +78,8 @@ class ContentForm extends React.Component {
   toggleItem(item) {
     const stateSelected = this.state.selected
     let selected
-    if (stateSelected.includes(item)) {
+    console.log(stateSelected)
+    if (this.selectedId.includes(item.id)) {
       selected = stateSelected.filter(s => s.id !== item.id)
     } else {
       selected = stateSelected.concat(item).reduce(getUnique, [])
@@ -86,9 +87,12 @@ class ContentForm extends React.Component {
     this.setState({
       selected,
     }, () => {
-      console.log(this.state.selected)
       this.props.setSelected(this.state.selected)
-      this.props.checkedSingleItem(this.state.selected[0].id || null)
+      if (this.state.selected[0]) {
+        this.props.checkedSingleItem(this.state.selected[0].id || null)
+      } else {
+        this.props.checkedSingleItem(null)
+      }
     })
   }
   rowClicked(id) {
