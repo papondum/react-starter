@@ -1001,11 +1001,32 @@ class SalesOrder extends React.Component {
           return this.getShipment()
           break;
         case 'Attachment':
-
+          return this.getAttachContent()
           break;
         default:
 
       }
+    }
+
+    getAttachContent(){
+      return (
+        <div>
+          <input type="file" ref="fileSelect" multiple />
+          <button type="button" onClick={()=>this.submitFiles()}>upload</button>
+        </div>
+      )
+    }
+
+    submitFiles(){
+      console.log(this.refs.fileSelect.files);
+      post(' /api/sales/test_upload', {files: this.refs.fileSelect.files})
+        .then((response)=>{
+          if (response.status >= 400) {
+            throw new Error("Bad response from server");
+          }
+          console.log(response);
+        })
+        .catch(err=>console.log(err))
     }
 
     deleteSelectedChild(){
@@ -1074,11 +1095,10 @@ class SalesOrder extends React.Component {
                       <div className={this.state.selectedTab === 'Ship'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Ship')}>
                           Shipment
                       </div>
-                      {/*
-                          <div className={this.state.selectedTab === 'Attach'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attach')}>
-                          Attachment
-                          </div>
-                      */}
+                      <div className={this.state.selectedTab === 'Attachment'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attachment')}>
+                        Attachment
+                      </div>
+
                   </div>
                   <hr style={{margin : 0}}/>
                   <div className = 'top-content'>
