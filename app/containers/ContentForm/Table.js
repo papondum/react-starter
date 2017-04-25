@@ -10,13 +10,14 @@ const Option = Select.Option;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
-const OverlayMenu = ({ onClick, columns, unselected, isSorting }) => (
-  <Menu key="menu" onClick={onClick} selectedKeys={[]}>
+const OverlayMenu = ({ onClick, columns, unselected, isSorting, selected }) => (
+  <Menu key="menu" onClick={onClick} selectedKeys={selected}>
     <Menu.Item key="asc"><Icon type="arrow-up" /> Sort Ascending</Menu.Item>
     <Menu.Item key="desc"><Icon type="arrow-down" /> Sort Descending</Menu.Item>
     {isSorting && <Menu.Item key="clear"><Icon /> Clear Sort</Menu.Item>}
     <SubMenu key="filter" title={[<Icon type="filter" />, <span>Filter using</span>]}>
       <MenuItemGroup key="sub">
+        <Menu.Item key="contain">Contain (default)</Menu.Item>
         <Menu.Item key="equal">Equal</Menu.Item>
         <Menu.Item key="not equal">Not equal</Menu.Item>
         <Menu.Item key="less than">Less than</Menu.Item>
@@ -134,8 +135,11 @@ class CustomTable extends React.Component {
   filterColumn(row, key) {
     const { filters } = this.state.bodyFilters;
     const type = filters[key];
-    if(!type) return fuzzysearch((this.state.filters[key] || '').toString(), (row[key] || '').toString())
+    if(!type) return fuzzysearch((this.state.filters[key] || '').toString().toLowerCase(), (row[key] || '').toString().toLowerCase())
     switch (type) {
+      case 'contain': {
+        return fuzzysearch((this.state.filters[key] || '').toString().toLowerCase(), (row[key] || '').toString().toLowerCase())
+      }
       case 'equal': {
         return row[key] === (this.state.filters[key] || '').toString()
       }
@@ -155,6 +159,29 @@ class CustomTable extends React.Component {
         return row[key] >= (this.state.filters[key] || '').toString()
       }
       default: return true
+    }
+  }
+  prefixFilter(type) {
+    switch (type) {
+      case 'equal': {
+        return '=  '
+      }
+      case 'not equal': {
+        return '!=  '
+      }
+      case 'less than': {
+        return '<  '
+      }
+      case 'greater than': {
+        return '>  '
+      }
+      case 'less than or': {
+        return '<=  '
+      }
+      case 'greater than or': {
+        return '>=  '
+      }
+      default: return ''
     }
   }
   sorting(a, b) {
@@ -205,6 +232,7 @@ class CustomTable extends React.Component {
             {this.renderColumn(column)}
           </div>
           <div className="column-title">
+            {this.prefixFilter(this.state.bodyFilters.filters[column])}
             {column}
             {this.state.bodyFilters.sorting.key === column && <Icon type={this.state.bodyFilters.sorting.sort === 'asc' ? 'arrow-up' : 'arrow-down'} />}
             <div className={this.state.columnActive === column ? "column-icon active" : "column-icon"}>
@@ -213,6 +241,7 @@ class CustomTable extends React.Component {
                 placement="bottomLeft"
                 onVisibleChange={isVisible => this.setState({ columnActive: isVisible ? column : null })}
                 overlay={<OverlayMenu
+                  selected={[this.state.bodyFilters.filters[column]]}
                   key={column}
                   isSorting={this.state.bodyFilters.sorting.key === column }
                   onClick={e => this.sortingMenu(column, e)}
