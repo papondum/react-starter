@@ -32,14 +32,15 @@ class UserAccount extends React.Component {
       let username = this.refs.username.value
       let password = this.refs.password.value
       let email = this.refs.email.value
+      let tel = this.refs.tel.value
       let role = this.refs.role.value
       let url = this.props.type=='create'||this.props.type=='copy'? '/api/user/create':'/api/user/update'
       let data = {}
       if (this.props.type=='create') {
-        data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role": role}
+        data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "tel":tel, "role": role}
       } else {
         let user_id = this.refs.user_id.value
-        data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "role_id": role, "id": user_id}
+        data = {"firstname":firstname, "lastname":lastname, "username":username, "password":password, "email":email, "tel":tel, "role_id": role, "id": user_id}
       }
 
       if(firstname&&lastname&&password&&email&&role){
@@ -101,6 +102,7 @@ class UserAccount extends React.Component {
         this.refs['username'].value = obj[0].username
         this.refs['password'].value = obj[0].password
         this.refs['email'].value = obj[0].email
+        this.refs['tel'].value = obj[0].tel
         this.refs['role'].value = obj[0].role_id
         this.refs['user_id'].value = obj[0].id
       }
@@ -144,6 +146,10 @@ class UserAccount extends React.Component {
                   <div className='input-box left flex'>
                       <label><i>Email : </i></label>
                       <input className='flex' type="text" ref = 'email'/>
+                  </div>
+                  <div className='input-box left flex'>
+                      <label><i>Tel : </i></label>
+                      <input className='flex' type="text" ref = 'tel'/>
                   </div>
                   <div className='input-box flex'>
                       <label><i>Role : </i></label>
