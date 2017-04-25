@@ -13,14 +13,16 @@ class ContentForm extends React.Component {
     this.state = {
       selected: [],
       subContent: [],
+      type: '',
     }
   }
   get selectedId() {
     return this.state.selected.map(record => record.id)
   }
   componentWillReceiveProps(nextProps){
-    if(this.props.type !== nextProps.type){
-      this.setState({ selected:[], subContent: [] })
+    if(this.state.type !== nextProps.type){
+      this.table && this.table.clearFilter()
+      this.setState({ selected:[], subContent: [], type: nextProps.type })
     }
     if(nextProps.deleteCall.userAcc === 'active'){
       let obj = { user_id: this.selectedId }
@@ -78,7 +80,6 @@ class ContentForm extends React.Component {
   toggleItem(item) {
     const stateSelected = this.state.selected
     let selected
-    console.log(stateSelected)
     if (this.selectedId.includes(item.id)) {
       selected = stateSelected.filter(s => s.id !== item.id)
     } else {
@@ -148,16 +149,17 @@ class ContentForm extends React.Component {
       return <div></div>
     }
     return (<div>
-        <Table
-            toggleItem={item => this.toggleItem(item)}
-            selected={this.selectedId}
-            header={this.subContentHeader}
-            rowClicked={id => this.rowClicked(id)}
-            content={this.props.content || []}
-            columns={this.columns}
-            subContent={this.state.subContent}
-            type={this.props.type}
-            isFromCreate= {this.props.isFromCreate}
+      <Table
+        ref={table => this.table = table}
+        toggleItem={item => this.toggleItem(item)}
+        selected={this.selectedId}
+        header={this.subContentHeader}
+        rowClicked={id => this.rowClicked(id)}
+        content={this.props.content || []}
+        columns={this.columns}
+        subContent={this.state.subContent}
+        type={this.props.type}
+        isFromCreate= {this.props.isFromCreate}
         />
     </div>)
   }

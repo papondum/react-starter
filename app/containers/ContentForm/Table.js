@@ -270,7 +270,7 @@ class CustomTable extends React.Component {
                               dataIndex: key,
                               width: `${1/Object.keys(this.props.subContent[0]).length * 100}%`
                           }))}
-                          dataSource={this.props.subContent}
+                          dataSource={this.props.subContent.map(s => ({ ...s, key: s.id }))}
                       />
                   </div>
               }
