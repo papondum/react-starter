@@ -366,6 +366,9 @@ class Purchase extends React.Component {
         let w = (total_after_discount * wotaxes / 100)
         this.setState({wotaxes: w})
         total = total - parseFloat(w)
+      } else {
+        this.setState({wotaxes: 0})
+        total = total - parseFloat(0)
       }
       console.log("wotaxes: " + wotaxes)
       console.log("total after wotaxes: " + total)
@@ -374,6 +377,9 @@ class Purchase extends React.Component {
         let t = (total_after_discount * taxes / 100)
         this.setState({taxes: t})
         total = total + parseFloat(t)
+      } else {
+        this.setState({taxes: 0})
+        total = total + parseFloat(0)
       }
       console.log("taxes: " + taxes)
       console.log("total after taxes: " + total)
