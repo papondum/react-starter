@@ -1024,8 +1024,8 @@ class SalesOrder extends React.Component {
     }
 
     submitFiles(){
-      console.log(this.refs.fileSelect.files);
-      post(' /api/sales/test_upload', {files: this.refs.fileSelect.files})
+      let listFile = this.refs.fileSelect.files
+      post('/api/sales/test_upload', {listFile})
         .then((response)=>{
           if (response.status >= 400) {
             throw new Error("Bad response from server");
