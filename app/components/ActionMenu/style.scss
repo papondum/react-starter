@@ -15,6 +15,12 @@
     border-style:none;
     padding: 10px;
     background: none;
+    &:hover{
+      cursor: pointer;
+    }
+    &:focus{
+      outline: none;
+    }
   }
 }
 
