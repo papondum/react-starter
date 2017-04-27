@@ -1,3 +1,6 @@
+$text-color: #3a3a3c;
+$input-text-color: #b0b4b7;
+
 .input-group{
   margin: auto;
   display: flex;
@@ -5,12 +8,12 @@
   input{
     padding:10px;
     margin:10px 0;
-    color: #b0b4b7;
+    color: $text-color;
     border-radius: 3px;
-    border:1px solid #b0b4b7;
+    border:1px solid $input-text-color;
   }
   input:-webkit-autofill{
-    color: #b0b4b7;
+    color: $input-text-color;
     background-color: #fff;
   }
   button{
@@ -23,6 +26,7 @@
   }
   p{
     margin:25px 0;
+    color: $text-color;
   }
 }
 footer {
@@ -35,6 +39,7 @@ footer {
       margin:0 auto;
       text-align: center;
       opacity: 0.87;
+      color: $text-color;
     }
 }
 .icon{
@@ -54,5 +59,6 @@ footer {
     text-align: center;
     margin: 45px 0;
     font-weight: 200;
+    color: $text-color;
   }
 }
