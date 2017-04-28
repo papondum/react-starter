@@ -4,6 +4,21 @@
   cursor:pointer;
   color:#454545;
   font-size: 11px;
+  .tab-close{
+    width: 8px;
+    height: 8px;
+    background: gray;
+    color: white;
+    padding: 2px;
+    border-radius: 10px;
+    line-height: 0;
+    display: inline-block;
+    font-size: 6px;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 4px;
+    margin-left: 10px;
+  }
 }
 .tablist-style{
   background-color: #eeeeee;
