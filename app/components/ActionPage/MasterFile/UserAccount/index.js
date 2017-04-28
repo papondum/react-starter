@@ -147,11 +147,13 @@ class UserAccount extends React.Component {
                       <label><i>Email : </i></label>
                       <input className='flex' type="text" ref = 'email'/>
                   </div>
-                  <div className='input-box left flex'>
+                  <div className='input-box flex'>
                       <label><i>Tel : </i></label>
                       <input className='flex' type="text" ref = 'tel'/>
                   </div>
-                  <div className='input-box flex'>
+              </div>
+              <div className='flex'>
+                  <div className='input-box left flex'>
                       <label><i>Role : </i></label>
                       <select style={{'width': '173px'}} ref = 'role'>
                           {this.roleListToElem()}
