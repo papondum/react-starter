@@ -77,11 +77,11 @@ class UserRole extends React.Component {
                         <div className='flex'>
                             <div style={{'flex':10}}>{j.name}</div>
                             <div className='flex' style={{'flex':5}}>
-                                <input className='flex-1' type='checkbox' ref = {j.id+'_view'} value={j.view}/>
-                                <input className='flex-1' type='checkbox' ref = {j.id+'_email'} value={j.email}/>
-                                <input className='flex-1' type='checkbox' ref = {j.id+'_print'} value={j.print}/>
-                                <input className='flex-1' type='checkbox' ref = {j.id+'_export'} value={j.export}/>
-                                <input className='flex-1' type='checkbox' ref = {j.id+'_edit'} value={j.edit}/>
+                                <span className='flex-1'>  <input type='checkbox' ref = {j.id+'_view'} value={j.view}/> </span>
+                                <span className='flex-1'>  <input type='checkbox' ref = {j.id+'_email'} value={j.email}/> </span>
+                                <span className='flex-1'>  <input type='checkbox' ref = {j.id+'_print'} value={j.print}/> </span>
+                                <span className='flex-1'>  <input type='checkbox' ref = {j.id+'_export'} value={j.export}/> </span>
+                                <span className='flex-1'>  <input type='checkbox' ref = {j.id+'_edit'} value={j.edit}/> </span>
                             </div>
                         </div>
                     </div>)}
@@ -226,7 +226,7 @@ class UserRole extends React.Component {
                   </div>
               </div>
               <hr/>
-              <div className='flex'>
+              <div className='flex content-left'>
                   <input type="hidden" ref = 'id'/>
                   <div className='input-box left flex'>
                       <label><i>User role :</i></label>
@@ -240,10 +240,10 @@ class UserRole extends React.Component {
 
 
               <div className='flex role-head'>
-                  <div style={{'flex':10}}>
+                  <div style={{'flex':10}} className='title'>
                       <span>Document</span>
                   </div>
-                  <div style={{'flex':5}} className='flex'>
+                  <div style={{'flex':5}} className='flex choice'>
                       <span className='flex-1' style={{'textAlign':'center'}} >View</span>
                       <span className='flex-1' style={{'textAlign':'center'}} >Email</span>
                       <span className='flex-1' style={{'textAlign':'center'}}>Print</span>
