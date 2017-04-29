@@ -320,7 +320,15 @@ class ActionMenu extends React.Component {
     })
   }
   disabledDeleteCheck(next){
-    if(this.props.tab.activeTabs=='Delivery Order'){
+    if(this.props.tab.activeTabs=='Delivery Order'||
+      this.props.tab.activeTabs=='Delivery Order'||
+      this.props.tab.activeTabs=='User account'||
+      this.props.tab.activeTabs=='Customer'||
+      this.props.tab.activeTabs=='Supplier'||
+      this.props.tab.activeTabs=='Product'||
+      this.props.tab.activeTabs=='Brand'||
+      this.props.tab.activeTabs=='Film Type'||
+      this.props.tab.activeTabs=='Grade' ){
       this.setState({disableDelete:true})
     }
     else if(next=='init'){
