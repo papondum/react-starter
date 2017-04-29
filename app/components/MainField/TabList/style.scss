@@ -4,7 +4,14 @@
   cursor:pointer;
   color:#454545;
   font-size: 11px;
+  span{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 55px;
+  }
 }
 .tablist-style{
   background-color: #eeeeee;
+  overflow: scroll;
 }

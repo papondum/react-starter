@@ -9,7 +9,7 @@ class TabList extends React.Component {
     generateTab() {
         const tab = this.props.tab.tabs;
         const tabs = tab.map(item=>{
-          return (<div key={item}  className={this.props.tab.activeTabs==item? 'active-tab tab-style':"tab-style"}>
+          return (<div key={item}  className={this.props.tab.activeTabs==item? 'active-tab tab-style flex':"tab-style flex"}>
             <span onClick={()=>this.props.openContent(item)}>{item}</span> <span onClick={()=>this.props.closeTab(item)}>x</span>
           </div>)});
         return tabs;
