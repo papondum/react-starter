@@ -671,7 +671,7 @@ class SalesOrder extends React.Component {
 
     getFilmTypeOption(){
         let result =  this.state.filmList.map((i=>{return (<option key = {'film'+i.id} value = {i.id}>{i.label}</option>)}))
-        result.unshift(<option key='select'>Select Item</option>)
+        result.unshift(<option key='selectF'>Select Item</option>)
         return result
     }
 
@@ -679,7 +679,7 @@ class SalesOrder extends React.Component {
       let getBrand = this.state.brandList.find(i=>i.id==('brandType'+id))
       if(getBrand){
         let result =  getBrand.content.map((i=>{return (<option key = {'brand'+i.brand_id} value = {i.brand_id}>{i.brand_name}</option>)}))
-        result.unshift(<option key='select'>Select Item</option>)
+        result.unshift(<option key='selectB'>Select Item</option>)
         return result
       }
     }
@@ -688,7 +688,7 @@ class SalesOrder extends React.Component {
       let getGrade = this.state.gradeList.find(i=>i.id==('gradeType'+id))
       if(getGrade){
         let result =  getGrade.content.map((i=>{return (<option key = {'grade'+i.grade_id} value = {i.grade_id}>{i.grade_name}</option>)}))
-        result.unshift(<option key='select'>Select Item</option>)
+        result.unshift(<option key='selectG'>Select Item</option>)
         return result
       }
     }
@@ -697,7 +697,7 @@ class SalesOrder extends React.Component {
       let getWidth = this.state.widthList.find(i=>i.id==('width'+id))
       if(getWidth){
         let result =  getWidth.content.map((i=>{return (<option key = {'width'+i.width} value = {i.width}>{i.width}</option>)}))
-        result.unshift(<option key='select'>Select Item</option>)
+        result.unshift(<option key='selectW'>Select Item</option>)
         return result
       }
     }
@@ -706,7 +706,7 @@ class SalesOrder extends React.Component {
       let getThick = this.state.thickList.find(i=>i.id==('thickNess'+id))
       if(getThick){
         let result =  getThick.content.map((i=>{return (<option key = {'thick'+i.thickness} value = {i.thickness}>{i.thickness}</option>)}))
-        result.unshift(<option key='select'>Select Item</option>)
+        result.unshift(<option key='selectT'>Select Item</option>)
         return result
       }
 
@@ -716,7 +716,7 @@ class SalesOrder extends React.Component {
       let getLength = this.state.length.find(i=>i.id==('length'+id))
       if(getLength){
         let result =  getLength.content.map((i=>{return (<option key = {'length'+i.length} value = {i.length}>{i.length}</option>)}))
-        result.unshift(<option key='select'>Select Item</option>)
+        result.unshift(<option key='selectL'>Select Item</option>)
         return result
       }
     }
@@ -792,7 +792,7 @@ class SalesOrder extends React.Component {
                 </select>
             </td>
             <td>
-              <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
+                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
                   {this.getLengthOption(i.id)}
               </select>
             </td>
@@ -837,7 +837,6 @@ class SalesOrder extends React.Component {
 
     updateSelectedCustomer(newVal) {
       this.getCustomerAsync(newVal.value).then((customer) => {
-        console.log(customer);
         this.setState({state_contact: customer[0].contact_person})
         this.setState({state_tel: customer[0].telephone})
         this.setState({state_fax: customer[0].fax})
@@ -847,7 +846,6 @@ class SalesOrder extends React.Component {
     }
 
     getCustomerAsync(customer_id) {
-      console.log(customer_id);
       return new Promise((resolve,reject)=>{
         post('/api/customer/id', {customer_id: customer_id})
           .then((response)=>{

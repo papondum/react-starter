@@ -132,9 +132,6 @@ class MainField extends React.Component {
 
           <div className="mainContent">
               <TabList tab = {this.props.tab} openContent = {(item) => this._getMainFieldFromTab(item)} closeTab= {(tab) => this.props.closeTab(tab)}/>
-
-
-              {/* content will recieve some prop that from ticked */}
               <Content
                   contentHeader = {this.state.openedTab}
                   mainContent={this.state.mainContent}
@@ -147,7 +144,7 @@ class MainField extends React.Component {
                   get = {(url)=>get(url)}
                   blockBtn = {this.props.blockBtn}
               />
-              <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>
+              {this.state.mainContent.length != undefined? <div className='bottom-counter'>Found {this.state.mainContent.length} objects</div>:''}
               <Modal show = {this.state.showModal.show} options = {this.state.showModal.show}/>
           </div>)
     }
