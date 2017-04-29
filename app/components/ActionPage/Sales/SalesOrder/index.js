@@ -247,7 +247,6 @@ class SalesOrder extends React.Component {
           throw new Error("Bad response from server");
         }
         this.setState({saleList:response.map(i=>{return Object.assign({},{value:i.id,label:i.Firstname})})})
-
       })
       .catch(err=>console.log(err))
     }
@@ -485,11 +484,12 @@ class SalesOrder extends React.Component {
     }
 
     componentDidMount(){
-      this.getCustomerList()
-      this.props.type=='edit'||this.props.type=='copy'? this._getEditItem():this.setDefaultSalePerson()
       this.getSaleList()
       this.getPriceList()
       this.getFilmType()
+      this.getCustomerList()
+      this.props.type=='edit'||this.props.type=='copy'? this._getEditItem():this.setDefaultSalePerson()
+
     }
 
     setDefaultSalePerson(){
@@ -767,32 +767,32 @@ class SalesOrder extends React.Component {
         return (<tr key={i.id} id = {i.id}>
             <td><input type='checkbox' ref = {'checkbox'+i.id} onChange= {()=>this.ifChecked(i.id)}/>{indexNo(index)}</td>
             <td>
-                <select ref = {'filmType'+i.id} value = {this.state.eFilmType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType'], i.id), 'brandType', i.id)} >
+                <select ref = {'filmType'+i.id} value = {this.state.eFilmType[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType'], i.id), 'brandType', i.id)} >
                     {this.getFilmTypeOption()}
                 </select>
             </td>
             <td>
-                <select ref = {'brandType'+i.id} value = {this.state.eBrandType[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType', 'brandType'], i.id), 'gradeType', i.id)}>
+                <select ref = {'brandType'+i.id} value = {this.state.eBrandType[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType', 'brandType'], i.id), 'gradeType', i.id)}>
                     {this.getBrandTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'width', i.id)}>
+                <select ref = {'gradeType'+i.id} value = {this.state.eGradeType[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType'], i.id), 'width', i.id)}>
                     {this.getGradeTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'widthType'+i.id} value = {this.state.eWidth[i.id]}  key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType', 'widthType'], i.id), 'thickNess', i.id)}>
+                <select ref = {'widthType'+i.id} value = {this.state.eWidth[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType', 'gradeType', 'widthType'], i.id), 'thickNess', i.id)}>
                     {this.getWidthTypeOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} key={i.id} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess'], i.id), 'length', i.id)}>
+                <select ref = {'thickNess'+i.id} value = {this.state.eThick[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess'], i.id), 'length', i.id)}>
                     {this.getThickNessOption(i.id)}
                 </select>
             </td>
             <td>
-                <select ref = {'length'+i.id} key={i.id}  value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
+                <select ref = {'length'+i.id} value = {this.state.eLength[i.id]} onChange = {() => this.onChangeUpdate(genArg(['filmType','brandType','gradeType','widthType','thickNess', 'length'], i.id), 'weight', i.id)}>
                   {this.getLengthOption(i.id)}
               </select>
             </td>
@@ -905,14 +905,14 @@ class SalesOrder extends React.Component {
               <div className='input-box flex'>
                   <label>Status :</label>
                   <select ref = 'status' value = {this.state.state_status} onChange={()=>this.updateParam('status')}>
-                      {this.state.statusList.map(i=> <option value={i.value}>{i.value}</option>)}
+                      {this.state.statusList.map(i=> <option key ={i.value} value={i.value}>{i.value}</option>)}
                   </select>
               </div>
               <div className='input-box flex'>
                   <label>Saleperson :</label>
                   <select ref = 'salePerson' value = {this.state.state_salePerson} onChange={()=>this.updateParam('salePerson')}>
                       {this.state.saleList.map(i=> {
-                          return <option value={i.value}>{i.label}</option>})}
+                          return <option key ={i.value} value={i.value}>{i.label}</option>})}
                   </select>
               </div>
               <div className='input-box flex'>
@@ -1100,7 +1100,7 @@ class SalesOrder extends React.Component {
                           Shipment
                       </div>
                       <div className={this.state.selectedTab === 'Attachment'? 'tab-quo active' : 'tab-quo'} onClick={()=>this.setContent('Attachment')}>
-                        Attachment
+                          Attachment
                       </div>
 
                   </div>

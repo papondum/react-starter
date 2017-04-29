@@ -27,6 +27,11 @@ class Quotation extends React.Component {
                 { value: 'Siam Nomura Co.,Ltd.', label: 'One' },
                 { value: 'Poly Mirae Co.,Ltd.', label: 'Two' }
             ],
+          dateList: [
+                { value: 'เช้าก่อน 10 โมง', label: 'เช้าก่อน 10 โมง' },
+                { value: 'ก่อนเที่ยง', label: 'ก่อนเที่ยง' },
+                { value: 'ก่อนบ่าย 3', label: 'ก่อนบ่าย 3' },
+              ],
           statusList: [{value: 'In Process '}, {value: 'Released'}, {value: 'Completed'}, {value: 'Cancelled'}],
           selectedCustomer: '',
           selectedTab: 'General',
@@ -46,7 +51,7 @@ class Quotation extends React.Component {
           state_fax:'',
           state_email:'',
           state_company:'',
-          state_date:'',
+          state_date: '',
           state_payterm:'',
           state_deliver:'',
           state_status:'',
@@ -767,7 +772,7 @@ class Quotation extends React.Component {
               </div>
               <div className='input-box flex'>
                   <label>Date :</label>
-                  <input className='flex' type="date" ref='date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}/>
+                  <select ref = 'date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}>{this.state.dateList.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}</select>
               </div>
 
           </div>
