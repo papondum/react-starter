@@ -21,10 +21,6 @@ class App extends React.Component {
           <div className="flex-col flex">
               <Header/>
               { this.props.children }
-            <div>
-                <Link to="/">Filterable Table</Link>
-                <Link to="/about">About</Link>
-            </div>
           </div>
       );
       }

@@ -3,6 +3,7 @@
   width:100%;
   border-left: 1px solid #e0e0e0;
   min-width: 200px;
+  max-width: 240px;
   overflow: scroll;
   .sub-head-text{
     color:#006be5;
@@ -13,6 +14,7 @@
 }
 .menu{
   width:100%;
+  max-width: 60px;
 }
 .menu-item{
   cursor: pointer;

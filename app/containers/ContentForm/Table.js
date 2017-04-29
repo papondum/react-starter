@@ -289,7 +289,7 @@ class CustomTable extends React.Component {
                           <h2 style={{ marginTop: 0 }}>{this.props.header}</h2>
                       </div>
                       <Table
-                          pagination={true}
+                          pagination={false}
                           scroll={{ x: 120, y: '20vh' }}
                           columns={Object.keys(this.props.subContent[0]).map(key => ({
                               title: <div style={{ padding: '5px 5px',
