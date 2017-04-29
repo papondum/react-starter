@@ -8,6 +8,14 @@ import MasterIcon from '../../resource/Icon/menu_masterfile.png'
 import ReportIcon from '../../resource/Icon/menu_report.png'
 import DashIcon from '../../resource/Icon/menu_dashboard.png'
 import submenuIcon from '../../resource/Icon/submenu.png'
+
+import SaleIconBlue from '../../resource/Icon/menu_sales_blue.png'
+import PurchaseIconBlue from '../../resource/Icon/menu_purchase_blue.png'
+import InventoryIconBlue from '../../resource/Icon/menu_inventory_blue.png'
+import MasterIconBlue from '../../resource/Icon/menu_masterfile_blue.png'
+import ReportIconBlue from '../../resource/Icon/menu_report_blue.png'
+import DashIconBlue from '../../resource/Icon/menu_dashboard_blue.png'
+
 import './style.scss';
 class LeftMenu extends React.Component {
     constructor(props) {
@@ -224,35 +232,62 @@ class LeftMenu extends React.Component {
     }
 
 
-    _getIconFromName(name){
-      switch (name) {
-        case 'Sales':
-          return (<img src={SaleIcon}/>)
-          break;
-        case 'Purchase':
-          return (<img src={PurchaseIcon}/>)
-          break;
-        case 'Inventory':
-          return (<img src={InventoryIcon}/>)
-          break;
-        case 'Master file':
-          return (<img src={MasterIcon}/>)
-          break;
-        case 'Report':
-          return (<img src={ReportIcon}/>)
-          break;
-        case 'Dashboard':
-          return (<img src={DashIcon}/>)
-          break;
-        default:
-          console.log('default');
+    _getIconFromName(name, isActive){
+      if(!isActive){
+        switch (name) {
+          case 'Sales':
+            return (<img src={SaleIcon}/>)
+            break;
+          case 'Purchase':
+            return (<img src={PurchaseIcon}/>)
+            break;
+          case 'Inventory':
+            return (<img src={InventoryIcon}/>)
+            break;
+          case 'Master file':
+            return (<img src={MasterIcon}/>)
+            break;
+          case 'Report':
+            return (<img src={ReportIcon}/>)
+            break;
+          case 'Dashboard':
+            return (<img src={DashIcon}/>)
+            break;
+          default:
+            console.log('default');
+        }
+      } else {
+        switch (name) {
+          case 'Sales':
+            return (<img src={SaleIconBlue}/>)
+            break;
+          case 'Purchase':
+            return (<img src={PurchaseIconBlue}/>)
+            break;
+          case 'Inventory':
+            return (<img src={InventoryIconBlue}/>)
+            break;
+          case 'Master file':
+            return (<img src={MasterIconBlue}/>)
+            break;
+          case 'Report':
+            return (<img src={ReportIconBlue}/>)
+            break;
+          case 'Dashboard':
+            return (<img src={DashIconBlue}/>)
+            break;
+          default:
+            console.log('default');
+        }
       }
+
+      
     }
 
     menuGenerate() {
         const menu = (this.props.menu).map((i)=>
         <div className={this.state.menuActive==i.name? 'menu-item active-menu':"menu-item"} onClick={()=>this.openSubmenu(i)} key={i.name}>
-          {this._getIconFromName(i.name)}
+          {this._getIconFromName(i.name, this.state.menuActive==i.name)}
           <p>{i.name}</p>
         </div>);
         return menu;
