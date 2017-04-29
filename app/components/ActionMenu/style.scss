@@ -17,6 +17,8 @@
     background: none;
     &:hover{
       cursor: pointer;
+      // opacity: 0.5;
+      filter: contrast(10);
     }
     &:focus{
       outline: none;
@@ -26,11 +28,13 @@
 
 .action-bar{
   justify-content: space-between;
+  padding: 0 10px;
   h2{
-    margin-left:10px;
-    color:#939393;
-    font-size: 18px;
-    margin-top: 22px;
+    height: 0;
+      line-height: 0;
+      margin: auto 0;
+      color:#939393;
+      font-size: 18px;
   }
 
 }
