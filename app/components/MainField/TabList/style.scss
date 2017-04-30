@@ -20,7 +20,14 @@
   &:hover{
     color: #006be5;
   }
+  span{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 55px;
+  }
 }
 .tablist-style{
   background-color: #eeeeee;
+  overflow: auto;
 }

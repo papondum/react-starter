@@ -1,12 +1,10 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from './components/App';
-import FilterableTable from './containers/FilterableTable';
 import Menu from './components/Menu';
 
 export default (
 	<Route path="/" component={App}>
-		<IndexRoute component={Menu} />
-		<Route path="/about" component={FilterableTable} />
+			<IndexRoute component={Menu} />
 	</Route>
 );

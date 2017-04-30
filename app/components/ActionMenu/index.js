@@ -138,7 +138,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('User account'),
         })
         break;
         case 'User role':
@@ -150,7 +150,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshActiosn:'',
+          refreshActiosn:()=>this.props.getContent('User role'),
         })
         break;
         case 'Customer':
@@ -162,7 +162,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Customer'),
         })
         break;
         case 'Supplier':
@@ -174,7 +174,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Supplier'),
         })
         break;
         case 'Price list':
@@ -186,7 +186,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Price list'),
         })
         break;
         case 'Product':
@@ -198,7 +198,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Product'),
         })
         break;
         case 'Brand':
@@ -210,7 +210,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Brand'),
         })
         break;
         case 'Film Type':
@@ -222,7 +222,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Film Type'),
         })
         break;
         case 'Grade':
@@ -234,7 +234,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Grade'),
         })
         break;
         case 'Quotation':
@@ -246,7 +246,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Quotation'),
         })
         break;
         case 'Sales Order':
@@ -258,7 +258,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Sales Order'),
         })
         break;
         case 'Purchase Order':
@@ -270,7 +270,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Purchase Order'),
         })
         break;
         case 'Delivery Order':
@@ -282,7 +282,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Delivery Order'),
         })
         break;
         case 'Good Receipt':
@@ -305,7 +305,7 @@ class ActionMenu extends React.Component {
           emailAction:'',
           printAction:'',
           exportAction:'',
-          refreshAction:'',
+          refreshAction:()=>this.props.getContent('Good Receipt'),
         })
         break;
         default:
@@ -320,7 +320,15 @@ class ActionMenu extends React.Component {
     })
   }
   disabledDeleteCheck(next){
-    if(this.props.tab.activeTabs=='Delivery Order'){
+    if(this.props.tab.activeTabs=='Delivery Order'||
+      this.props.tab.activeTabs=='Delivery Order'||
+      this.props.tab.activeTabs=='User account'||
+      this.props.tab.activeTabs=='Customer'||
+      this.props.tab.activeTabs=='Supplier'||
+      this.props.tab.activeTabs=='Product'||
+      this.props.tab.activeTabs=='Brand'||
+      this.props.tab.activeTabs=='Film Type'||
+      this.props.tab.activeTabs=='Grade' ){
       this.setState({disableDelete:true})
     }
     else if(next=='init'){
@@ -387,7 +395,7 @@ class ActionMenu extends React.Component {
               <button className = {this._blockChecker('email')} onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
               <button className = {this._blockChecker('print')} onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>
               <button className = {this._blockChecker('export')} onClick={() =>this.state.createAction() }><img src={exportIcon}/> <p>Export</p></button>
-              <button onClick={() =>this.state.createAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
+              <button onClick={() =>this.state.refreshAction() }><img src={refreshIcon}/> <p>Refresh</p></button>
           </div>
 
           <ModalC show = {this.state.showModal.show} options = {this.state.showModal}/>
