@@ -32,6 +32,15 @@
   font-size: 14px;
   padding: 10px;
   line-height: 0px;
+  &:hover{
+    cursor: pointer;
+    box-shadow: 0 1px 3px 0px grey;
+  }
+  &:focus{
+    outline: none;
+    box-shadow: 0 1px 3px 0px lightgrey;
+    filter: contrast(2);
+  }
 }
 .inactive-color{
   opacity: 0.37;

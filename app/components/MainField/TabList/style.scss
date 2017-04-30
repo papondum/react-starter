@@ -11,8 +11,14 @@
     img{
     width: 11px;
     height: 11px;
-    filter: invert(.8);
+    filter: invert(0.8);
+      &:hover {
+        filter: invert(0.4);
+      }
     }
+  }
+  &:hover{
+    color: #006be5;
   }
 }
 .tablist-style{

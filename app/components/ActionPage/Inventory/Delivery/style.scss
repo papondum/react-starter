@@ -5,6 +5,10 @@
   &.active{
     background: #e0e0e0;
   }
+  &:hover{
+    background: white;
+    
+  }
 }
 .selector-class{
   min-width: 150px;

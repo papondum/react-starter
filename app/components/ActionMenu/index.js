@@ -382,7 +382,7 @@ class ActionMenu extends React.Component {
               >
                   <img src={editIcon}/> <p>Edit</p>
               </button>
-              <button className = {this.props.selected.length !== 1? 'disabled':''} onClick={() =>this.state.copyAction() } disabled={this.props.selected.length !== 1}><img src={copyIcon}/> <p>Copy</p></button>
+              <button className = {this.props.selected.length !== 1? 'disabledbutton':''} onClick={() =>this.state.copyAction() } disabled={this.props.selected.length !== 1}><img src={copyIcon}/> <p>Copy</p></button>
               <button className = {this.state.disableDelete? 'disabledbutton':''} onClick={() =>this.state.deleteAction()}><img src={deleteIcon}/> <p>Delete</p></button>
               <button className = {this._blockChecker('email')} onClick={() =>this.state.createAction() }><img src={emailIcon}/> <p>Email</p></button>
               <button className = {this._blockChecker('print')} onClick={() =>this.state.createAction() }><img src={printIcon}/> <p>Print</p></button>

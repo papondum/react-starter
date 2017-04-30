@@ -13,5 +13,14 @@
   button{
     border-style:none;
     background: none;
+    &:hover{
+      cursor: pointer;
+      // opacity: 0.5;
+      // filter: contrast(10);
+      filter: drop-shadow(1px 1px 1px rgba(170, 170, 170, 0.5));
+    }
+    &:focus{
+      outline: none;
+    }
   }
 }

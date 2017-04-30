@@ -1,3 +1,9 @@
+.header{
+  .action-group-btn button:hover {
+    filter: drop-shadow(1px 1px 1px #5a5a5a);
+  }
+}
+
 .action-group-btn{
   display: flex;
   justify-content: flex-end;
@@ -18,7 +24,8 @@
     &:hover{
       cursor: pointer;
       // opacity: 0.5;
-      filter: contrast(10);
+      // filter: contrast(10);
+      filter: drop-shadow(1px 1px 1px rgba(170, 170, 170, 0.5));
     }
     &:focus{
       outline: none;

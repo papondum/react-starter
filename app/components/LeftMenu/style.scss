@@ -29,6 +29,10 @@
     color: #454545;
     font-size: 9.3px;
   }
+  &:hover{
+    background-color: white;
+    filter: contrast(2);
+  }
 }
 .submenu-item{
   cursor: pointer;
@@ -47,6 +51,9 @@
     font-family: 'Myriad Pro';
     margin:0;
     margin-top:13px;
+  }
+  &:hover{
+    filter: contrast(2);
   }
 }
 .active-menu{
