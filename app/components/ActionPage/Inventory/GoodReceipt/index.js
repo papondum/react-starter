@@ -372,6 +372,7 @@ class GoodReceipt extends React.Component {
               <div className="flex flex-row space-bet" >
                   <div className='tab-quo active'>Content</div>
               </div>
+              <hr style={{margin : 0}}/>
               <div className = 'content-quo-table'>
                   <table>
                       <thead>

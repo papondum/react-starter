@@ -1081,6 +1081,7 @@ class Purchase extends React.Component {
                       <button onClick={() => this.deleteSelectedChild()}><img src={deleteIcon}/></button>
                   </div>
               </div>
+              <hr style={{margin : 0}}/>
               <div className = 'content-quo-table'>
                   <table>
                       <thead>
