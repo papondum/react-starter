@@ -223,7 +223,7 @@ class PriceList extends React.Component {
                 </div>
             </div>
             <hr/>
-            <div className='flex'>
+            <div className='content-left flex'>
                 <div className='input-box left flex'>
                     <label>Name:*</label>
                     <input className='flex' type="text" ref='name'/>
