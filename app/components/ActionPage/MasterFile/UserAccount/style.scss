@@ -28,8 +28,9 @@
 }
 
 .page-style{
+  position: relative;
   .left{
-    margin-right: 5px;
+    // margin-right: 5px;
   }
   .page-head{
     display: flex;
@@ -44,6 +45,9 @@
       color:#939393;
       font-size: 18px;
     }
+  }
+  .flex{
+    flex-wrap: wrap;
   }
 }
 .disabled{
