@@ -25,6 +25,11 @@ class Delivery extends React.Component {
           widthList: [],
           length: [],
           weight: [],
+          adt: [
+                { value: 'เช้าก่อน 10 โมง', label: 'เช้าก่อน 10 โมง' },
+                { value: 'ก่อนเที่ยง', label: 'ก่อนเที่ยง' },
+                { value: 'ก่อนบ่าย 3', label: 'ก่อนบ่าย 3' },
+            ],
           statusList: [{value: 'Not yet delivered'}, {value: 'Ready to Deliver'}, {value: 'Delivered'}],
           selectedCustomer: '',
           eFilmType: {},
@@ -368,6 +373,8 @@ class Delivery extends React.Component {
     }
 
     _setInitialVal(res){
+      console.log("BBBBBB")
+      console.log(res)
 
       let item = res[0]
       let saleperson = this.state.saleList.find((i) => i.value==item.salesperson_id)
@@ -377,11 +384,11 @@ class Delivery extends React.Component {
         // state_tel: item.customer ? item.customer.tel:item.tel ,
         // state_fax: item.customer ? item.customer.fax:item.fax,
         // state_email: item.customer? item.customer.email:item.email,
-        state_date: item.deliver_date||'',
+        state_date: item.docdate.split("T")[0]||'',
         state_time: item.deliver_time||'',
         state_sonumber: item.so_number||'',
-        state_ponumber: item.po_number||'',
-        state_shipto: item.ship_to||'',
+        state_ponumber: item.purchase_order||'',
+        state_shipto: item.place||'',
         // state_payterm: item.payment_term,
         // state_deliver: item.delivery_term,
         state_status: item.status,
@@ -406,6 +413,9 @@ class Delivery extends React.Component {
       status: req.body.status,
       salesperson_id: req.body.contact_person,
       */
+
+      console.log("this.state.state_time")
+      console.log(this.state.state_time)
       let obj = Object.assign({},
       {
         customer_id: this.state.selectedCustomer || this.refs['customer'].value,
@@ -658,8 +668,10 @@ class Delivery extends React.Component {
                   <input className='flex' type="date" ref='date' value = {this.state.state_date} onChange={()=>this.updateParam('date')}/>
               </div>
               <div className='input-box flex'>
-                  <label>Delivery Time :</label>
-                  <input className='flex' type="time" ref='time' value = {this.state.state_time} onChange={()=>this.updateParam('time')}/>
+                  <label>Deliver Time :</label>
+                  <select ref = 'time' value = {this.state.state_time} onChange={()=>this.updateParam('time')}>
+                      {this.state.adt.map(i=> <option key={i.value} value={i.value}>{i.label}</option>)}
+                  </select>
               </div>
           </div>
           <div className="flex flex-1 flex-col">
