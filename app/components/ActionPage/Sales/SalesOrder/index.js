@@ -1014,9 +1014,9 @@ class SalesOrder extends React.Component {
 
     getAttachContent(){
       return (
-        <div>
+        <div className='content-attachment'>
           <input type="file" ref="fileSelect" multiple />
-          <button type="button" onClick={()=>this.submitFiles()}>upload</button>
+          <button className='material-btn confirm-style' type="button" onClick={()=>this.submitFiles()}>upload</button>
         </div>
       )
     }
@@ -1145,27 +1145,28 @@ class SalesOrder extends React.Component {
                       </tbody>
                   </table>
               </div>
-              <div className = 'flex create-quo-btm'>
+              <div className = 'flex create-quo-btm content-remark'>
                   <div className = 'flex-1'>
-                      <p>Remarks</p>
+                      <p>Remarks :</p>
                       <textarea rows="5" cols="40" ref = 'remark' />
                   </div>
                   <div className = 'flex-1'>
                       <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Total before discount</span>&nbsp;&nbsp;&nbsp;
+                          <span className = 'create-quo-btm-input-label-left'>Total before discount:</span>
                           <span>{this.state.total_before_discount}</span></div>
                       <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Discount</span>&nbsp;&nbsp;&nbsp; <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
+                          <span className = 'create-quo-btm-input-label-left'>Discount:</span> <input type = 'number' ref = 'discount' onChange={()=>this.updateAll(0)}/></div>
                       <div className = 'flex-row flex'>
                           <span className = 'create-quo-btm-input-label-left'>Taxes
-                              <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                              <input type = 'number' ref = 'taxes' onChange={()=>this.updateAll(0)}/>%:</span>
                           <span>{this.state.taxes}</span></div>
                       <div className = 'flex-row flex'>
                           <span className = 'create-quo-btm-input-label-left'>Withholding Taxes
-                              <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%</span>&nbsp;&nbsp;&nbsp;
+                              <input type = 'number' ref = 'wotaxes' onChange={()=>this.updateAll(0)}/>%:</span>
                           <span>{this.state.wotaxes}</span></div>
                       <div className = 'flex-row flex'>
-                          <span className = 'create-quo-btm-input-label-left'>Total</span>&nbsp;&nbsp;&nbsp;                 <span>{this.state.total}</span></div>
+                          <span className = 'create-quo-btm-input-label-left'>Total:</span>
+                          <span>{this.state.total}</span></div>
                   </div>
               </div>
           </div>)
