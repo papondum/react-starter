@@ -1125,19 +1125,19 @@ class SalesOrder extends React.Component {
                   <table>
                       <thead>
                           <tr>
-                              <td><input type='checkbox'/>Line No.</td>
-                              <td>Film Type</td>
-                              <td>Brand</td>
-                              <td>Grade</td>
-                              <td>Width</td>
-                              <td>Thickness</td>
-                              <td>Length</td>
-                              <td>Order Qty. (Roll)</td>
-                              <td>Total Weight(Kg)</td>
-                              <td>Based Price</td>
-                              <td>Unit Price(THB/Kg)</td>
-                              <td>Subtotal(THB)</td>
-                              <td>Remarks</td>
+                              <th> <span> <div> <input type='checkbox'/>Line No. </div></span></th>
+                              <th> <span> <div> Film Type </div></span></th>
+                              <th> <span> <div> Brand </div></span></th>
+                              <th> <span> <div> Grade </div></span></th>
+                              <th> <span> <div> Width </div></span></th>
+                              <th> <span> <div> Thickness </div></span></th>
+                              <th> <span> <div> Length </div></span></th>
+                              <th> <span> <div> Order Qty. (Roll) </div></span></th>
+                              <th> <span> <div> Total Weight(Kg) </div></span></th>
+                              <th> <span> <div> Based Price </div></span></th>
+                              <th> <span> <div> Unit Price(THB/Kg) </div></span></th>
+                              <th> <span> <div> Subtotal(THB) </div></span></th>
+                              <th> <span> <div> Remarks </div></span></th>
                           </tr>
                       </thead>
                       <tbody>

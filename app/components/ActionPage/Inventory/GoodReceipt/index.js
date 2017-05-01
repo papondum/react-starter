@@ -377,18 +377,18 @@ class GoodReceipt extends React.Component {
                   <table>
                       <thead>
                           <tr>
-                              <td><input type='checkbox' />Line No.</td>
-                              <td>Film Type</td>
-                              <td>Brand</td>
-                              <td>Grade</td>
-                              <td>Width</td>
-                              <td>Thickness</td>
-                              <td>Length</td>
-                              <td>Order Quantity(Roll)</td>
-                              <td>Total Weight(Kg)</td>
-                              <td>Pending Quantity</td>
-                              <td>Receive Quantity</td>
-                              <td>Remark</td>
+                              <th><span><div><input type='checkbox' />Line No.</div></span></th>
+                              <th><span><div>Film Type</div></span></th>
+                              <th><span><div>Brand</div></span></th>
+                              <th><span><div>Grade</div></span></th>
+                              <th><span><div>Width</div></span></th>
+                              <th><span><div>Thickness</div></span></th>
+                              <th><span><div>Length</div></span></th>
+                              <th><span><div>Order Quantity(Roll)</div></span></th>
+                              <th><span><div>Total Weight(Kg)</div></span></th>
+                              <th><span><div>Pending Quantity</div></span></th>
+                              <th><span><div>Receive Quantity</div></span></th>
+                              <th><span><div>Remark</div></span></th>
                           </tr>
                       </thead>
                       <tbody>
