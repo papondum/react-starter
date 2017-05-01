@@ -1,7 +1,7 @@
 .sub-menu{
   background-color: #ffffff;
   width:100%;
-  border-left: 1px solid #e0e0e0;
+  // border-left: 1px solid #e0e0e0;
   min-width: 200px;
   max-width: 240px;
   overflow: scroll;
@@ -15,6 +15,7 @@
 .menu{
   width:100%;
   max-width: 60px;
+  border-right: 1px solid #e0e0e0;
 }
 .menu-item{
   cursor: pointer;
@@ -34,6 +35,7 @@
   &:hover{
     background-color: white;
     filter: contrast(2);
+    border-right: 1px solid #afafaf;
   }
 }
 .submenu-item{
@@ -64,5 +66,8 @@
   background-color: #ffffff;
   p{
       color:#006be5;
+  }
+  &:hover{
+    border-right: none;
   }
 }
