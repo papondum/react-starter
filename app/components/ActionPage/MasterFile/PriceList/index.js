@@ -8,6 +8,8 @@ import emailIcon from '../../../../resource/Icon/button_email.png'
 import printIcon from '../../../../resource/Icon/button_print.png'
 import exportIcon from '../../../../resource/Icon/button_export.png'
 import { post ,get } from '../../../../../utils'
+import ContentForm from '../../../../containers/ContentForm'
+
 class PriceList extends React.Component {
   constructor(props) {
       super(props);
@@ -210,6 +212,7 @@ class PriceList extends React.Component {
       }
   }
   render() {
+
       return(
         <div className='page-style'>
             <div className='page-head'>
@@ -244,18 +247,12 @@ class PriceList extends React.Component {
                 <button onClick={()=>this.openInputModal()}>Input Price</button>
             </div>
             <div>
+              {this.state.mainContent.length > 0 &&
                 <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                {this._headerGen(this.state.mainContent)}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this._contentGen(this.state.mainContent)}
-                        </tbody>
-                    </table>
+                    <ContentForm
+                      content={this.state.mainContent}/>
                 </div>
+              }
             </div>
             <ModalCustom show = {this.state.inputModal.show} options = {this.state.inputModal}>
                 <div>
