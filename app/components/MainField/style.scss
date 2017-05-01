@@ -7,10 +7,22 @@
       color:#006be5;
     }
   }
+// .bottom-counter{
+  // color:#454545;
+  // font-size: 12px;
+  // position: fixed;
+  // bottom: 8px;
+  // right: 16px;
+// }
 .bottom-counter{
-  color:#454545;
   font-size: 12px;
-  position: fixed;
-  bottom: 8px;
-  right: 16px;
+  color:#454545;
+  display: block;
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  padding: 5px 15px;
+  background: inherit;
+  text-align: right;
+  border-top: 1px solid #e0e0e0;
 }
