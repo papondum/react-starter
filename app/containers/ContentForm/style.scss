@@ -223,3 +223,10 @@ th {
 .ant-table-body, .ant-table-pagination, .subcontent-table .ant-table-header{
   margin-right: 16px!important;
 }
+
+.ant-table-body{
+  max-height: calc(60vh - 208px)!important;
+}
+.subcontent-table .ant-table-body {
+  max-height: calc(30vh - 102px)!important;
+}
