@@ -4,6 +4,7 @@
   cursor:pointer;
   color:#454545;
   font-size: 11px;
+  box-shadow: 1px -1px 6px rgba(0, 0, 0, 0.26);
   .tab-close{
     display: inline-block;
     vertical-align: middle;
@@ -30,4 +31,5 @@
 .tablist-style{
   background-color: #eeeeee;
   overflow: auto;
+  box-shadow: 1px -1px 6px rgba(0, 0, 0, 0.26);
 }
