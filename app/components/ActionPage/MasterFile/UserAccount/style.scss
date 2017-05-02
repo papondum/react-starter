@@ -10,20 +10,36 @@
   }
   input, select{
     padding-left: 3px;
-    min-width: 200px;
-    max-width: 250px;
+    // min-width: 200px;
+    // max-width: 250px;
   }
 }
 .flex-col > .input-box {
   input, select{
-    width: calc(65% - 10px);
+    width: calc(58% - 10px);
     height: 20px;
     min-width: initial;
     max-width: initial;
   }
   label{
-    width: 25%;
+    width: 30%;
     display: inline-block;
+  }
+  .Select.selector-class{
+    width: calc(58% - 10px);
+    min-width: initial;
+  }
+}
+
+@media screen and (max-width: 1110px) {
+  .input-box, .flex-col > .input-box {
+    label{
+      width: 100%;
+      text-align: left;
+    }
+    .Select.selector-class, input, select {
+      width: 100%;
+    }
   }
 }
 
@@ -61,7 +77,7 @@
 
 // ------
 .Select.selector-class{
-      width: 60%;
+      // width: 60%;
       height: 34px;
 }
 .Select-control{
