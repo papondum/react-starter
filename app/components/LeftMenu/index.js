@@ -177,15 +177,6 @@ class LeftMenu extends React.Component {
           case 'User':
             clusteringFromSet.user.push(item[i])
             break;
-          case 'Business Partner':
-            clusteringFromSet.business.push(item[i])
-            break;
-          case 'Pricing':
-            clusteringFromSet.price.push(item[i])
-            break;
-          case 'Product':
-            clusteringFromSet.product.push(item[i])
-            break;
           default:
 
         }
@@ -195,18 +186,6 @@ class LeftMenu extends React.Component {
             <div>
                 <div className="sub-head-text">User</div>
                 {clusteringFromSet.user}
-            </div>
-            <div>
-                <div className="sub-head-text">Business Partner</div>
-                {clusteringFromSet.business}
-            </div>
-            <div>
-                <div className="sub-head-text">Pricing</div>
-                {clusteringFromSet.price}
-            </div>
-            <div>
-                <div className="sub-head-text">Product</div>
-                {clusteringFromSet.product}
             </div>
         </div>)
     }
@@ -281,7 +260,7 @@ class LeftMenu extends React.Component {
         }
       }
 
-      
+
     }
 
     menuGenerate() {

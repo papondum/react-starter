@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
+import { Route, Link } from 'react-router';
 import './style.scss'
-import logoSrc from '../../resource/Icon/logo_codex_transparent.png'
+import logoSrc from '../../resource/shiba-framework.jpg'
+import Menu from '../../components/Menu'
 class Login extends Component {
   constructor(props){
     super(props)
@@ -16,8 +18,8 @@ class Login extends Component {
     return (
       <div>
           <div className = 'container'>
-              <img src={logoSrc} />
-              <h1>Log in to Codex ERP</h1>
+              <div className= 'img-center'><img src={logoSrc} /></div>
+              <h1>Shiba Kun</h1>
 
               <div className='input-group'>
                   <p>Please enter your credentials to access system.</p>
@@ -26,6 +28,7 @@ class Login extends Component {
                   <button onClick={(event) => this.handleClick(event)} className="btn btn-primary">
                       Log in
                   </button>
+                  <Link className="btn" to="/test">Skip</Link>
               </div>
           </div>
           <footer>

@@ -50,10 +50,15 @@ footer {
   margin-top:10vh;
   margin:auto;
   max-width: 600px;
+  .img-center{
+    width: 100%;
+    text-align: center;
+  }
   img{
-    height: 110px;
-    width: 500px;
-    margin-top: 15vh;
+    height: 150px;
+    // height: 110px;
+    // width: 500px;
+    // margin-top: 15vh;
   }
   h1{
     text-align: center;
@@ -61,4 +66,13 @@ footer {
     font-weight: 200;
     color: $text-color;
   }
+}
+.btn{
+  height:50px;
+  color:#fff;
+  border-radius: 5px;
+  margin:20px 0;
+  background-color: #0265d5;
+  border-style: none;
+  text-align: center;
 }

@@ -10,22 +10,11 @@ import printIcon from '../../resource/Icon/button_print.png'
 import emailIcon from '../../resource/Icon/button_email.png'
 import exportIcon from '../../resource/Icon/button_export.png'
 import refreshIcon from '../../resource/Icon/button_refresh.png'
-import * as DeleteAction from '../../actions/deleteCall'
 import Modal from '../Modal/Custom'
 import ModalC from '../Modal/Confirm'
 import Content from '../MainField/Content';
 import UserAccount from '../ActionPage/MasterFile/UserAccount'
-import Customer from '../ActionPage/MasterFile/Customer'
 import Userrole from '../ActionPage/MasterFile/UserRole'
-import Supplier from '../ActionPage/MasterFile/Supplier'
-import PriceList from '../ActionPage/MasterFile/PriceList'
-import Product from '../ActionPage/MasterFile/Product'
-import Brand from '../ActionPage/MasterFile/Brand'
-import FilmType from '../ActionPage/MasterFile/FilmType'
-import Grade from '../ActionPage/MasterFile/Grade'
-import Quotation from '../ActionPage/Sales/Quotation'
-import Salesorder from '../ActionPage/Sales/SalesOrder'
-import Purchase from '../ActionPage/Purchase'
 import Delivery from '../ActionPage/Inventory/Delivery'
 import GoodReceipt from '../ActionPage/Inventory/GoodReceipt'
 import {get } from '../../../utils'
@@ -153,126 +142,6 @@ class ActionMenu extends React.Component {
           refreshActiosn:()=>this.props.getContent('User role'),
         })
         break;
-        case 'Customer':
-        this.setState({
-          createAction:()=>this.props.setContent((<Customer type='create' getContent={(item)=>this.props.getContent(item)}/>)),   //set new content when click this menu
-          editAction:()=>this.props.setContent((<Customer type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<Customer type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(), //no need change contnt just popup modal cover old
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Customer'),
-        })
-        break;
-        case 'Supplier':
-        this.setState({
-          createAction:()=>this.props.setContent((<Supplier type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction: ()=>this.props.setContent((<Supplier type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<Supplier type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Supplier'),
-        })
-        break;
-        case 'Price list':
-        this.setState({
-          createAction:()=>this.props.setContent((<PriceList type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<PriceList type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<PriceList type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Price list'),
-        })
-        break;
-        case 'Product':
-        this.setState({
-          createAction:()=>this.props.setContent((<Product type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction: ()=>this.props.setContent((<Product type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<Product type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Product'),
-        })
-        break;
-        case 'Brand':
-        this.setState({
-          createAction:()=>this.props.setContent((<Brand type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction:()=>this.props.setContent((<Brand type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<Brand type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Brand'),
-        })
-        break;
-        case 'Film Type':
-        this.setState({
-          createAction:()=>this.props.setContent((<FilmType type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction: ()=>this.props.setContent((<FilmType type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<FilmType type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Film Type'),
-        })
-        break;
-        case 'Grade':
-        this.setState({
-          createAction:()=>this.props.setContent((<Grade type='create' getContent={(item)=>this.props.getContent(item)}/>)),
-          editAction: ()=>this.props.setContent((<Grade type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<Grade type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Grade'),
-        })
-        break;
-        case 'Quotation':
-        this.setState({
-          createAction:()=>this.props.setContent((<Quotation type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
-          editAction:()=>this.props.setContent((<Quotation type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<Quotation type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Quotation'),
-        })
-        break;
-        case 'Sales Order':
-        this.setState({
-          createAction:()=>this.props.setContent((<Salesorder type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
-          editAction: ()=>this.props.setContent((<Salesorder type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          copyAction: ()=>this.props.setContent((<Salesorder type='copy' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Sales Order'),
-        })
-        break;
-        case 'Purchase Order':
-        this.setState({
-          createAction:()=>this.props.setContent((<Purchase type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
-          editAction:()=>this.props.setContent((<Purchase type='edit' getContent={(item)=>this.props.getContent(item)} editItem={this.props.editItem} objFromFetch={this.props}/>)),
-          copyAction: ()=>this.props.setContent((<Purchase type= 'copy' getContent= {(item)=>this.props.getContent(item)} editItem= {this.props.editItem} objFromFetch= {this.props}/>)),
-          deleteAction:()=>this.showDeleteModal(),
-          emailAction:'',
-          printAction:'',
-          exportAction:'',
-          refreshAction:()=>this.props.getContent('Purchase Order'),
-        })
-        break;
         case 'Delivery Order':
         this.setState({
           createAction: ()=>this.props.setContent((<Delivery type='create' getContent={(item)=>this.props.getContent(item)} username = {this.state.userId}/>)),
@@ -313,12 +182,6 @@ class ActionMenu extends React.Component {
     }, 100);
   }
 
-  _addNotification(event , type) {
-    this.state._notificationSystem.addNotification({
-      message: event+' ' + 'item was deleted',
-      level: type
-    })
-  }
   disabledDeleteCheck(next){
     if(this.props.tab.activeTabs=='Delivery Order'||
       this.props.tab.activeTabs=='Delivery Order'||
@@ -407,13 +270,12 @@ class ActionMenu extends React.Component {
   const mapStateToProps = (state) => {
     return {
       tab: state.tab,
-      deleteCall: state.deleteCall,
-      username: state.login.auth.user
+      username: state.login.auth.user,
     };
   };
 
   function mapDispatchToProps(dispatch) {
-    return bindActionCreators(Object.assign({}, DeleteAction), dispatch)
+    return bindActionCreators(Object.assign({}), dispatch)
   }
 
   export default connect(
